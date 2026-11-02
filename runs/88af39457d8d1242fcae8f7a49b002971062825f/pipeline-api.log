@@ -1,0 +1,28 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-02T17:08:37.938Z  INFO 13483 --- [notification-api] [           main] c.r.n.api.NotificationApiApplication     : Starting NotificationApiApplication v0.1.0-SNAPSHOT using Java 21.0.13 with PID 13483 (/home/runner/work/rc_bill/rc_bill/notification-api/target/notification-api-0.1.0-SNAPSHOT.jar started by runner in /home/runner/work/rc_bill/rc_bill/notification-worker)
+2026-11-02T17:08:37.947Z  INFO 13483 --- [notification-api] [           main] c.r.n.api.NotificationApiApplication     : The following 1 profile is active: "runtime"
+2026-11-02T17:08:39.929Z  INFO 13483 --- [notification-api] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 42427 (http)
+2026-11-02T17:08:39.951Z  INFO 13483 --- [notification-api] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-11-02T17:08:39.952Z  INFO 13483 --- [notification-api] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.27]
+2026-11-02T17:08:39.991Z  INFO 13483 --- [notification-api] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1926 ms
+2026-11-02T17:08:40.347Z  INFO 13483 --- [notification-api] [           main] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Starting...
+2026-11-02T17:08:40.623Z  INFO 13483 --- [notification-api] [           main] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Start completed.
+2026-11-02T17:08:42.129Z  INFO 13483 --- [notification-api] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-11-02T17:08:42.288Z  INFO 13483 --- [notification-api] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 42427 (http) with context path '/'
+2026-11-02T17:08:42.336Z  INFO 13483 --- [notification-api] [           main] c.r.n.api.NotificationApiApplication     : Started NotificationApiApplication in 5.206 seconds (process running for 7.458)
+2026-11-02T17:08:42.592Z  INFO 13483 --- [notification-api] [omcat-handler-0] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-02T17:08:42.592Z  INFO 13483 --- [notification-api] [omcat-handler-0] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-11-02T17:08:42.594Z  INFO 13483 --- [notification-api] [omcat-handler-0] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-11-02T17:08:59.314Z  INFO 13483 --- [notification-api] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-11-02T17:08:59.325Z  INFO 13483 --- [notification-api] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-11-02T17:08:59.343Z  INFO 13483 --- [notification-api] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Shutdown initiated...
+2026-11-02T17:08:59.354Z  INFO 13483 --- [notification-api] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Shutdown completed.
