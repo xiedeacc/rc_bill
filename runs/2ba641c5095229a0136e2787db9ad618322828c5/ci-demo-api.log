@@ -8,21 +8,21 @@
 
  :: Spring Boot ::                (v4.1.2)
 
-2026-11-02T20:34:54.446Z  INFO 25154 --- [notification-api] [           main] c.r.n.api.NotificationApiApplication     : Starting NotificationApiApplication v0.1.0-SNAPSHOT using Java 21.0.13 with PID 25154 (/home/runner/work/rc_bill/rc_bill/notification-api/target/notification-api-0.1.0-SNAPSHOT.jar started by runner in /home/runner/work/rc_bill/rc_bill)
-2026-11-02T20:34:54.455Z  INFO 25154 --- [notification-api] [           main] c.r.n.api.NotificationApiApplication     : The following 1 profile is active: "runtime"
-2026-11-02T20:34:57.307Z  INFO 25154 --- [notification-api] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
-2026-11-02T20:34:57.330Z  INFO 25154 --- [notification-api] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-11-02T20:34:57.330Z  INFO 25154 --- [notification-api] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.27]
-2026-11-02T20:34:57.357Z  INFO 25154 --- [notification-api] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2821 ms
-2026-11-02T20:34:57.646Z  INFO 25154 --- [notification-api] [           main] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Starting...
-2026-11-02T20:34:57.898Z  INFO 25154 --- [notification-api] [           main] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Start completed.
-2026-11-02T20:34:59.925Z  INFO 25154 --- [notification-api] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
-2026-11-02T20:35:00.165Z  INFO 25154 --- [notification-api] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
-2026-11-02T20:35:00.316Z  INFO 25154 --- [notification-api] [           main] c.r.n.api.NotificationApiApplication     : Started NotificationApiApplication in 7.491 seconds (process running for 8.959)
-2026-11-02T20:35:00.869Z  INFO 25154 --- [notification-api] [omcat-handler-0] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-11-02T20:35:00.873Z  INFO 25154 --- [notification-api] [omcat-handler-0] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-11-02T20:35:00.877Z  INFO 25154 --- [notification-api] [omcat-handler-0] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
-2026-11-02T20:35:10.970Z  INFO 25154 --- [notification-api] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
-2026-11-02T20:35:10.974Z  INFO 25154 --- [notification-api] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
-2026-11-02T20:35:10.981Z  INFO 25154 --- [notification-api] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Shutdown initiated...
-2026-11-02T20:35:10.989Z  INFO 25154 --- [notification-api] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Shutdown completed.
+2026-11-02T20:35:06.135Z  INFO 24749 --- [notification-api] [           main] c.r.n.api.NotificationApiApplication     : Starting NotificationApiApplication v0.1.0-SNAPSHOT using Java 21.0.13 with PID 24749 (/home/runner/work/rc_bill/rc_bill/notification-api/target/notification-api-0.1.0-SNAPSHOT.jar started by runner in /home/runner/work/rc_bill/rc_bill)
+2026-11-02T20:35:06.141Z  INFO 24749 --- [notification-api] [           main] c.r.n.api.NotificationApiApplication     : The following 1 profile is active: "runtime"
+2026-11-02T20:35:11.566Z  INFO 24749 --- [notification-api] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-11-02T20:35:11.591Z  INFO 24749 --- [notification-api] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-11-02T20:35:11.591Z  INFO 24749 --- [notification-api] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.27]
+2026-11-02T20:35:11.707Z  INFO 24749 --- [notification-api] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 5320 ms
+2026-11-02T20:35:12.649Z  INFO 24749 --- [notification-api] [           main] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Starting...
+2026-11-02T20:35:13.355Z  INFO 24749 --- [notification-api] [           main] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Start completed.
+2026-11-02T20:35:15.773Z  INFO 24749 --- [notification-api] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-11-02T20:35:16.385Z  INFO 24749 --- [notification-api] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-11-02T20:35:16.448Z  INFO 24749 --- [notification-api] [           main] c.r.n.api.NotificationApiApplication     : Started NotificationApiApplication in 11.58 seconds (process running for 13.81)
+2026-11-02T20:35:17.120Z  INFO 24749 --- [notification-api] [omcat-handler-0] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-02T20:35:17.125Z  INFO 24749 --- [notification-api] [omcat-handler-0] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-11-02T20:35:17.129Z  INFO 24749 --- [notification-api] [omcat-handler-0] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2026-11-02T20:35:29.797Z  INFO 24749 --- [notification-api] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-11-02T20:35:29.801Z  INFO 24749 --- [notification-api] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-11-02T20:35:29.809Z  INFO 24749 --- [notification-api] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Shutdown initiated...
+2026-11-02T20:35:29.816Z  INFO 24749 --- [notification-api] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Shutdown completed.

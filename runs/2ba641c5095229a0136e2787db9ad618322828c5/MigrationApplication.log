@@ -1,9 +1,9 @@
-20:34:09.983 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Starting...
-20:34:10.437 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Start completed.
-20:34:10.857 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:postgresql://localhost:15432/notification?currentSchema=jobs_37a2113857cc45cdb2c86748a6703c3b (PostgreSQL 17.11)
-20:34:10.952 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 7 migrations (execution time 00:00.029s)
-20:34:10.962 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema "jobs_37a2113857cc45cdb2c86748a6703c3b": 7
-20:34:10.964 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema "jobs_37a2113857cc45cdb2c86748a6703c3b" is up to date. No migration necessary.
+20:34:10.993 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Starting...
+20:34:11.490 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Start completed.
+20:34:11.988 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:postgresql://localhost:15432/notification?currentSchema=jobs_0abf826fd7f94bb9851ed400d9d6e553 (PostgreSQL 17.11)
+20:34:12.099 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 7 migrations (execution time 00:00.044s)
+20:34:12.112 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema "jobs_0abf826fd7f94bb9851ed400d9d6e553": 7
+20:34:12.114 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema "jobs_0abf826fd7f94bb9851ed400d9d6e553" is up to date. No migration necessary.
 Ledger migrations and immutable topology checks completed.
-20:34:11.118 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown initiated...
-20:34:11.121 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown completed.
+20:34:12.412 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown initiated...
+20:34:12.415 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown completed.

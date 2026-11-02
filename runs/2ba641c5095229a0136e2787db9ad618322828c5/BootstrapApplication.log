@@ -1,4 +1,4 @@
-20:34:13.809 [main] INFO org.apache.kafka.common.config.AbstractConfig -- AdminClientConfig values: 
+20:34:16.614 [main] INFO org.apache.kafka.common.config.AbstractConfig -- AdminClientConfig values: 
 	bootstrap.controllers = []
 	bootstrap.servers = [localhost:19092, localhost:19093, localhost:19094]
 	client.dns.lookup = use_all_dns_ips
@@ -91,15 +91,15 @@
 	ssl.truststore.password = null
 	ssl.truststore.type = JKS
 
-20:34:14.053 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka version: 4.2.2
-20:34:14.055 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka commitId: c5e942859576203e
-20:34:14.055 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka startTimeMs: 1793651654051
+20:34:17.201 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka version: 4.2.2
+20:34:17.204 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka commitId: c5e942859576203e
+20:34:17.204 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka startTimeMs: 1793651657198
 Existing offsets retained unchanged.
 Kafka topology bootstrap completed.
-20:34:14.524 [main] INFO org.apache.kafka.common.metrics.Metrics -- Metrics scheduler closed
-20:34:14.524 [main] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.metrics.JmxReporter
-20:34:14.525 [main] INFO org.apache.kafka.common.metrics.Metrics -- Metrics reporters closed
-20:34:14.526 [kafka-admin-client-thread | adminclient-1] INFO org.apache.kafka.common.utils.AppInfoParser -- App info kafka.admin.client for adminclient-1 unregistered
-20:34:14.534 [kafka-admin-client-thread | adminclient-1] INFO org.apache.kafka.common.metrics.Metrics -- Metrics scheduler closed
-20:34:14.534 [kafka-admin-client-thread | adminclient-1] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.metrics.JmxReporter
-20:34:14.534 [kafka-admin-client-thread | adminclient-1] INFO org.apache.kafka.common.metrics.Metrics -- Metrics reporters closed
+20:34:18.278 [main] INFO org.apache.kafka.common.metrics.Metrics -- Metrics scheduler closed
+20:34:18.278 [main] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.metrics.JmxReporter
+20:34:18.278 [main] INFO org.apache.kafka.common.metrics.Metrics -- Metrics reporters closed
+20:34:18.280 [kafka-admin-client-thread | adminclient-1] INFO org.apache.kafka.common.utils.AppInfoParser -- App info kafka.admin.client for adminclient-1 unregistered
+20:34:18.297 [kafka-admin-client-thread | adminclient-1] INFO org.apache.kafka.common.metrics.Metrics -- Metrics scheduler closed
+20:34:18.297 [kafka-admin-client-thread | adminclient-1] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.metrics.JmxReporter
+20:34:18.297 [kafka-admin-client-thread | adminclient-1] INFO org.apache.kafka.common.metrics.Metrics -- Metrics reporters closed

@@ -2,7 +2,7 @@
   "requests": 64,
   "concurrency": 8,
   "succeeded": 64,
-  "acceptance_p95_ms": 400.42,
-  "total_seconds": 7.07,
+  "acceptance_p95_ms": 358.22,
+  "total_seconds": 7.48,
   "capacity_claim": false
 }
