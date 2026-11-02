@@ -11,7 +11,7 @@ public interface NotificationStore {
     Optional<IdempotencyHit> findIdempotency(
             NotificationUseCases.Caller caller, String operationScope, String idempotencyKey);
 
-    /** Atomically writes task and deduplication record; a mismatched fingerprint conflicts. */
+    /** Same-shard transaction writes task, payload, dedup and Outbox; mismatched fingerprint conflicts. */
     NotificationUseCases.Acceptance accept(
             NotificationUseCases.Caller caller, String idempotencyKey,
             String fingerprint, NotificationUseCases.Submission submission,
@@ -22,7 +22,7 @@ public interface NotificationStore {
     NotificationUseCases.AttemptPage attempts(
             NotificationUseCases.Caller caller, UUID id, int afterAttempt, int limit);
 
-    /** Locks the delivery chain, checks eligibility, writes child + dedup + audit together. */
+    /** Locks original-slot chain and writes child, dedup, audit and Outbox in one transaction. */
     NotificationUseCases.Acceptance replay(
             NotificationUseCases.Caller caller, UUID originalId, String idempotencyKey,
             String fingerprint, NotificationUseCases.Replay replay);
