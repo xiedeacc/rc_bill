@@ -1,0 +1,24 @@
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=75.0
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-02T20:35:21.416Z  INFO 1 --- [notification-worker] [           main] c.r.n.w.NotificationWorkerApplication    : Starting NotificationWorkerApplication v0.1.0-SNAPSHOT using Java 21.0.13 with PID 1 (/app/app.jar started by ? in /app)
+2026-11-02T20:35:21.419Z  INFO 1 --- [notification-worker] [           main] c.r.n.w.NotificationWorkerApplication    : The following 1 profile is active: "scaffold"
+2026-11-02T20:35:24.182Z  INFO 1 --- [notification-worker] [           main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=a71410aa-7605-3a96-8efc-6921ef0f3335
+2026-11-02T20:35:24.926Z  INFO 1 --- [notification-worker] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 18081 (http)
+2026-11-02T20:35:24.944Z  INFO 1 --- [notification-worker] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-11-02T20:35:24.944Z  INFO 1 --- [notification-worker] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.27]
+2026-11-02T20:35:25.061Z  INFO 1 --- [notification-worker] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 3540 ms
+2026-11-02T20:35:27.120Z  INFO 1 --- [notification-worker] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-11-02T20:35:27.229Z  INFO 1 --- [notification-worker] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 18081 (http) with context path '/'
+2026-11-02T20:35:27.248Z  INFO 1 --- [notification-worker] [           main] c.r.n.w.NotificationWorkerApplication    : Started NotificationWorkerApplication in 6.906 seconds (process running for 7.948)
+2026-11-02T20:35:27.512Z  INFO 1 --- [notification-worker] [omcat-handler-0] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-02T20:35:27.512Z  INFO 1 --- [notification-worker] [omcat-handler-0] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-11-02T20:35:27.513Z  INFO 1 --- [notification-worker] [omcat-handler-0] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
