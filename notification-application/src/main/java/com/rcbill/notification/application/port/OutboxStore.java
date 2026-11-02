@@ -18,5 +18,5 @@ public interface OutboxStore {
 
     int recoverExpiredPublicationLeases(int physicalShard, int limit);
 
-    record Publication(DispatchEvent event, UUID leaseToken, Instant leaseUntil) { }
+    record Publication(DispatchEvent event, String eventType, UUID leaseToken, Instant leaseUntil) { }
 }
