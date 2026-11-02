@@ -1,16 +1,16 @@
 {
-  "sha": "88af39457d8d1242fcae8f7a49b002971062825f",
-  "run_id": "41488076428",
+  "sha": "82af365e9b4df74089635b40f2cc61a527b79e83",
+  "run_id": "41488556302",
   "tests_outcome": "success",
   "infrastructure_outcome": "success",
   "unit": {
-    "tests": 123,
+    "tests": 124,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
   "integration": {
-    "tests": 7,
+    "tests": 8,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -59,7 +59,7 @@
     {
       "name": "com.rcbill.notification.adapters.config.CatalogTest",
       "kind": "unit",
-      "tests": 2,
+      "tests": 3,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -155,7 +155,7 @@
     {
       "name": "com.rcbill.notification.adapters.persistence.LedgerIT",
       "kind": "integration",
-      "tests": 6,
+      "tests": 7,
       "failures": 0,
       "errors": 0,
       "skipped": 0
