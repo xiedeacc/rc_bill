@@ -1,13 +1,13 @@
 {
-  "sha": "f435793995c78fbae23f7c5633edfc92b7074bfb",
-  "run_id": "41515864799",
+  "sha": "d58d40abc4678d38f20a25088075ca267a7de134",
+  "run_id": "41518168245",
   "tests_outcome": "success",
   "infrastructure_outcome": "success",
   "image_outcome": "success",
   "container_outcome": "success",
   "runtime_outcome": "success",
   "unit": {
-    "tests": 144,
+    "tests": 145,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -134,7 +134,7 @@
     {
       "name": "com.rcbill.notification.application.BacklogGateTest",
       "kind": "unit",
-      "tests": 2,
+      "tests": 3,
       "failures": 0,
       "errors": 0,
       "skipped": 0
