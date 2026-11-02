@@ -21,7 +21,7 @@ public final class Shards implements AutoCloseable {
     private final List<Shard> shards=new ArrayList<>();
     private final int partitions;
     public Shards(List<String> urls,String user,String password,boolean migrate,int partitions) {
-        if(urls.isEmpty() || urls.size()>4096 || partitions<urls.size() || partitions>4096
+        if(urls.isEmpty() || urls.size()>64 || partitions<urls.size() || partitions>4096
                 || 4096%partitions!=0 || partitions%urls.size()!=0) throw new IllegalArgumentException("Incompatible immutable shard/partition topology");
         this.partitions=partitions;
         try {
@@ -30,6 +30,7 @@ public final class Shards implements AutoCloseable {
                 h.setMaximumPoolSize(Math.min(8,Math.max(1,64/urls.size())));h.setMinimumIdle(0);h.setConnectionTimeout(3000);h.setPoolName("ledger-"+shards.size());
                 h.setConnectionInitSql(migrate?"SET statement_timeout='30min'":"SET statement_timeout='5s'");
                 h.addDataSourceProperty("options","-c lock_timeout=5000");h.addDataSourceProperty("prepareThreshold","0");
+                h.addDataSourceProperty("connectTimeout","3");h.addDataSourceProperty("socketTimeout",migrate?"1805":"5");
                 HikariDataSource ds=new HikariDataSource(h);
                 try {
                     if(migrate)Flyway.configure().dataSource(ds).configuration(Map.of("flyway.postgresql.transactional.lock","false")).locations("classpath:db/migration").load().migrate();
