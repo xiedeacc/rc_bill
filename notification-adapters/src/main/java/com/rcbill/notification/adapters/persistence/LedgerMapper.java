@@ -56,7 +56,7 @@ public interface LedgerMapper {
     @Update("UPDATE outbox_event SET publish_state='PUBLISHED',published_at=CURRENT_TIMESTAMP,lease_token=NULL,lease_until=NULL WHERE event_id=#{event} AND lease_token=#{token} AND publish_state='IN_FLIGHT'") int published(Map<String,Object> args);
     @Update("UPDATE outbox_event SET publish_state='PENDING',scheduled_at=COALESCE(scheduled_at,available_at),available_at=#{available},lease_token=NULL,lease_until=NULL WHERE event_id=#{event} AND lease_token=#{token} AND publish_state='IN_FLIGHT'") int republish(Map<String,Object> args);
     @Update("UPDATE outbox_event SET publish_state='PENDING',lease_token=NULL,lease_until=NULL WHERE event_id IN (SELECT event_id FROM outbox_event WHERE publish_state='IN_FLIGHT' AND lease_until<CURRENT_TIMESTAMP LIMIT #{limit} FOR UPDATE SKIP LOCKED)") int recoverOutbox(@Param("limit") int limit);
-    @Insert("INSERT INTO topology_guard(singleton,shard_count,partition_count) VALUES(true,#{shards},#{partitions}) ON CONFLICT DO NOTHING") int initializeTopology(Map<String,Object> args);
+    @Insert("INSERT INTO topology_guard(singleton,shard_count,partition_count,physical_shard_id) VALUES(true,#{shards},#{partitions},#{physicalId}) ON CONFLICT DO NOTHING") int initializeTopology(Map<String,Object> args);
     @Select("SELECT * FROM topology_guard WHERE singleton=true") Map<String,Object> topology();
     @Insert("INSERT INTO destination_version(destination_id,version,fingerprint) VALUES(#{id},#{version},#{fingerprint}) ON CONFLICT DO NOTHING") int registerDestination(Map<String,Object> args);
     @Select("SELECT fingerprint FROM destination_version WHERE destination_id=#{id} AND version=#{version}") String destinationFingerprint(Map<String,Object> args);

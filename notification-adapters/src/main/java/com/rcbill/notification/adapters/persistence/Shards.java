@@ -38,11 +38,13 @@ public final class Shards implements AutoCloseable {
                     var bean=new SqlSessionFactoryBean();bean.setDataSource(ds);bean.setConfiguration(cfg);
                     var shard=new Shard(new SqlSessionTemplate(bean.getObject()),new TransactionTemplate(new DataSourceTransactionManager(ds)),ds);
                     shards.add(shard);
+                    int physicalId=shards.size()-1;
                     shard.transaction(m -> {
-                        m.initializeTopology(Db.map("shards",urls.size(),"partitions",partitions));
+                        m.initializeTopology(Db.map("shards",urls.size(),"partitions",partitions,"physicalId",physicalId));
                         var row=m.topology();
                         if(Db.integer(row,"shard_count")!=urls.size() || Db.integer(row,"partition_count")!=partitions)
                             throw new IllegalStateException("Topology changed: migrate explicitly before starting");
+                        if(row.get("physical_shard_id")==null||Db.integer(row,"physical_shard_id")!=physicalId)throw new IllegalStateException("Physical shard identity missing or reordered; explicit mapping migration required");
                         return null;
                     });
                 } catch(Exception error) {ds.close();throw error;}
