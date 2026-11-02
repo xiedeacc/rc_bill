@@ -1,20 +1,20 @@
 {
-  "sha": "427c05838e588f2e61f5e3121eca4f5a61ab6ab9",
-  "run_id": "41511974823",
-  "tests_outcome": "failure",
+  "sha": "839547c67064bbb42c5df3ca41ba702ccfc12385",
+  "run_id": "41513033655",
+  "tests_outcome": "success",
   "infrastructure_outcome": "success",
-  "image_outcome": "skipped",
-  "container_outcome": "skipped",
-  "runtime_outcome": "skipped",
+  "image_outcome": "success",
+  "container_outcome": "success",
+  "runtime_outcome": "success",
   "unit": {
-    "tests": 136,
+    "tests": 139,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
   "integration": {
     "tests": 12,
-    "failures": 1,
+    "failures": 0,
     "errors": 0,
     "skipped": 0
   },
@@ -95,6 +95,14 @@
       "name": "com.rcbill.notification.domain.RoutingTest",
       "kind": "unit",
       "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.worker.KafkaMetadataTest",
+      "kind": "unit",
+      "tests": 3,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -207,7 +215,7 @@
       "name": "com.rcbill.notification.worker.AdministrativeJobsIT",
       "kind": "integration",
       "tests": 1,
-      "failures": 1,
+      "failures": 0,
       "errors": 0,
       "skipped": 0
     },
@@ -221,5 +229,5 @@
     }
   ],
   "report_errors": [],
-  "test_evidence_complete": false
+  "test_evidence_complete": true
 }
