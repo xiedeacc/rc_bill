@@ -1,0 +1,12 @@
+**/target/
+.idea/
+.vscode/
+*.iml
+.env
+.env.*
+!.env.example
+*.log
+tmp/
+.tools/
+invite.ics
+Thumbs.db
