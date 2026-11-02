@@ -32,4 +32,9 @@ class ApacheHttpTransportTest {
         var release=new CountDownLatch(1);server.createContext("/stall",e->{try{release.await();}catch(InterruptedException x){Thread.currentThread().interrupt();}finally{e.close();}});
         try{var r=client.send(request("/stall",Duration.ofMillis(200)));assertThat(r.outcomeUnknown()).isTrue();assertThat(r.elapsedMs()).isLessThan(2000);}finally{release.countDown();}
     }
+    @Test void dnsLookupCannotOutliveTheRequestBudget()throws Exception{
+        var release=new CountDownLatch(1);server.createContext("/dns",e->{e.sendResponseHeaders(204,-1);e.close();});
+        client.close();client=new ApacheHttpTransport(new AddressPolicy(true),4,host->{try{release.await();return InetAddress.getAllByName(host);}catch(InterruptedException e){Thread.currentThread().interrupt();throw new UnknownHostException("cancelled test lookup");}});
+        try{var result=client.send(request("/dns",Duration.ofMillis(200)));assertThat(result.outcomeUnknown()).isTrue();assertThat(result.elapsedMs()).isLessThan(1500);}finally{release.countDown();}
+    }
 }
