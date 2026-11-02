@@ -1,0 +1,73 @@
+name: notification-verification
+on:
+  push:
+    branches: [master, 'implementation/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: verification-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      contents: write
+    env:
+      TEST_PG_URL: jdbc:postgresql://localhost:15432/notification
+      TEST_PG_USER: notification
+      TEST_PG_PASSWORD: notification_test
+      TEST_KAFKA_BOOTSTRAP: localhost:19092,localhost:19093,localhost:19094
+      TEST_KAFKA_REPLICATION: '3'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Start isolated PostgreSQL and three Kafka brokers
+        id: infrastructure
+        run: docker compose -f compose.test.yaml up -d --wait --wait-timeout 180
+      - name: Unit and real infrastructure tests
+        id: tests
+        run: |
+          set -o pipefail
+          ./mvnw -B -ntp -Pintegration clean verify 2>&1 | tee ci-maven.log
+      - name: Collect verification evidence
+        if: always()
+        env:
+          TEST_OUTCOME: ${{ steps.tests.outcome }}
+          INFRA_OUTCOME: ${{ steps.infrastructure.outcome }}
+        run: |
+          docker compose -f compose.test.yaml logs --no-color > ci-services.log 2>&1 || true
+          python3 scripts/collect-ci-evidence.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: verification-${{ github.sha }}
+          path: ci-evidence-output/
+          retention-days: 14
+      - name: Publish machine-readable evidence for SSH-only review
+        if: always() && github.event_name == 'push'
+        run: |
+          report="$RUNNER_TEMP/rc-bill-ci-evidence"
+          if git fetch origin refs/heads/ci-evidence; then
+            git worktree add -b ci-evidence "$report" FETCH_HEAD
+          else
+            git worktree add -b ci-evidence "$report" HEAD
+            git -C "$report" rm -r --ignore-unmatch . >/dev/null
+          fi
+          mkdir -p "$report/runs/$GITHUB_SHA"
+          cp -R ci-evidence-output/. "$report/runs/$GITHUB_SHA/"
+          cp ci-evidence-output/summary.json "$report/latest.json"
+          git -C "$report" config user.name 'github-actions[bot]'
+          git -C "$report" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C "$report" add .
+          git -C "$report" commit -m "ci: evidence for $GITHUB_SHA" || true
+          git -C "$report" push origin HEAD:ci-evidence
+      - name: Remove only the isolated test services
+        if: always()
+        run: docker compose -f compose.test.yaml down -v
