@@ -1,6 +1,7 @@
 package com.rcbill.notification.application;
 import com.rcbill.notification.application.port.*;
 import com.rcbill.notification.domain.NotificationView;
+import com.rcbill.notification.domain.Routing;
 import java.util.*;
 public final class NotificationService implements NotificationUseCases {
     private final NotificationStore store;private final DestinationCatalog catalog;
