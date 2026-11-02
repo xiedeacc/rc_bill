@@ -16,7 +16,11 @@ public final class BootstrapApplication {
             for(var entry:Map.of(dispatch,partitions,dead,Math.min(48,partitions),quarantine,Math.min(12,partitions)).entrySet()){
                 try{admin.createTopics(List.of(new NewTopic(entry.getKey(),entry.getValue(),replicas).configs(Map.of("min.insync.replicas",Integer.toString(Math.min(2,replicas)),"cleanup.policy","delete","retention.ms","604800000","retention.bytes","-1")))).all().get(30,TimeUnit.SECONDS);}
                 catch(ExecutionException exists){if(!(exists.getCause() instanceof TopicExistsException))throw exists;}
-                var topic=admin.describeTopics(List.of(entry.getKey())).allTopicNames().get(10,TimeUnit.SECONDS).get(entry.getKey());
+                var topic=KafkaMetadata.await(()->{
+                    var described=admin.describeTopics(List.of(entry.getKey())).allTopicNames().get(5,TimeUnit.SECONDS).get(entry.getKey());
+                    if(described.partitions().stream().anyMatch(p->p.leader()==null||p.leader().id()<0||p.isr().size()<Math.min(2,replicas)))throw new org.apache.kafka.common.errors.LeaderNotAvailableException("Replicas not ready");
+                    return described;
+                },java.time.Duration.ofSeconds(30),System::nanoTime,()->java.util.concurrent.locks.LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100)));
                 if(topic.partitions().size()!=entry.getValue()||topic.partitions().stream().anyMatch(p->p.replicas().size()<replicas))throw new IllegalStateException("Existing topic has incompatible topology");
             }
             var current=admin.listConsumerGroupOffsets(group).partitionsToOffsetAndMetadata().get(10,TimeUnit.SECONDS);
