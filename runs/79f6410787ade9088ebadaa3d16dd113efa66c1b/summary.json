@@ -1,0 +1,124 @@
+{
+  "sha": "79f6410787ade9088ebadaa3d16dd113efa66c1b",
+  "run_id": "41486235156",
+  "tests_outcome": "failure",
+  "infrastructure_outcome": "success",
+  "unit": {
+    "tests": 107,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "integration": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "name": "com.rcbill.notification.adapters.http.AddressPolicyTest",
+      "kind": "unit",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.adapters.http.ApacheHttpTransportTest",
+      "kind": "unit",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.adapters.scaffold.ScaffoldModeTest",
+      "kind": "unit",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.adapters.scaffold.ScaffoldHealthIndicatorTest",
+      "kind": "unit",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.adapters.persistence.MapperContractTest",
+      "kind": "unit",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.adapters.config.CatalogTest",
+      "kind": "unit",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.adapters.security.PayloadCipherTest",
+      "kind": "unit",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.domain.RetryPolicyTest",
+      "kind": "unit",
+      "tests": 25,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.domain.RoutingTest",
+      "kind": "unit",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.application.BoundedExecutionTest",
+      "kind": "unit",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.application.SubmissionRequestTest",
+      "kind": "unit",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.application.NotificationServiceTest",
+      "kind": "unit",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.adapters.persistence.LedgerIT",
+      "kind": "integration",
+      "tests": 5,
+      "failures": 0,
+      "errors": 1,
+      "skipped": 0
+    }
+  ]
+}

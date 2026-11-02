@@ -1,10 +1,10 @@
 {
-  "sha": "63a317211ef32bf6b19988872597da9bf0422fbd",
-  "run_id": "41485481447",
+  "sha": "79f6410787ade9088ebadaa3d16dd113efa66c1b",
+  "run_id": "41486235156",
   "tests_outcome": "failure",
   "infrastructure_outcome": "success",
   "unit": {
-    "tests": 102,
+    "tests": 107,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -12,7 +12,7 @@
   "integration": {
     "tests": 5,
     "failures": 0,
-    "errors": 5,
+    "errors": 1,
     "skipped": 0
   },
   "suites": [
@@ -51,7 +51,7 @@
     {
       "name": "com.rcbill.notification.adapters.persistence.MapperContractTest",
       "kind": "unit",
-      "tests": 2,
+      "tests": 7,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -117,7 +117,7 @@
       "kind": "integration",
       "tests": 5,
       "failures": 0,
-      "errors": 5,
+      "errors": 1,
       "skipped": 0
     }
   ]

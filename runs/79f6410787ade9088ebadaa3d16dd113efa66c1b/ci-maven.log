@@ -1,0 +1,306 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] Reliable API Notification Service                                  [pom]
+[INFO] notification-domain                                                [jar]
+[INFO] notification-application                                           [jar]
+[INFO] notification-adapters                                              [jar]
+[INFO] notification-api                                                   [jar]
+[INFO] notification-worker                                                [jar]
+[INFO] 
+[INFO] ------------------< com.rcbill:notification-service >-------------------
+[INFO] Building Reliable API Notification Service 0.1.0-SNAPSHOT          [1/6]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ notification-service ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (supported-toolchain) @ notification-service ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] --- failsafe:3.5.6:integration-test (default) @ notification-service ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- failsafe:3.5.6:verify (default) @ notification-service ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] -------------------< com.rcbill:notification-domain >-------------------
+[INFO] Building notification-domain 0.1.0-SNAPSHOT                        [2/6]
+[INFO]   from notification-domain/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ notification-domain ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (supported-toolchain) @ notification-domain ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (domain-framework-free) @ notification-domain ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.dependency.BannedDependencies passed
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ notification-domain ---
+[INFO] skip non existing resourceDirectory /home/runner/work/rc_bill/rc_bill/notification-domain/src/main/resources
+[INFO] skip non existing resourceDirectory /home/runner/work/rc_bill/rc_bill/notification-domain/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ notification-domain ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 7 source files with javac [debug parameters release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ notification-domain ---
+[INFO] skip non existing resourceDirectory /home/runner/work/rc_bill/rc_bill/notification-domain/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ notification-domain ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 2 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ notification-domain ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.rcbill.notification.domain.RoutingTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.268 s -- in com.rcbill.notification.domain.RoutingTest
+[INFO] Running com.rcbill.notification.domain.RetryPolicyTest
+[INFO] Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.145 s -- in com.rcbill.notification.domain.RetryPolicyTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 33, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ notification-domain ---
+[INFO] Building jar: /home/runner/work/rc_bill/rc_bill/notification-domain/target/notification-domain-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- failsafe:3.5.6:integration-test (default) @ notification-domain ---
+[INFO] 
+[INFO] --- failsafe:3.5.6:verify (default) @ notification-domain ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] ----------------< com.rcbill:notification-application >-----------------
+[INFO] Building notification-application 0.1.0-SNAPSHOT                   [3/6]
+[INFO]   from notification-application/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ notification-application ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (supported-toolchain) @ notification-application ---
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ notification-application ---
+[INFO] skip non existing resourceDirectory /home/runner/work/rc_bill/rc_bill/notification-application/src/main/resources
+[INFO] skip non existing resourceDirectory /home/runner/work/rc_bill/rc_bill/notification-application/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ notification-application ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 13 source files with javac [debug parameters release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ notification-application ---
+[INFO] skip non existing resourceDirectory /home/runner/work/rc_bill/rc_bill/notification-application/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ notification-application ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 3 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ notification-application ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.rcbill.notification.application.BoundedExecutionTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.549 s -- in com.rcbill.notification.application.BoundedExecutionTest
+[INFO] Running com.rcbill.notification.application.SubmissionRequestTest
+[INFO] Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.355 s -- in com.rcbill.notification.application.SubmissionRequestTest
+[INFO] Running com.rcbill.notification.application.NotificationServiceTest
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+WARNING: A Java agent has been loaded dynamically (/home/runner/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.15/byte-buddy-agent-1.18.15.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.134 s -- in com.rcbill.notification.application.NotificationServiceTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 23, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ notification-application ---
+[INFO] Building jar: /home/runner/work/rc_bill/rc_bill/notification-application/target/notification-application-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- failsafe:3.5.6:integration-test (default) @ notification-application ---
+[INFO] 
+[INFO] --- failsafe:3.5.6:verify (default) @ notification-application ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] ------------------< com.rcbill:notification-adapters >------------------
+[INFO] Building notification-adapters 0.1.0-SNAPSHOT                      [4/6]
+[INFO]   from notification-adapters/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ notification-adapters ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (supported-toolchain) @ notification-adapters ---
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ notification-adapters ---
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ notification-adapters ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 19 source files with javac [debug parameters release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ notification-adapters ---
+[INFO] skip non existing resourceDirectory /home/runner/work/rc_bill/rc_bill/notification-adapters/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ notification-adapters ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 8 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ notification-adapters ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.rcbill.notification.adapters.http.AddressPolicyTest
+[INFO] Tests run: 22, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.843 s -- in com.rcbill.notification.adapters.http.AddressPolicyTest
+[INFO] Running com.rcbill.notification.adapters.http.ApacheHttpTransportTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.928 s -- in com.rcbill.notification.adapters.http.ApacheHttpTransportTest
+[INFO] Running com.rcbill.notification.adapters.persistence.MapperContractTest
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+WARNING: A Java agent has been loaded dynamically (/home/runner/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.15/byte-buddy-agent-1.18.15.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.207 s -- in com.rcbill.notification.adapters.persistence.MapperContractTest
+[INFO] Running com.rcbill.notification.adapters.security.PayloadCipherTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.020 s -- in com.rcbill.notification.adapters.security.PayloadCipherTest
+[INFO] Running com.rcbill.notification.adapters.scaffold.ScaffoldModeTest
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.101 s -- in com.rcbill.notification.adapters.scaffold.ScaffoldModeTest
+[INFO] Running com.rcbill.notification.adapters.scaffold.ScaffoldHealthIndicatorTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s -- in com.rcbill.notification.adapters.scaffold.ScaffoldHealthIndicatorTest
+[INFO] Running com.rcbill.notification.adapters.config.CatalogTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.367 s -- in com.rcbill.notification.adapters.config.CatalogTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 51, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ notification-adapters ---
+[INFO] Building jar: /home/runner/work/rc_bill/rc_bill/notification-adapters/target/notification-adapters-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- failsafe:3.5.6:integration-test (default) @ notification-adapters ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.rcbill.notification.adapters.persistence.LedgerIT
+16:57:08.085 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Starting...
+16:57:08.138 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Start completed.
+16:57:08.439 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:postgresql://localhost:15432/notification?currentSchema=it_849dcfcc855a407fbc287156c974d922 (PostgreSQL 17.11)
+16:57:08.511 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Schema history table "it_849dcfcc855a407fbc287156c974d922"."flyway_schema_history" does not exist yet
+16:57:08.515 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 1 migration (execution time 00:00.017s)
+16:57:08.529 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Creating Schema History table "it_849dcfcc855a407fbc287156c974d922"."flyway_schema_history" ...
+16:57:08.588 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema "it_849dcfcc855a407fbc287156c974d922": << Empty Schema >>
+16:57:08.618 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "it_849dcfcc855a407fbc287156c974d922" to version "1 - notification ledger"
+16:57:08.669 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Successfully applied 1 migration to schema "it_849dcfcc855a407fbc287156c974d922", now at version v1 (execution time 00:00.033s)
+16:57:10.611 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown initiated...
+16:57:10.620 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown completed.
+[ERROR] Tests run: 5, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 3.018 s <<< FAILURE! -- in com.rcbill.notification.adapters.persistence.LedgerIT
+[ERROR] com.rcbill.notification.adapters.persistence.LedgerIT.replayIsAuditedDeduplicatedAndPreservesDeliveryIdentity -- Time elapsed: 0.989 s <<< ERROR!
+org.springframework.dao.DataIntegrityViolationException: 
+Error attempting to get column 'ciphertext' from result set.  Cause: org.postgresql.util.PSQLException: Bad value for type byte : \x282386eb0a7453af68b1b74f576b3f4520f220c140bc543cfd762410e79de3119a7b28dbf4a290d10493570da9f2032ac94269feb7ff6774caaeb81571dc50af658d0564311e34479291425bee921f74e1e2dc
+; Bad value for type byte : \x282386eb0a7453af68b1b74f576b3f4520f220c140bc543cfd762410e79de3119a7b28dbf4a290d10493570da9f2032ac94269feb7ff6774caaeb81571dc50af658d0564311e34479291425bee921f74e1e2dc
+	at org.springframework.jdbc.support.SQLStateSQLExceptionTranslator.doTranslate(SQLStateSQLExceptionTranslator.java:140)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:102)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:111)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:111)
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:95)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:362)
+	at jdk.proxy2/jdk.proxy2.$Proxy37.selectList(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:209)
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:147)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:80)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at jdk.proxy2/jdk.proxy2.$Proxy38.payload(Unknown Source)
+	at com.rcbill.notification.adapters.persistence.PgNotificationStore.lambda$replay$2(PgNotificationStore.java:68)
+	at com.rcbill.notification.adapters.persistence.Shards$Shard.lambda$transaction$0(Shards.java:17)
+	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:137)
+	at com.rcbill.notification.adapters.persistence.Shards$Shard.transaction(Shards.java:17)
+	at com.rcbill.notification.adapters.persistence.PgNotificationStore.replay(PgNotificationStore.java:62)
+	at com.rcbill.notification.application.NotificationService.replay(NotificationService.java:32)
+	at com.rcbill.notification.adapters.persistence.LedgerIT.replayIsAuditedDeduplicatedAndPreservesDeliveryIdentity(LedgerIT.java:82)
+Caused by: org.postgresql.util.PSQLException: Bad value for type byte : \x282386eb0a7453af68b1b74f576b3f4520f220c140bc543cfd762410e79de3119a7b28dbf4a290d10493570da9f2032ac94269feb7ff6774caaeb81571dc50af658d0564311e34479291425bee921f74e1e2dc
+	at org.postgresql.jdbc.PgResultSet.getByte(PgResultSet.java:2624)
+	at org.postgresql.jdbc.PgResultSet.getByte(PgResultSet.java:3080)
+	at com.zaxxer.hikari.pool.HikariProxyResultSet.getByte(HikariProxyResultSet.java)
+	at org.apache.ibatis.type.ByteTypeHandler.getNullableResult(ByteTypeHandler.java:35)
+	at org.apache.ibatis.type.ByteTypeHandler.getNullableResult(ByteTypeHandler.java:26)
+	at org.apache.ibatis.type.BaseTypeHandler.getResult(BaseTypeHandler.java:85)
+	at org.apache.ibatis.executor.resultset.DefaultResultSetHandler.createPrimitiveResultObject(DefaultResultSetHandler.java:868)
+	at org.apache.ibatis.executor.resultset.DefaultResultSetHandler.createResultObject(DefaultResultSetHandler.java:681)
+	at org.apache.ibatis.executor.resultset.DefaultResultSetHandler.createResultObject(DefaultResultSetHandler.java:659)
+	at org.apache.ibatis.executor.resultset.DefaultResultSetHandler.getRowValue(DefaultResultSetHandler.java:411)
+	at org.apache.ibatis.executor.resultset.DefaultResultSetHandler.handleRowValuesForSimpleResultMap(DefaultResultSetHandler.java:366)
+	at org.apache.ibatis.executor.resultset.DefaultResultSetHandler.handleRowValues(DefaultResultSetHandler.java:337)
+	at org.apache.ibatis.executor.resultset.DefaultResultSetHandler.handleResultSet(DefaultResultSetHandler.java:310)
+	at org.apache.ibatis.executor.resultset.DefaultResultSetHandler.handleResultSets(DefaultResultSetHandler.java:202)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:66)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:80)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:65)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:137)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:348)
+	... 14 more
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Errors: 
+[ERROR]   LedgerIT.replayIsAuditedDeduplicatedAndPreservesDeliveryIdentity:82 » DataIntegrityViolation Error attempting to get column 'ciphertext' from result set.  Cause: org.postgresql.util.PSQLException: Bad value for type byte : \x282386eb0a7453af68b1b74f576b3f4520f220c140bc543cfd762410e79de3119a7b28dbf4a290d10493570da9f2032ac94269feb7ff6774caaeb81571dc50af658d0564311e34479291425bee921f74e1e2dc
+; Bad value for type byte : \x282386eb0a7453af68b1b74f576b3f4520f220c140bc543cfd762410e79de3119a7b28dbf4a290d10493570da9f2032ac94269feb7ff6774caaeb81571dc50af658d0564311e34479291425bee921f74e1e2dc
+[INFO] 
+[ERROR] Tests run: 5, Failures: 0, Errors: 1, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.5.6:verify (default) @ notification-adapters ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Reliable API Notification Service 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] Reliable API Notification Service .................. SUCCESS [  2.262 s]
+[INFO] notification-domain ................................ SUCCESS [  9.800 s]
+[INFO] notification-application ........................... SUCCESS [  5.884 s]
+[INFO] notification-adapters .............................. FAILURE [ 22.702 s]
+[INFO] notification-api ................................... SKIPPED
+[INFO] notification-worker ................................ SKIPPED
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  46.724 s
+[INFO] Finished at: 2026-11-02T16:57:11Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.5.6:verify (default) on project notification-adapters: 
+[ERROR] 
+[ERROR] See /home/runner/work/rc_bill/rc_bill/notification-adapters/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :notification-adapters
