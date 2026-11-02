@@ -10,25 +10,35 @@ import java.util.UUID;
 
 /** Target business boundary. No implementation is registered in scaffold mode. */
 public interface NotificationUseCases {
-    Acceptance submit(Caller caller, String idempotencyKey, Submission submission);
-    Optional<NotificationView> get(Caller caller, UUID notificationId);
-    AttemptPage attempts(Caller caller, UUID notificationId, int afterAttempt, int limit);
-    Acceptance replay(Caller caller, UUID originalId, String idempotencyKey, Replay replay);
+  Acceptance submit(Caller caller, String idempotencyKey, Submission submission);
 
-    /** Construct only from authenticated claims, never from request JSON. */
-    record Caller(String tenantId, String clientId, String subject) { }
+  Optional<NotificationView> get(Caller caller, UUID notificationId);
 
-    /** Implementations must snapshot input and never log payloads or dynamic header values. */
-    interface Submission {
-        String destinationId();
-        int destinationVersion();
-        String contentType();
-        String body();
-        Map<String, String> headers();
-        int ttlSeconds();
-    }
+  AttemptPage attempts(Caller caller, UUID notificationId, int afterAttempt, int limit);
 
-    record Acceptance(UUID notificationId, Instant acceptedAt, boolean replayed) { }
-    record Replay(String reason, boolean acknowledgeDuplicateRisk) { }
-    record AttemptPage(List<AttemptView> items, Integer nextAfterAttempt) { }
+  Acceptance replay(Caller caller, UUID originalId, String idempotencyKey, Replay replay);
+
+  /** Construct only from authenticated claims, never from request JSON. */
+  record Caller(String tenantId, String clientId, String subject) {}
+
+  /** Implementations must snapshot input and never log payloads or dynamic header values. */
+  interface Submission {
+    String destinationId();
+
+    int destinationVersion();
+
+    String contentType();
+
+    String body();
+
+    Map<String, String> headers();
+
+    int ttlSeconds();
+  }
+
+  record Acceptance(UUID notificationId, Instant acceptedAt, boolean replayed) {}
+
+  record Replay(String reason, boolean acknowledgeDuplicateRisk) {}
+
+  record AttemptPage(List<AttemptView> items, Integer nextAfterAttempt) {}
 }

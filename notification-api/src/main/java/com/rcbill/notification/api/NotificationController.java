@@ -14,27 +14,38 @@ import org.springframework.web.bind.annotation.*;
 @org.springframework.context.annotation.Profile("scaffold")
 @RequestMapping("/v1/notifications")
 public class NotificationController {
-    @PostMapping
-    public ResponseEntity<?> submit(HttpServletRequest request) { return unavailable(request); }
+  @PostMapping
+  public ResponseEntity<?> submit(HttpServletRequest request) {
+    return unavailable(request);
+  }
 
-    @GetMapping("/{notificationId}")
-    public ResponseEntity<?> get(HttpServletRequest request) { return unavailable(request); }
+  @GetMapping("/{notificationId}")
+  public ResponseEntity<?> get(HttpServletRequest request) {
+    return unavailable(request);
+  }
 
-    @GetMapping("/{notificationId}/attempts")
-    public ResponseEntity<?> attempts(HttpServletRequest request) { return unavailable(request); }
+  @GetMapping("/{notificationId}/attempts")
+  public ResponseEntity<?> attempts(HttpServletRequest request) {
+    return unavailable(request);
+  }
 
-    @PostMapping("/{notificationId}/replays")
-    public ResponseEntity<?> replay(HttpServletRequest request) { return unavailable(request); }
+  @PostMapping("/{notificationId}/replays")
+  public ResponseEntity<?> replay(HttpServletRequest request) {
+    return unavailable(request);
+  }
 
-    private ResponseEntity<?> unavailable(HttpServletRequest request) {
-        var problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_IMPLEMENTED,
-                "Scaffold only: durable acceptance and delivery are not implemented.");
-        problem.setType(URI.create("urn:rcbill:problem:not-implemented"));
-        problem.setTitle("Notification capability is not implemented");
-        problem.setInstance(URI.create(request.getRequestURI()));
-        problem.setProperty("code", "NOT_IMPLEMENTED");
-        problem.setProperty("traceId", UUID.randomUUID().toString());
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
-                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(problem);
-    }
+  private ResponseEntity<?> unavailable(HttpServletRequest request) {
+    var problem =
+        ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_IMPLEMENTED,
+            "Scaffold only: durable acceptance and delivery are not implemented.");
+    problem.setType(URI.create("urn:rcbill:problem:not-implemented"));
+    problem.setTitle("Notification capability is not implemented");
+    problem.setInstance(URI.create(request.getRequestURI()));
+    problem.setProperty("code", "NOT_IMPLEMENTED");
+    problem.setProperty("traceId", UUID.randomUUID().toString());
+    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
+        .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+        .body(problem);
+  }
 }
