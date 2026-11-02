@@ -1,0 +1,589 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-02T20:07:41.962Z  INFO 28019 --- [notification-worker] [           main] c.r.n.w.NotificationWorkerApplication    : Starting NotificationWorkerApplication v0.1.0-SNAPSHOT using Java 21.0.13 with PID 28019 (/home/runner/work/rc_bill/rc_bill/notification-worker/target/notification-worker-0.1.0-SNAPSHOT.jar started by runner in /home/runner/work/rc_bill/rc_bill)
+2026-11-02T20:07:41.972Z  INFO 28019 --- [notification-worker] [           main] c.r.n.w.NotificationWorkerApplication    : The following 1 profile is active: "runtime"
+2026-11-02T20:07:45.498Z  INFO 28019 --- [notification-worker] [           main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=d99145ab-3202-34f1-813e-d114bdb77ed2
+2026-11-02T20:07:47.523Z  INFO 28019 --- [notification-worker] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8081 (http)
+2026-11-02T20:07:47.582Z  INFO 28019 --- [notification-worker] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-11-02T20:07:47.582Z  INFO 28019 --- [notification-worker] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.27]
+2026-11-02T20:07:47.768Z  INFO 28019 --- [notification-worker] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 5587 ms
+2026-11-02T20:07:48.949Z  INFO 28019 --- [notification-worker] [           main] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Starting...
+2026-11-02T20:07:50.138Z  INFO 28019 --- [notification-worker] [           main] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Start completed.
+2026-11-02T20:07:50.699Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.config.AbstractConfig   : AdminClientConfig values: 
+	bootstrap.controllers = []
+	bootstrap.servers = [localhost:19092, localhost:19093, localhost:19094]
+	client.dns.lookup = use_all_dns_ips
+	client.id = 
+	config.providers = []
+	connections.max.idle.ms = 300000
+	default.api.timeout.ms = 60000
+	enable.metrics.push = false
+	metadata.max.age.ms = 300000
+	metadata.recovery.rebootstrap.trigger.ms = 300000
+	metadata.recovery.strategy = rebootstrap
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = []
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = []
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+
+2026-11-02T20:07:51.135Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.config.AbstractConfig   : These configurations '[ssl.endpoint.identification.algorithm]' were supplied but are not used yet.
+2026-11-02T20:07:51.137Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 4.2.2
+2026-11-02T20:07:51.138Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: c5e942859576203e
+2026-11-02T20:07:51.138Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1793650071135
+2026-11-02T20:07:53.851Z  INFO 28019 --- [notification-worker] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-11-02T20:07:53.946Z  INFO 28019 --- [notification-worker] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8081 (http) with context path '/'
+2026-11-02T20:07:54.008Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.config.AbstractConfig   : ConsumerConfig values: 
+	allow.auto.create.topics = false
+	auto.commit.interval.ms = 5000
+	auto.offset.reset = none
+	bootstrap.servers = [localhost:19092, localhost:19093, localhost:19094]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-notification-dispatch-v1-1
+	client.rack = 
+	config.providers = []
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 16777216
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = notification-dispatch-v1
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_committed
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 100
+	metadata.max.age.ms = 300000
+	metadata.recovery.rebootstrap.trigger.ms = 300000
+	metadata.recovery.strategy = rebootstrap
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = []
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	share.acknowledgement.mode = implicit
+	share.acquire.mode = BATCH_OPTIMIZED
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = []
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+
+2026-11-02T20:07:54.064Z  INFO 28019 --- [notification-worker] [           main] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-11-02T20:07:54.134Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.config.AbstractConfig   : These configurations '[ssl.endpoint.identification.algorithm]' were supplied but are not used yet.
+2026-11-02T20:07:54.135Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 4.2.2
+2026-11-02T20:07:54.135Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: c5e942859576203e
+2026-11-02T20:07:54.135Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1793650074135
+2026-11-02T20:07:54.138Z  INFO 28019 --- [notification-worker] [           main] o.a.k.c.c.i.ClassicKafkaConsumer         : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Subscribed to topic(s): notification.dispatch.v1
+2026-11-02T20:07:54.151Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.config.AbstractConfig   : ConsumerConfig values: 
+	allow.auto.create.topics = false
+	auto.commit.interval.ms = 5000
+	auto.offset.reset = none
+	bootstrap.servers = [localhost:19092, localhost:19093, localhost:19094]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-notification-dispatch-v1-2
+	client.rack = 
+	config.providers = []
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 16777216
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = notification-dispatch-v1
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_committed
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 100
+	metadata.max.age.ms = 300000
+	metadata.recovery.rebootstrap.trigger.ms = 300000
+	metadata.recovery.strategy = rebootstrap
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = []
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	share.acknowledgement.mode = implicit
+	share.acquire.mode = BATCH_OPTIMIZED
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = []
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+
+2026-11-02T20:07:54.151Z  INFO 28019 --- [notification-worker] [           main] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-11-02T20:07:54.167Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.config.AbstractConfig   : These configurations '[ssl.endpoint.identification.algorithm]' were supplied but are not used yet.
+2026-11-02T20:07:54.167Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 4.2.2
+2026-11-02T20:07:54.167Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: c5e942859576203e
+2026-11-02T20:07:54.167Z  INFO 28019 --- [notification-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1793650074167
+2026-11-02T20:07:54.168Z  INFO 28019 --- [notification-worker] [           main] o.a.k.c.c.i.ClassicKafkaConsumer         : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Subscribed to topic(s): notification.dispatch.v1
+2026-11-02T20:07:54.220Z  INFO 28019 --- [notification-worker] [           main] c.r.n.w.NotificationWorkerApplication    : Started NotificationWorkerApplication in 14.654 seconds (process running for 17.995)
+2026-11-02T20:07:54.231Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Cluster ID: MkU3OEVBNTcwNTJENDM2Qk
+2026-11-02T20:07:54.233Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Cluster ID: MkU3OEVBNTcwNTJENDM2Qk
+2026-11-02T20:07:54.236Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Discovered group coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false)
+2026-11-02T20:07:54.239Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Discovered group coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false)
+2026-11-02T20:07:54.241Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] (Re-)joining group
+2026-11-02T20:07:54.279Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] (Re-)joining group
+2026-11-02T20:07:54.344Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Request joining group due to: need to re-join with the given member-id: consumer-notification-dispatch-v1-2-66db9dee-fc75-457a-ada3-6723351fe870
+2026-11-02T20:07:54.345Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] (Re-)joining group
+2026-11-02T20:07:54.345Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Request joining group due to: need to re-join with the given member-id: consumer-notification-dispatch-v1-1-8d22a43b-ccce-4fac-b654-2de20523e05a
+2026-11-02T20:07:54.346Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] (Re-)joining group
+2026-11-02T20:07:54.605Z  INFO 28019 --- [notification-worker] [omcat-handler-0] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-02T20:07:54.605Z  INFO 28019 --- [notification-worker] [omcat-handler-0] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-11-02T20:07:54.608Z  INFO 28019 --- [notification-worker] [omcat-handler-0] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-11-02T20:07:56.086Z  INFO 28019 --- [notification-worker] [      control-2] o.a.kafka.common.config.AbstractConfig   : ProducerConfig values: 
+	acks = -1
+	batch.size = 65536
+	bootstrap.servers = [localhost:19092, localhost:19093, localhost:19094]
+	buffer.memory = 67108864
+	client.dns.lookup = use_all_dns_ips
+	client.id = notification-worker-producer-1
+	compression.gzip.level = -1
+	compression.lz4.level = 9
+	compression.type = lz4
+	compression.zstd.level = 3
+	config.providers = []
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	enable.metrics.push = true
+	interceptor.classes = []
+	key.serializer = class org.apache.kafka.common.serialization.StringSerializer
+	linger.ms = 5
+	max.block.ms = 5000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metadata.recovery.rebootstrap.trigger.ms = 300000
+	metadata.recovery.strategy = rebootstrap
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = []
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = []
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 60000
+	transaction.two.phase.commit.enable = false
+	transactional.id = null
+	value.serializer = class org.apache.kafka.common.serialization.StringSerializer
+
+2026-11-02T20:07:56.110Z  INFO 28019 --- [notification-worker] [      control-2] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-11-02T20:07:56.194Z  INFO 28019 --- [notification-worker] [      control-2] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=notification-worker-producer-1] Instantiated an idempotent producer.
+2026-11-02T20:07:56.358Z  INFO 28019 --- [notification-worker] [      control-2] o.a.kafka.common.config.AbstractConfig   : These configurations '[ssl.endpoint.identification.algorithm]' were supplied but are not used yet.
+2026-11-02T20:07:56.359Z  INFO 28019 --- [notification-worker] [      control-2] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 4.2.2
+2026-11-02T20:07:56.359Z  INFO 28019 --- [notification-worker] [      control-2] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: c5e942859576203e
+2026-11-02T20:07:56.359Z  INFO 28019 --- [notification-worker] [      control-2] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1793650076359
+2026-11-02T20:07:56.440Z  INFO 28019 --- [notification-worker] [rker-producer-1] org.apache.kafka.clients.Metadata        : [Producer clientId=notification-worker-producer-1] Cluster ID: MkU3OEVBNTcwNTJENDM2Qk
+2026-11-02T20:07:56.445Z  INFO 28019 --- [notification-worker] [rker-producer-1] o.a.k.c.p.internals.TransactionManager   : [Producer clientId=notification-worker-producer-1] ProducerId set to 0 with epoch 0
+2026-11-02T20:08:00.355Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Successfully joined group with generation Generation{generationId=1, memberId='consumer-notification-dispatch-v1-2-66db9dee-fc75-457a-ada3-6723351fe870', protocol='cooperative-sticky'}
+2026-11-02T20:08:00.356Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Successfully joined group with generation Generation{generationId=1, memberId='consumer-notification-dispatch-v1-1-8d22a43b-ccce-4fac-b654-2de20523e05a', protocol='cooperative-sticky'}
+2026-11-02T20:08:00.363Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.i.AbstractStickyAssignor       : Final assignment of partitions to consumers: 
+{consumer-notification-dispatch-v1-2-66db9dee-fc75-457a-ada3-6723351fe870=[notification.dispatch.v1-1, notification.dispatch.v1-3, notification.dispatch.v1-5, notification.dispatch.v1-7, notification.dispatch.v1-9, notification.dispatch.v1-11, notification.dispatch.v1-13, notification.dispatch.v1-15], consumer-notification-dispatch-v1-1-8d22a43b-ccce-4fac-b654-2de20523e05a=[notification.dispatch.v1-0, notification.dispatch.v1-2, notification.dispatch.v1-4, notification.dispatch.v1-6, notification.dispatch.v1-8, notification.dispatch.v1-10, notification.dispatch.v1-12, notification.dispatch.v1-14]}
+2026-11-02T20:08:00.364Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Finished assignment for group at generation 1: {consumer-notification-dispatch-v1-2-66db9dee-fc75-457a-ada3-6723351fe870=Assignment(partitions=[notification.dispatch.v1-1, notification.dispatch.v1-3, notification.dispatch.v1-5, notification.dispatch.v1-7, notification.dispatch.v1-9, notification.dispatch.v1-11, notification.dispatch.v1-13, notification.dispatch.v1-15]), consumer-notification-dispatch-v1-1-8d22a43b-ccce-4fac-b654-2de20523e05a=Assignment(partitions=[notification.dispatch.v1-0, notification.dispatch.v1-2, notification.dispatch.v1-4, notification.dispatch.v1-6, notification.dispatch.v1-8, notification.dispatch.v1-10, notification.dispatch.v1-12, notification.dispatch.v1-14])}
+2026-11-02T20:08:00.377Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Successfully synced group in generation Generation{generationId=1, memberId='consumer-notification-dispatch-v1-2-66db9dee-fc75-457a-ada3-6723351fe870', protocol='cooperative-sticky'}
+2026-11-02T20:08:00.378Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Updating assignment with
+	Assigned partitions:                       [notification.dispatch.v1-1, notification.dispatch.v1-3, notification.dispatch.v1-5, notification.dispatch.v1-7, notification.dispatch.v1-9, notification.dispatch.v1-11, notification.dispatch.v1-13, notification.dispatch.v1-15]
+	Current owned partitions:                  []
+	Added partitions (assigned - owned):       [notification.dispatch.v1-1, notification.dispatch.v1-3, notification.dispatch.v1-5, notification.dispatch.v1-7, notification.dispatch.v1-9, notification.dispatch.v1-11, notification.dispatch.v1-13, notification.dispatch.v1-15]
+	Revoked partitions (owned - assigned):     []
+
+2026-11-02T20:08:00.378Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Notifying assignor about the new Assignment(partitions=[notification.dispatch.v1-1, notification.dispatch.v1-3, notification.dispatch.v1-5, notification.dispatch.v1-7, notification.dispatch.v1-9, notification.dispatch.v1-11, notification.dispatch.v1-13, notification.dispatch.v1-15])
+2026-11-02T20:08:00.380Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Successfully synced group in generation Generation{generationId=1, memberId='consumer-notification-dispatch-v1-1-8d22a43b-ccce-4fac-b654-2de20523e05a', protocol='cooperative-sticky'}
+2026-11-02T20:08:00.381Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Updating assignment with
+	Assigned partitions:                       [notification.dispatch.v1-0, notification.dispatch.v1-2, notification.dispatch.v1-4, notification.dispatch.v1-6, notification.dispatch.v1-8, notification.dispatch.v1-10, notification.dispatch.v1-12, notification.dispatch.v1-14]
+	Current owned partitions:                  []
+	Added partitions (assigned - owned):       [notification.dispatch.v1-0, notification.dispatch.v1-2, notification.dispatch.v1-4, notification.dispatch.v1-6, notification.dispatch.v1-8, notification.dispatch.v1-10, notification.dispatch.v1-12, notification.dispatch.v1-14]
+	Revoked partitions (owned - assigned):     []
+
+2026-11-02T20:08:00.381Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Notifying assignor about the new Assignment(partitions=[notification.dispatch.v1-0, notification.dispatch.v1-2, notification.dispatch.v1-4, notification.dispatch.v1-6, notification.dispatch.v1-8, notification.dispatch.v1-10, notification.dispatch.v1-12, notification.dispatch.v1-14])
+2026-11-02T20:08:00.381Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Adding newly assigned partitions: [notification.dispatch.v1-1, notification.dispatch.v1-3, notification.dispatch.v1-5, notification.dispatch.v1-7, notification.dispatch.v1-9, notification.dispatch.v1-11, notification.dispatch.v1-13, notification.dispatch.v1-15]
+2026-11-02T20:08:00.382Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] s.k.l.ConcurrentMessageListenerContainer : notification-dispatch-v1: partitions assigned: [notification.dispatch.v1-1, notification.dispatch.v1-3, notification.dispatch.v1-5, notification.dispatch.v1-7, notification.dispatch.v1-9, notification.dispatch.v1-11, notification.dispatch.v1-13, notification.dispatch.v1-15]
+2026-11-02T20:08:00.384Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Adding newly assigned partitions: [notification.dispatch.v1-0, notification.dispatch.v1-2, notification.dispatch.v1-4, notification.dispatch.v1-6, notification.dispatch.v1-8, notification.dispatch.v1-10, notification.dispatch.v1-12, notification.dispatch.v1-14]
+2026-11-02T20:08:00.384Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] s.k.l.ConcurrentMessageListenerContainer : notification-dispatch-v1: partitions assigned: [notification.dispatch.v1-0, notification.dispatch.v1-2, notification.dispatch.v1-4, notification.dispatch.v1-6, notification.dispatch.v1-8, notification.dispatch.v1-10, notification.dispatch.v1-12, notification.dispatch.v1-14]
+2026-11-02T20:08:00.397Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-5 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.399Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-3 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.399Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-1 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.399Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-15 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.400Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-13 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.400Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-11 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.400Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-9 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.400Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-7 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.396Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-4 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.400Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-2 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.400Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-0 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.400Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-14 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.401Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-12 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.401Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-10 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.401Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-8 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:00.401Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition notification.dispatch.v1-6 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+2026-11-02T20:08:01.825Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Revoke previously assigned partitions [notification.dispatch.v1-0, notification.dispatch.v1-2, notification.dispatch.v1-4, notification.dispatch.v1-6, notification.dispatch.v1-8, notification.dispatch.v1-10, notification.dispatch.v1-12, notification.dispatch.v1-14]
+2026-11-02T20:08:01.826Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] s.k.l.ConcurrentMessageListenerContainer : notification-dispatch-v1: partitions revoked: [notification.dispatch.v1-0, notification.dispatch.v1-2, notification.dispatch.v1-4, notification.dispatch.v1-6, notification.dispatch.v1-8, notification.dispatch.v1-10, notification.dispatch.v1-12, notification.dispatch.v1-14]
+2026-11-02T20:08:01.830Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Revoke previously assigned partitions [notification.dispatch.v1-1, notification.dispatch.v1-3, notification.dispatch.v1-5, notification.dispatch.v1-7, notification.dispatch.v1-9, notification.dispatch.v1-11, notification.dispatch.v1-13, notification.dispatch.v1-15]
+2026-11-02T20:08:01.831Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] s.k.l.ConcurrentMessageListenerContainer : notification-dispatch-v1: partitions revoked: [notification.dispatch.v1-1, notification.dispatch.v1-3, notification.dispatch.v1-5, notification.dispatch.v1-7, notification.dispatch.v1-9, notification.dispatch.v1-11, notification.dispatch.v1-13, notification.dispatch.v1-15]
+2026-11-02T20:08:01.832Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Member consumer-notification-dispatch-v1-1-8d22a43b-ccce-4fac-b654-2de20523e05a sending LeaveGroup request to coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false) due to the consumer unsubscribed from all topics
+2026-11-02T20:08:01.834Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Member consumer-notification-dispatch-v1-2-66db9dee-fc75-457a-ada3-6723351fe870 sending LeaveGroup request to coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false) due to the consumer unsubscribed from all topics
+2026-11-02T20:08:01.834Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Resetting generation and member id due to: consumer pro-actively leaving the group
+2026-11-02T20:08:01.834Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Request joining group due to: consumer pro-actively leaving the group
+2026-11-02T20:08:01.834Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.i.ClassicKafkaConsumer         : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Unsubscribed all topics or patterns and assigned partitions
+2026-11-02T20:08:01.842Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Resetting generation and member id due to: consumer pro-actively leaving the group
+2026-11-02T20:08:01.845Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Request joining group due to: consumer pro-actively leaving the group
+2026-11-02T20:08:01.845Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.i.ClassicKafkaConsumer         : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Unsubscribed all topics or patterns and assigned partitions
+2026-11-02T20:08:01.848Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Resetting generation and member id due to: consumer pro-actively leaving the group
+2026-11-02T20:08:01.848Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-1, groupId=notification-dispatch-v1] Request joining group due to: consumer pro-actively leaving the group
+2026-11-02T20:08:01.850Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Resetting generation and member id due to: consumer pro-actively leaving the group
+2026-11-02T20:08:01.850Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-notification-dispatch-v1-2, groupId=notification-dispatch-v1] Request joining group due to: consumer pro-actively leaving the group
+2026-11-02T20:08:01.963Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2026-11-02T20:08:01.963Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2026-11-02T20:08:01.963Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+2026-11-02T20:08:01.963Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2026-11-02T20:08:01.973Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.a.kafka.common.utils.AppInfoParser     : App info kafka.consumer for consumer-notification-dispatch-v1-2 unregistered
+2026-11-02T20:08:01.974Z  INFO 28019 --- [notification-worker] [   kafka-poll-1] o.s.k.l.KafkaMessageListenerContainer    : notification-dispatch-v1: Consumer stopped
+2026-11-02T20:08:02.311Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2026-11-02T20:08:02.311Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2026-11-02T20:08:02.313Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+2026-11-02T20:08:02.314Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2026-11-02T20:08:02.320Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.a.kafka.common.utils.AppInfoParser     : App info kafka.consumer for consumer-notification-dispatch-v1-1 unregistered
+2026-11-02T20:08:02.320Z  INFO 28019 --- [notification-worker] [   kafka-poll-0] o.s.k.l.KafkaMessageListenerContainer    : notification-dispatch-v1: Consumer stopped
+2026-11-02T20:08:02.324Z  INFO 28019 --- [notification-worker] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-11-02T20:08:02.329Z  INFO 28019 --- [notification-worker] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-11-02T20:08:02.330Z  INFO 28019 --- [notification-worker] [ionShutdownHook] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=notification-worker-producer-1] Closing the Kafka producer with timeoutMillis = 30000 ms.
+2026-11-02T20:08:02.341Z  INFO 28019 --- [notification-worker] [ionShutdownHook] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2026-11-02T20:08:02.350Z  INFO 28019 --- [notification-worker] [ionShutdownHook] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2026-11-02T20:08:02.350Z  INFO 28019 --- [notification-worker] [ionShutdownHook] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+2026-11-02T20:08:02.350Z  INFO 28019 --- [notification-worker] [ionShutdownHook] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2026-11-02T20:08:02.352Z  INFO 28019 --- [notification-worker] [ionShutdownHook] o.a.kafka.common.utils.AppInfoParser     : App info kafka.producer for notification-worker-producer-1 unregistered
+2026-11-02T20:08:02.374Z  INFO 28019 --- [notification-worker] [ionShutdownHook] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2026-11-02T20:08:02.374Z  INFO 28019 --- [notification-worker] [ionShutdownHook] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2026-11-02T20:08:02.375Z  INFO 28019 --- [notification-worker] [ionShutdownHook] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2026-11-02T20:08:02.377Z  INFO 28019 --- [notification-worker] [| adminclient-1] o.a.kafka.common.utils.AppInfoParser     : App info kafka.admin.client for adminclient-1 unregistered
+2026-11-02T20:08:02.379Z  INFO 28019 --- [notification-worker] [| adminclient-1] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2026-11-02T20:08:02.379Z  INFO 28019 --- [notification-worker] [| adminclient-1] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2026-11-02T20:08:02.379Z  INFO 28019 --- [notification-worker] [| adminclient-1] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2026-11-02T20:08:02.385Z  INFO 28019 --- [notification-worker] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Shutdown initiated...
+2026-11-02T20:08:02.392Z  INFO 28019 --- [notification-worker] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : ledger-0 - Shutdown completed.

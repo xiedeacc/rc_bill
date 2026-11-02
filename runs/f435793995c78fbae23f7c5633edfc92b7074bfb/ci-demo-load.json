@@ -1,0 +1,8 @@
+{
+  "requests": 64,
+  "concurrency": 8,
+  "succeeded": 64,
+  "acceptance_p95_ms": 673.53,
+  "total_seconds": 6.83,
+  "capacity_claim": false
+}
