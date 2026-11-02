@@ -16,7 +16,7 @@ x-kafka-env: &kafka-env
   KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE: "false"
   KAFKA_HEAP_OPTS: -Xms256m -Xmx512m
 x-kafka: &kafka
-  image: apache/kafka:4.2.2
+  image: apache/kafka:4.2.2@sha256:1213eb3943d551e5ed1fca7a4e109001cee35770b66a02a0c37a8964efe09b69
   healthcheck:
     test: [CMD-SHELL, '/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:29092 >/dev/null 2>&1']
     interval: 5s
@@ -25,7 +25,7 @@ x-kafka: &kafka
     start_period: 20s
 services:
   postgres:
-    image: postgres:17
+    image: postgres:17@sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1
     environment:
       POSTGRES_DB: notification
       POSTGRES_USER: notification

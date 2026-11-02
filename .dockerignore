@@ -1,0 +1,7 @@
+**
+!notification-api/
+!notification-api/target/
+!notification-api/target/*.jar
+!notification-worker/
+!notification-worker/target/
+!notification-worker/target/*.jar
