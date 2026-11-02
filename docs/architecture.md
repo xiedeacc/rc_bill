@@ -28,7 +28,7 @@ flowchart LR
 
 ![容器与可靠性边界](diagrams/architecture.png)
 
-[SVG可缩放版本](diagrams/architecture.svg)。蓝色框是应用运行角色，紫色框是持久基础设施，虚线表示恢复和写回。数据库提交、Kafka确认、offset提交和供应商响应是四种不同的事实。
+[SVG可缩放版本](diagrams/architecture.svg)。浅蓝框是应用组件，虚线子框标明Worker进程边界；紫色框是持久数据，橙色虚线表示故障恢复，蓝线表示调用与投递。数据库提交、Kafka确认、offset提交和供应商响应是四种不同的事实。
 
 | 提交点 | 谁拥有后续责任 | 进程此刻退出时 |
 | --- | --- | --- |

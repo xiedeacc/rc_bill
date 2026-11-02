@@ -1,6 +1,6 @@
 # Kafka 高流量投递可靠性与部署设计
 
-版本2.0，2026-11-02。本文与[系统设计](system-design.md)共同构成当前基线，替代原先的低容量数据库队列方案。假设持续20,000条通知/秒、峰值100,000条/秒持续10分钟，默认平均重试放大1.05。参数均为压测起点，部署、业务适配、集成与故障测试仍为TODO。
+版本2.0，2026-11-02。本文与[系统设计](system-design.md)共同构成当前基线，替代原先的低容量数据库队列方案。假设持续20,000条通知/秒、峰值100,000条/秒持续10分钟，默认平均重试放大1.05。参数均为压测起点；业务适配及真实基础设施测试已有实现，生产部署、跨AZ和目标容量仍需环境验收。
 
 ## 1 保证范围
 
@@ -20,7 +20,7 @@
 
 API不直接承担Kafka发布。一次MyBatis/Spring数据库事务在**同一物理PG分片**写入以下内容：幂等记录、notification、payload、delivery_chain和首个Outbox事件。提交后返回202，Kafka暂时不可用时由Outbox保留；超过Outbox容量或最老年龄门限则停止接受新任务并返回503。不存在“先202再补写Outbox”的窗口。
 
-`outbox_event`字段：`event_id, logical_slot, notification_id, schedule_epoch, event_type, payload, available_at, publish_state, lease_token, lease_until, published_at`。约束`UNIQUE(notification_id,schedule_epoch,event_type)`，event_id稳定不变。事件只含路由和状态索引，不含Body或凭证；预计600B，单条硬上限8KiB。正常消息不携带64KiB通知Body，避免重试在Kafka中反复复制隐私数据。
+`outbox_event`字段：`event_id, slot, notification_id, schedule_epoch, event_type, scheduled_at, available_at, publish_state, lease_token, lease_until, published_at`。约束`UNIQUE(notification_id,schedule_epoch,event_type)`，event_id稳定不变。事件只含路由和状态索引，不含Body或凭证；预计600B，单条硬上限8KiB。正常消息不携带64KiB通知Body，避免重试在Kafka中反复复制隐私数据。
 
 Relay按分片/固定lane分工，每100ms小批读取到期未发布行，`FOR UPDATE SKIP LOCKED`短事务取得发布租约后提交；**不持数据库锁等待Kafka**。默认每批≤500，每进程共享少量Producer并异步发送，限制未完成send数量及buffer占用。Future收到Kafka成功确认后按Outbox租约CAS标记PUBLISHED；失败保留待发布，指数退避。事务结束与markPublished之间崩溃，允许同eventId再次发布，由消费者业务幂等处理。
 
@@ -32,7 +32,7 @@ Outbox发布租约180s，Producer delivery.timeout=120s，结果写回另留余�
 
 ## 3 消费与提交 offset
 
-Topic事件字段冻结为：`schemaVersion=1, eventId, notificationId, logicalSlot, scheduleEpoch, destinationId, createdAt, expiresAt`。Kafka key使用notificationId，但Relay显式指定`partition=logicalSlot % 2048`，不使用默认字符串key哈希分区器。slot已经按完整幂等身份散列，因此分区不按tenant或destination聚集，避免大客户/热门供应商占满一个分区。初始PG映射为`physicalShard=logicalSlot % 64`，2048是64的整数倍，因此每个dispatch partition只关联一个PG主分片，便于连接池与消费亲和。分区数/slot映射是版本化拓扑，不能独立随意更改。身份、目标和版本必须与PG记录核对，不能将消息里自报tenant当授权证明。
+Topic事件字段冻结为：`schemaVersion=1, eventId, notificationId, logicalSlot, scheduleEpoch, destinationId, destinationVersion, createdAt, expiresAt`。Kafka key使用notificationId，Relay显式指定`partition=logicalSlot % partitionCount`。运行基线默认16分区，容量模型使用2048，不使用默认字符串key哈希分区器。slot已经按完整幂等身份散列，因此分区不按tenant或destination聚集，避免大客户/热门供应商占满一个分区。初始PG映射为`physicalShard=logicalSlot % 64`，2048是64的整数倍，因此每个dispatch partition只关联一个PG主分片，便于连接池与消费亲和。分区数/slot映射是版本化拓扑，不能独立随意更改。身份、目标和版本必须与PG记录核对，不能将消息里自报tenant当授权证明。
 
 消费采用“**先持久移交责任，再提交offset，HTTP异步执行**”模式，避免将10s外部调用阻塞在Kafka poll线程上：
 
@@ -210,7 +210,7 @@ PG峰值事务下限：接收100k/s + 领取105k/s + 写回105k/s ≈310k事务/
 
 2小时平均速率全目标故障会产生1.44亿任务，原始Body约274.7GiB；Outbox/重试不能放内存。Kafka最大lag年龄、Outbox最老未发布年龄和磁盘余量比一个全局`count(*)`更适合作背压依据：初始Outbox年龄>60s软拒绝新流量，>5分钟或预计12h耗尽磁盘硬保护，Kafka最老未处理>24h警报/TTL对账，达到retention前必须修复。阈值要按故障预算调整，已接受任务继续保留责任。
 
-## 10 部署与运维 TODO
+## 10 部署与运维验收
 
 1. KRaft controller使用独立持久卷、独立资源和反亲和；统一cluster.id，一次初始化，禁止重启脚本重新format存储。broker与controller设置独立监听器，校验advertised.listeners从客户端与其他broker均可达。
 2. 客户端使用`security.protocol=SASL_SSL`、经平台批准的`sasl.mechanism`（例如SCRAM-SHA-512）与`ssl.endpoint.identification.algorithm=https`，或采用双向TLS；truststore/凭证从密钥平台注入，不提交JAAS密码。API不直连broker；Relay只具备dispatch/dead写权限，Worker只读对应topic/group及隔离写权限，运维建topic独立账号。禁用不必要的Delete/Alter权限。
@@ -221,7 +221,7 @@ PG峰值事务下限：接收100k/s + 领取105k/s + 写回105k/s ≈310k事务/
 7. 毒消息、认证失败、缺失offset、PG状态缺失均要有停止与人工对账路径。关闭自动静默恢复器的“默认跳过”。恢复备份后先暂停出站，再核对幂等窗口和可能已成功的HTTP。
 8. 集成/故障验收包括：发送成功但ACK丢失、发布后未markPublished就杀Relay、持久handoff后未提交offset就杀consumer、offset提交后未执行HTTP就杀Worker、rebalance中继续完成旧租约、供应商成功后写回失败、ISR从3降2降1、磁盘满、offset过期、slot迁移和重复重放。要求task/attempt/Outbox不变量与审计结果同时正确。
 
-本阶段不交付可直接上生产的Kubernetes清单。以上部署参数是可审查设计，必须通过真实集群与失效演练；README会分别说明“已加入依赖”和“实际集成已完成”的区别。
+已提供Kubernetes环境适配模板和默认关闭的手动发布流程，不把模板当作已部署集群。现有CI证明小规模真实PG/Kafka协议和进程运行，不能替代目标集群及失效演练。
 
 ## 11 虚拟线程与 Spring Cloud
 
@@ -236,7 +236,7 @@ spring:
     keep-alive: true
 ```
 
-MVC请求处理和Boot自动配置的任务执行器可使用虚拟线程；并非所有第三方库线程都会自动改变。Kafka poll/container固定用平台线程；HTTP执行器未来采用独立的virtual-thread-per-task executor并在提交**之前**申请有限执行名额。名额满则背压，不把几百万个虚拟线程当队列。应用保留Java21编译兼容，生产优先评估JDK25 LTS以利用JDK24起消除普通synchronized阻塞pinning的改进；JDK21路径必须单独测pinning，不用JDK27测试代替。[Boot虚拟线程配置](https://docs.spring.io/spring-boot/reference/features/spring-application.html#features.spring-application.virtual-threads)、[JDK24改进](https://docs.oracle.com/en/java/javase/24/migrate/significant-changes-jdk-24.html)
+MVC请求处理和Boot自动配置的任务执行器可使用虚拟线程；并非所有第三方库线程都会自动改变。Kafka poll/container固定用平台线程；HTTP执行器采用独立的virtual-thread-per-task executor并在提交**之前**申请有限执行名额。名额满则背压，不把几百万个虚拟线程当队列。应用保留Java21编译兼容，生产优先评估JDK25 LTS以利用JDK24起消除普通synchronized阻塞pinning的改进；JDK21路径必须单独测pinning，不用JDK27测试代替。[Boot虚拟线程配置](https://docs.spring.io/spring-boot/reference/features/spring-application.html#features.spring-application.virtual-threads)、[JDK24改进](https://docs.oracle.com/en/java/javase/24/migrate/significant-changes-jdk-24.html)
 
 Spring Kafka当前官方文档仍对并发listener使用虚拟线程给出谨慎建议，因此显式保持平台poll线程。JDK24改进monitor pinning，不会自动修复KafkaConsumer线程安全、锁竞争或异步offset提交协议；不要把二者混为一谈。[Spring Kafka线程安全说明](https://docs.spring.io/spring-kafka/reference/kafka/thread-safety.html)
 
@@ -245,3 +245,13 @@ MyBatis底层仍经JDBC/Hikari访问PG。数据库事务在一个虚拟线程中
 Resilience4j采用有界SemaphoreBulkhead，避免再套固定ThreadPoolBulkhead使虚拟线程退化成等待另一层池；熔断不是重试。真实HTTP客户端必须在连接、响应和总deadline处中止I/O，Future超时不一定停止底层请求；释放并发许可前确认请求已结束或标记不确定。持久重试仍由Outbox调度，不用虚拟线程sleep数分钟/数小时充当定时器。
 
 验收指标：固定相同出口QPS与并发上限对比平台/虚拟线程模式的吞吐、P99、CPU、堆内存、活跃连接、JFR pinning/阻塞和carrier占用；测试响应2s/10s、DB池耗尽、Kafka重平衡与优雅停机。只有达到受控并发下的改善才扩大使用，不承诺开启一个开关就获得倍数性能。
+
+## 当前实现与高流量目标的差异
+
+- 当前支持固定拓扑和物理分片身份校验，不提供在线数据搬迁。目标版本由shard zero的低流量登记表约束，进程缓存已核对的不可变指纹；它是冷启动的控制面依赖，不是每条通知的中心写热点。
+- 运行适配器通过外部HTTP协议获取单次共享许可，未实现批量grant租赁。吞吐预算必须使用`consumer数量 / (配额RPC + PG移交 + 本地处理平均时间)`；不能只计算PG耗时。配额RPC是可替换外部依赖，需要生产团队落实。
+- API默认50000未终态任务软上限，按分片分配并以约1秒采样。正常未来重试不算发布积压；scheduled_at固定原始到期时间，available_at允许发布退避，不可用后者不断刷新失败年龄。
+- UUIDv8保留12位slot，嵌入48位毫秒时间和62位随机数，使同slot的新任务具有时间局部性；不提供业务FIFO或严格单调时钟保证。
+- 正常供应商成功策略为HTTP_2XX，不包含未提供协议的供应商业务返回码解释。目标配置启动加载，停用通过配置发布/重启生效。
+- 默认HTTPS443；经部署配置显式允许的HTTP或非443 HTTPS origin可用于遗留协议，但供应商私网/DNS限制仍有效。HTTP本身不提供TLS保护。
+- 数据加密使用固定注入key，必须保管备份；在线keyring轮换、漏洞平台及大规模灾备是额外生产门禁，不应假装已经完成。
