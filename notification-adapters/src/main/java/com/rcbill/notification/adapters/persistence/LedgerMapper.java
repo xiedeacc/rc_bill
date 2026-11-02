@@ -48,7 +48,7 @@ public interface LedgerMapper {
     @Select("SELECT * FROM notification WHERE status IN ('PENDING','RETRY_WAIT') AND expires_at<=clock_timestamp() ORDER BY expires_at LIMIT #{limit} FOR UPDATE SKIP LOCKED")
     List<Map<String,Object>> expired(@Param("limit") int limit);
     @Select("""
-        SELECT o.*,n.destination_id,n.expires_at FROM outbox_event o JOIN notification n ON n.id=o.notification_id
+        SELECT o.*,n.destination_id,n.destination_version,n.expires_at FROM outbox_event o JOIN notification n ON n.id=o.notification_id
         WHERE o.publish_state='PENDING' AND o.available_at<=clock_timestamp()
         ORDER BY o.available_at,o.event_id LIMIT #{limit} FOR UPDATE OF o SKIP LOCKED
         """) List<Map<String,Object>> dueOutbox(@Param("limit") int limit);

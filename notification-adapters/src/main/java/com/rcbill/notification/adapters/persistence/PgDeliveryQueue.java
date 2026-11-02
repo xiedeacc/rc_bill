@@ -18,7 +18,7 @@ public final class PgDeliveryQueue implements DeliveryQueue {
         if(event.schemaVersion()!=1||event.logicalSlot()<0||event.logicalSlot()>4095||event.scheduleEpoch()<0||Routing.slot(event.notificationId())!=event.logicalSlot())throw new ServiceFailure(400,"INVALID_EVENT");
         var row=m.lockTask(event.notificationId());
         if(row==null)throw new ServiceFailure(503,"TASK_MISSING");
-        if(!Objects.equals(row.get("destination_id"),event.destinationId()))throw new ServiceFailure(400,"EVENT_DESTINATION_MISMATCH");
+        if(!Objects.equals(row.get("destination_id"),event.destinationId())||integer(row,"destination_version")!=event.destinationVersion())throw new ServiceFailure(400,"EVENT_DESTINATION_MISMATCH");
         if(event.scheduleEpoch()>number(row,"schedule_epoch"))throw new ServiceFailure(503,"FUTURE_EPOCH");
         return row;
     }

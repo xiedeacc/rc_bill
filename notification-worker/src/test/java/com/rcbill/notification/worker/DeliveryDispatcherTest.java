@@ -32,4 +32,9 @@ class DeliveryDispatcherTest {
         try(var d=new DeliveryDispatcher(q,http,mock(SecretProvider.class),admission,new ConfiguredCatalog(List.of(destination)),1,Clock.fixed(now,ZoneOffset.UTC),new SimpleMeterRegistry())){d.handle(event);assertThat(done.await(5,TimeUnit.SECONDS)).isTrue();}
         verify(q).complete(eq(lease),argThat(c->c.nextStatus()==NotificationStatus.SUCCEEDED));verify(http,times(1)).send(any());
     }
+    @Test void enabledNewVersionDoesNotSpendAttemptsOnPausedOldVersion(){
+        var q=mock(DeliveryQueue.class);var http=mock(HttpTransport.class);var admission=mock(DispatchAdmission.class);
+        var next=new Destination("crm-test",2,Set.of("t"),Set.of("c"),true,URI.create("https://example.com/next"),"POST",Set.of("text/plain"),Set.of(),Map.of(),null,"Idempotency-Key",new DestinationCatalog.DurationPolicy(2,20,86400));
+        try(var d=new DeliveryDispatcher(q,http,mock(SecretProvider.class),admission,new ConfiguredCatalog(List.of(next)),1,Clock.fixed(now,ZoneOffset.UTC),new SimpleMeterRegistry())){var old=event();d.handle(old);verify(q).defer(eq(old),eq(now.plusSeconds(60)),eq("DESTINATION_PAUSED"));verify(q,never()).claim(any(),any());verifyNoInteractions(http,admission);}
+    }
 }

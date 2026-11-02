@@ -13,7 +13,7 @@ public final class PgOutboxStore implements OutboxStore {
         return shards.all().get(shard).transaction(m->{
             var rows=m.dueOutbox(limit);Instant until=m.now().plus(duration);var result=new ArrayList<Publication>();
             for(var row:rows){UUID token=UUID.randomUUID();m.leaseOutbox(map("event",row.get("event_id"),"token",token,"until",until));
-                var event=new DispatchEvent(1,id(row.get("event_id")),id(row.get("notification_id")),integer(row,"slot"),number(row,"schedule_epoch"),(String)row.get("destination_id"),instant(row.get("created_at")),instant(row.get("expires_at")));
+                var event=new DispatchEvent(1,id(row.get("event_id")),id(row.get("notification_id")),integer(row,"slot"),number(row,"schedule_epoch"),(String)row.get("destination_id"),integer(row,"destination_version"),instant(row.get("created_at")),instant(row.get("expires_at")));
                 result.add(new Publication(event,(String)row.get("event_type"),token,until));}
             return List.copyOf(result);
         });

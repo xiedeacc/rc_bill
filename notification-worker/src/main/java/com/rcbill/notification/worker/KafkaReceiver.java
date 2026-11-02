@@ -17,7 +17,7 @@ public final class KafkaReceiver {
         try{
             if(record.value()==null||record.value().getBytes(java.nio.charset.StandardCharsets.UTF_8).length>8192)throw new IllegalArgumentException();
             event=json.readValue(record.value(),DispatchEvent.class);
-            if(event.schemaVersion()!=1||event.eventId()==null||event.notificationId()==null||event.destinationId()==null||event.createdAt()==null||event.expiresAt()==null||event.logicalSlot()!=Routing.slot(event.notificationId())||event.scheduleEpoch()<0||!event.notificationId().toString().equals(record.key()))throw new IllegalArgumentException();
+            if(event.schemaVersion()!=1||event.eventId()==null||event.notificationId()==null||event.destinationId()==null||event.destinationVersion()<1||event.createdAt()==null||event.expiresAt()==null||event.logicalSlot()!=Routing.slot(event.notificationId())||event.scheduleEpoch()<0||!event.notificationId().toString().equals(record.key()))throw new IllegalArgumentException();
         }catch(RuntimeException invalid){quarantine(record,"INVALID_EVENT");return;}
         try{dispatcher.handle(event);}catch(ServiceFailure failure){if(failure.status()==400)quarantine(record,failure.code());else throw failure;}
     }

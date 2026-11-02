@@ -23,7 +23,7 @@ public final class DeliveryDispatcher implements AutoCloseable {
         var slot=execution.reserve().orElseThrow(()->new RejectedExecutionException("Local capacity exhausted"));
         DispatchAdmission.Permit permit=null;CircuitBreaker breaker=breakers.circuitBreaker(event.destinationId());boolean breakerPermit=false,handed=false;
         try{
-            var active=catalog.all().stream().filter(d->d.id().equals(event.destinationId())&&d.enabled()).findFirst();
+            var active=catalog.all().stream().filter(d->d.id().equals(event.destinationId())&&d.version()==event.destinationVersion()&&d.enabled()).findFirst();
             if(active.isEmpty()){queue.defer(event,clock.instant().plusSeconds(60),"DESTINATION_PAUSED");return;}
             if(!breaker.tryAcquirePermission()){queue.defer(event,clock.instant().plusSeconds(30),"CIRCUIT_OPEN");return;}breakerPermit=true;
             String budget=active.get().credentialRef()!=null?active.get().credentialRef():active.get().endpoint().getAuthority();
