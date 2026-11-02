@@ -1,6 +1,0 @@
-* text=auto
-*.sh text eol=lf
-mvnw text eol=lf
-*.cmd text eol=crlf
-*.pdf binary
-*.zip binary
