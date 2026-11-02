@@ -1,17 +1,20 @@
 {
-  "sha": "82af365e9b4df74089635b40f2cc61a527b79e83",
-  "run_id": "41488556302",
-  "tests_outcome": "success",
+  "sha": "427c05838e588f2e61f5e3121eca4f5a61ab6ab9",
+  "run_id": "41511974823",
+  "tests_outcome": "failure",
   "infrastructure_outcome": "success",
+  "image_outcome": "skipped",
+  "container_outcome": "skipped",
+  "runtime_outcome": "skipped",
   "unit": {
-    "tests": 124,
+    "tests": 136,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
   "integration": {
-    "tests": 8,
-    "failures": 0,
+    "tests": 12,
+    "failures": 1,
     "errors": 0,
     "skipped": 0
   },
@@ -19,7 +22,15 @@
     {
       "name": "com.rcbill.notification.adapters.http.AddressPolicyTest",
       "kind": "unit",
-      "tests": 22,
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.adapters.config.JsonContractTest",
+      "kind": "unit",
+      "tests": 1,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -27,7 +38,7 @@
     {
       "name": "com.rcbill.notification.adapters.http.ApacheHttpTransportTest",
       "kind": "unit",
-      "tests": 3,
+      "tests": 4,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -83,7 +94,7 @@
     {
       "name": "com.rcbill.notification.domain.RoutingTest",
       "kind": "unit",
-      "tests": 8,
+      "tests": 9,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -99,7 +110,7 @@
     {
       "name": "com.rcbill.notification.worker.DeliveryDispatcherTest",
       "kind": "unit",
-      "tests": 2,
+      "tests": 3,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -113,9 +124,17 @@
       "skipped": 0
     },
     {
+      "name": "com.rcbill.notification.application.BacklogGateTest",
+      "kind": "unit",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
       "name": "com.rcbill.notification.application.SubmissionRequestTest",
       "kind": "unit",
-      "tests": 16,
+      "tests": 17,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -124,6 +143,14 @@
       "name": "com.rcbill.notification.application.NotificationServiceTest",
       "kind": "unit",
       "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.application.HandoffContractTest",
+      "kind": "unit",
+      "tests": 1,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -145,6 +172,14 @@
       "skipped": 0
     },
     {
+      "name": "com.rcbill.notification.api.EnvelopeLimitFilterTest",
+      "kind": "unit",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
       "name": "com.rcbill.notification.api.ApiJsonTest",
       "kind": "unit",
       "tests": 7,
@@ -155,8 +190,24 @@
     {
       "name": "com.rcbill.notification.adapters.persistence.LedgerIT",
       "kind": "integration",
-      "tests": 7,
+      "tests": 9,
       "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.adapters.persistence.ShardingIT",
+      "kind": "integration",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.worker.AdministrativeJobsIT",
+      "kind": "integration",
+      "tests": 1,
+      "failures": 1,
       "errors": 0,
       "skipped": 0
     },
@@ -168,5 +219,7 @@
       "errors": 0,
       "skipped": 0
     }
-  ]
+  ],
+  "report_errors": [],
+  "test_evidence_complete": false
 }
