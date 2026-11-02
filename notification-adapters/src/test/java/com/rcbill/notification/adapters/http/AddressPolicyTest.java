@@ -21,4 +21,17 @@ class AddressPolicyTest {
     @ParameterizedTest @ValueSource(strings={"http://example.com/x","https://user:pass@example.com/x","https://example.com:8443/x","https://example.com/x#fragment","file:///etc/passwd"})
     void rejectsUnsafeUrlForms(String url) {assertThatIllegalArgumentException().isThrownBy(()->new AddressPolicy(false).validate(URI.create(url)));}
     @Test void permitsNormalHttps(){new AddressPolicy(false).validate(URI.create("https://example.com/v1"));}
+    @Test void trustedControlPlaneDoesNotWeakenProviderPolicy()throws Exception{
+        var control=AddressPolicy.controlPlane(URI.create("https://quota.internal"),false);
+        control.validateAddresses(new InetAddress[]{InetAddress.getByName("10.0.0.5")});
+        assertThatIllegalArgumentException().isThrownBy(()->control.validate(URI.create("https://another.internal/v1/permits")));
+        assertThatThrownBy(()->control.validateAddresses(new InetAddress[]{InetAddress.getByName("169.254.169.254")})).isInstanceOf(UnknownHostException.class);
+        assertThatThrownBy(()->new AddressPolicy(false).validateAddresses(new InetAddress[]{InetAddress.getByName("10.0.0.5")})).isInstanceOf(UnknownHostException.class);
+    }
+    @Test void explicitLegacyOriginDoesNotAuthorizeOtherPortsOrPrivateAddresses()throws Exception{
+        var policy=new AddressPolicy(false,java.util.Set.of(URI.create("http://legacy.example:80"),URI.create("https://vendor.example:8443")));
+        policy.validate(URI.create("http://legacy.example/callback"));policy.validate(URI.create("https://vendor.example:8443/v1"));
+        assertThatIllegalArgumentException().isThrownBy(()->policy.validate(URI.create("http://legacy.example:8080/callback")));
+        assertThatThrownBy(()->policy.validateAddresses(new InetAddress[]{InetAddress.getByName("10.0.0.1")})).isInstanceOf(UnknownHostException.class);
+    }
 }

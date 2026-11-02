@@ -6,6 +6,7 @@ import com.rcbill.notification.adapters.security.*;
 import com.rcbill.notification.adapters.persistence.*;
 import com.rcbill.notification.adapters.kafka.KafkaDispatchPublisher;
 import org.springframework.context.annotation.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.core.env.Environment;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -60,23 +61,25 @@ public class WorkerRuntimeConfiguration {
     }
     @Bean KafkaTemplate<String,String> notificationKafkaTemplate(DefaultKafkaProducerFactory<String,String> factory){return new KafkaTemplate<>(factory);}
     @Bean KafkaDispatchPublisher publisher(KafkaTemplate<String,String> template,JsonMapper json,Shards shards,Environment e){return new KafkaDispatchPublisher(template,json,shards.partitions(),topic(e,"dispatch"),topic(e,"dead"));}
-    @Bean(destroyMethod="close") ApacheHttpTransport httpTransport(Environment e,ConfiguredCatalog catalog){
-        var policy=new AddressPolicy(e.getProperty("notification.allow-loopback",Boolean.class,false));catalog.all().forEach(d->policy.validate(d.endpoint()));
+    @Bean(destroyMethod="close") @ConditionalOnExpression("'${notification.role:all}' != 'relay'") ApacheHttpTransport httpTransport(Environment e,ConfiguredCatalog catalog){
+        var origins=Arrays.stream(e.getProperty("notification.http.additional-origins","").split(",")).filter(s->!s.isBlank()).map(String::trim).map(URI::create).collect(java.util.stream.Collectors.toSet());
+        var policy=new AddressPolicy(e.getProperty("notification.allow-loopback",Boolean.class,false),origins);catalog.all().forEach(d->policy.validate(d.endpoint()));
         return new ApacheHttpTransport(policy,e.getProperty("notification.http.maximum",Integer.class,128));
     }
-    @Bean EnvironmentSecrets providerSecrets(ConfiguredCatalog catalog,Environment e){var secrets=new EnvironmentSecrets(e::getProperty);for(var d:catalog.all())if(d.credentialRef()!=null)try(var ignored=secrets.resolve(d.credentialRef())){}return secrets;}
-    @Bean HttpQuotaAdmission admission(ApacheHttpTransport transport,EnvironmentSecrets secrets,JsonMapper json,Environment e){
-        URI uri=URI.create(e.getRequiredProperty("notification.quota.url"));new AddressPolicy(e.getProperty("notification.allow-loopback",Boolean.class,false)).validate(uri);
+    @Bean @ConditionalOnExpression("'${notification.role:all}' != 'relay'") EnvironmentSecrets providerSecrets(ConfiguredCatalog catalog,Environment e){var secrets=new EnvironmentSecrets(e::getProperty);for(var d:catalog.all())if(d.credentialRef()!=null)try(var ignored=secrets.resolve(d.credentialRef())){}return secrets;}
+    @Bean(destroyMethod="close") @ConditionalOnExpression("'${notification.role:all}' != 'relay'") ApacheHttpTransport quotaTransport(Environment e){return new ApacheHttpTransport(AddressPolicy.controlPlane(URI.create(e.getRequiredProperty("notification.quota.url")),e.getProperty("notification.allow-loopback",Boolean.class,false)),32);}
+    @Bean @ConditionalOnExpression("'${notification.role:all}' != 'relay'") HttpQuotaAdmission admission(@org.springframework.beans.factory.annotation.Qualifier("quotaTransport") ApacheHttpTransport transport,EnvironmentSecrets secrets,JsonMapper json,Environment e){
+        URI uri=URI.create(e.getRequiredProperty("notification.quota.url"));
         String credential=e.getProperty("notification.quota.credential-ref");if(credential==null&&!e.getProperty("notification.allow-loopback",Boolean.class,false))throw new IllegalStateException("Quota service authentication required");
         return new HttpQuotaAdmission(transport,uri,secrets,credential,json,Clock.systemUTC());
     }
-    @Bean(destroyMethod="close") DeliveryDispatcher dispatcher(PgDeliveryQueue queue,ApacheHttpTransport transport,EnvironmentSecrets secrets,HttpQuotaAdmission admission,ConfiguredCatalog catalog,Environment e,MeterRegistry meters){return new DeliveryDispatcher(queue,transport,secrets,admission,catalog,e.getProperty("notification.http.maximum",Integer.class,128),Clock.systemUTC(),meters);}
-    @Bean WorkerJobs workerJobs(Shards shards,PgOutboxStore outbox,PgDeliveryQueue queue,KafkaDispatchPublisher publisher,Environment e,MeterRegistry meters){
+    @Bean(destroyMethod="close") @ConditionalOnExpression("'${notification.role:all}' != 'relay'") DeliveryDispatcher dispatcher(PgDeliveryQueue queue,@org.springframework.beans.factory.annotation.Qualifier("httpTransport") ApacheHttpTransport transport,EnvironmentSecrets secrets,HttpQuotaAdmission admission,ConfiguredCatalog catalog,Environment e,MeterRegistry meters){return new DeliveryDispatcher(queue,transport,secrets,admission,catalog,e.getProperty("notification.http.maximum",Integer.class,128),Clock.systemUTC(),meters);}
+    @Bean WorkerJobs workerJobs(Shards shards,PgOutboxStore outbox,org.springframework.beans.factory.ObjectProvider<PgDeliveryQueue> queue,KafkaDispatchPublisher publisher,Environment e,MeterRegistry meters){
         String role=e.getProperty("notification.role","all");if(!Set.of("all","relay","dispatch").contains(role))throw new IllegalArgumentException("Invalid worker role");
-        return new WorkerJobs(shards,outbox,queue,publisher,role,meters);
+        return new WorkerJobs(shards,outbox,queue.getIfAvailable(),publisher,role,meters);
     }
     @Bean ThreadPoolTaskScheduler taskScheduler(){var scheduler=new ThreadPoolTaskScheduler();scheduler.setPoolSize(3);scheduler.setThreadNamePrefix("control-");scheduler.setWaitForTasksToCompleteOnShutdown(true);scheduler.setAwaitTerminationSeconds(30);return scheduler;}
-    @Bean ConcurrentMessageListenerContainer<String,String> dispatchContainer(Environment e,DeliveryDispatcher dispatcher,JsonMapper json,KafkaTemplate<String,String> template,MeterRegistry meters,Admin kafkaAdminClient){
+    @Bean @ConditionalOnExpression("'${notification.role:all}' != 'relay'") ConcurrentMessageListenerContainer<String,String> dispatchContainer(Environment e,DeliveryDispatcher dispatcher,JsonMapper json,KafkaTemplate<String,String> template,MeterRegistry meters,Admin kafkaAdminClient){
         var p=common(e);p.put("key.deserializer",StringDeserializer.class);p.put("value.deserializer",StringDeserializer.class);p.put("group.id",e.getProperty("notification.kafka.group","notification-dispatch-v1"));
         p.put("enable.auto.commit",false);p.put("auto.offset.reset","none");p.put("isolation.level","read_committed");p.put("group.protocol","classic");p.put("partition.assignment.strategy","org.apache.kafka.clients.consumer.CooperativeStickyAssignor");p.put("max.poll.records",100);p.put("max.poll.interval.ms",300000);p.put("session.timeout.ms",45000);p.put("heartbeat.interval.ms",3000);p.put("allow.auto.create.topics",false);p.put("fetch.max.bytes",16777216);p.put("max.partition.fetch.bytes",1048576);
         var props=new ContainerProperties(topic(e,"dispatch"));props.setAckMode(ContainerProperties.AckMode.BATCH);props.setSyncCommits(true);props.setAsyncAcks(false);
