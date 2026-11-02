@@ -55,5 +55,10 @@ public final class Shards implements AutoCloseable {
     public Shard task(UUID id) {return slot(Routing.slot(id));}
     public List<Shard> all() {return List.copyOf(shards);}
     public int partitions(){return partitions;}
+    public int maintainAvailable(Function<Shard,Integer> action){
+        int completed=0,total=0,index=0;
+        for(var shard:shards){try{total+=action.apply(shard);completed++;}catch(RuntimeException failure){org.slf4j.LoggerFactory.getLogger(Shards.class).warn("ledger_maintenance_unavailable shard={} cause={}",index,failure.getClass().getSimpleName());}index++;}
+        if(completed==0)throw new IllegalStateException("All ledger shards unavailable");return total;
+    }
     @Override public void close(){shards.forEach(s->s.pool().close());}
 }

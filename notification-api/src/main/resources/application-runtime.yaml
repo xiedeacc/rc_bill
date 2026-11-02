@@ -18,7 +18,9 @@ management:
     health:
       group:
         readiness:
-          include: readinessState,ledger
+          # A shared shard outage must not remove every API pod from routing.
+          # The overall health endpoint still reports ledger dependencies.
+          include: readinessState
 notification:
   database:
     urls: ${PG_URL}

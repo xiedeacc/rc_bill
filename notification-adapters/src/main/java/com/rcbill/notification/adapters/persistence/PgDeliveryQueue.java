@@ -70,9 +70,12 @@ public final class PgDeliveryQueue implements DeliveryQueue {
     @Override public boolean complete(Lease lease,Completion completion){return shards.slot(lease.logicalSlot()).transaction(m->{
         var row=m.lockTask(lease.notificationId());if(!owns(row,lease,m.now()))return false;
         if(!Set.of(NotificationStatus.SUCCEEDED,NotificationStatus.RETRY_WAIT,NotificationStatus.DEAD,NotificationStatus.EXPIRED).contains(completion.nextStatus()))throw new IllegalArgumentException("Illegal completion state");
+        if(completion.nextStatus()==NotificationStatus.RETRY_WAIT&&completion.nextAttemptAt()==null)throw new IllegalArgumentException("Retry must have a durable due time");
         int updated=m.finish(map("id",lease.notificationId(),"token",lease.token(),"outcome",completion.outcome().name(),"http",completion.httpStatus(),"error",completion.errorCode(),"elapsed",completion.elapsedMs(),"provider",completion.providerRequestId()));
         if(updated!=1)throw new IllegalStateException("Attempt invariant violated");
-        transition(m,row,completion.nextStatus(),completion.nextAttemptAt()==null?m.now():completion.nextAttemptAt(),completion.errorCode());return true;
+        var state=completion.nextStatus();
+        if(state==NotificationStatus.RETRY_WAIT&&!completion.nextAttemptAt().isBefore(instant(row.get("expires_at"))))state=NotificationStatus.EXPIRED;
+        transition(m,row,state,completion.nextAttemptAt()==null?m.now():completion.nextAttemptAt(),completion.errorCode());return true;
     });}
     private void transition(LedgerMapper m,Map<String,Object> row,NotificationStatus status,Instant next,String error){
         UUID task=id(row.get("id"));boolean retry=status==NotificationStatus.RETRY_WAIT;long epoch=number(row,"schedule_epoch")+(retry?1:0);
@@ -81,13 +84,13 @@ public final class PgDeliveryQueue implements DeliveryQueue {
         if(retry||status==NotificationStatus.DEAD||status==NotificationStatus.EXPIRED)
             PgNotificationStore.event(m,task,integer(row,"slot"),epoch,retry?"DISPATCH":"DEAD",retry?next:m.now());
     }
-    @Override public int recoverExpiredLeases(int batch){int count=0;for(var shard:shards.all())count+=shard.transaction(m->{
+    @Override public int recoverExpiredLeases(int batch){return shards.maintainAvailable(shard->shard.transaction(m->{
         var rows=m.abandoned(batch);
         for(var row:rows){
             var decision=RetryPolicy.decide(m.now(),instant(row.get("expires_at")),integer(row,"attempt_count"),destination(row).policy().maxAttempts(),null,null,"IO_UNKNOWN",()->0.5);
             m.finish(map("id",row.get("id"),"token",row.get("lease_token"),"outcome","UNKNOWN","http",null,"error","LEASE_EXPIRED","elapsed",null,"provider",null));
             transition(m,row,decision.status(),decision.nextAttemptAt()==null?m.now():decision.nextAttemptAt(),"LEASE_EXPIRED");
         }return rows.size();
-    });return count;}
-    @Override public int expireQueued(int batch){int count=0;for(var shard:shards.all())count+=shard.transaction(m->{var rows=m.expired(batch);for(var row:rows)transition(m,row,NotificationStatus.EXPIRED,m.now(),"TTL_EXPIRED");return rows.size();});return count;}
+    }));}
+    @Override public int expireQueued(int batch){return shards.maintainAvailable(shard->shard.transaction(m->{var rows=m.expired(batch);for(var row:rows)transition(m,row,NotificationStatus.EXPIRED,m.now(),"TTL_EXPIRED");return rows.size();}));}
 }

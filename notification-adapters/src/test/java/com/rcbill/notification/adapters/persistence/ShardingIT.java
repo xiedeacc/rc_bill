@@ -23,7 +23,11 @@ class ShardingIT {
             for(int i=0;i<20;i++){var a=service.submit(caller,"sharded-key-"+i,request);owners.add(com.rcbill.notification.domain.Routing.slot(a.notificationId())%2);assertThat(service.get(caller,a.notificationId())).isPresent();assertThat(service.submit(caller,"sharded-key-"+i,request).notificationId()).isEqualTo(a.notificationId());}
             assertThat(owners).containsExactlyInAnyOrder(0,1);
             assertThatThrownBy(()->new Shards(List.of(urls.get(1),urls.get(0)),user,password,false,16)).isInstanceOf(IllegalStateException.class);
-
+            try(var c=DriverManager.getConnection(base,user,password);var s=c.createStatement()){
+                s.execute("ALTER TABLE "+schemas.get(0)+".notification RENAME TO temporarily_unavailable");
+                try{var queue=new PgDeliveryQueue(shards,new PayloadCipher(Base64.getEncoder().encodeToString(new byte[32])),JsonMapper.builder().build());assertThatCode(()->queue.expireQueued(100)).doesNotThrowAnyException();}
+                finally{s.execute("ALTER TABLE "+schemas.get(0)+".temporarily_unavailable RENAME TO notification");}
+            }
         }finally{try(var c=DriverManager.getConnection(base,user,password);var s=c.createStatement()){for(var schema:schemas)s.execute("DROP SCHEMA "+schema+" CASCADE");}}
     }
 }
