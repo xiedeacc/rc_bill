@@ -26,4 +26,10 @@ class RoutingTest {
         assertThat(Routing.slot("a|b", "c", "submit", "k"))
                 .isNotEqualTo(Routing.slot("a", "b|c", "submit", "k"));
     }
+    @Test void recentIdsRemainTimeLocalWithinEachSlot(){
+        var first=Routing.newId(4095,java.time.Instant.ofEpochMilli(4095));
+        var next=Routing.newId(4095,java.time.Instant.ofEpochMilli(4096));
+        assertThat(first.compareTo(next)).isLessThan(0);assertThat(Routing.slot(next)).isEqualTo(4095);
+        assertThatIllegalArgumentException().isThrownBy(()->Routing.newId(0,java.time.Instant.ofEpochMilli(-1)));
+    }
 }

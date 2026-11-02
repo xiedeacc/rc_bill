@@ -28,10 +28,13 @@ public final class Routing {
         }
     }
     public static UUID newId(int slot) {
+        return newId(slot,java.time.Instant.now());
+    }
+    public static UUID newId(int slot,java.time.Instant time) {
         if (slot < 0 || slot > 4095) throw new IllegalArgumentException("Invalid logical slot");
+        long millis=time.toEpochMilli();if(millis<0||millis>0xffffffffffffL)throw new IllegalArgumentException("Timestamp outside UUID layout");
         UUID random = UUID.randomUUID();
-        long high = (random.getMostSignificantBits() & 0x000fffffffff0fffL)
-                | ((long) slot << 52) | 0x8000L;
+        long high = ((long)slot<<52) | ((millis>>>12)<<16) | 0x8000L | (millis&0xfffL);
         return new UUID(high, random.getLeastSignificantBits());
     }
     public static int slot(UUID id) { return (int) (id.getMostSignificantBits() >>> 52); }
