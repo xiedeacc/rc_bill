@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rcbill:dispatch-event:v1",
   "title": "Notification dispatch event",
-  "description": "Target Kafka contract, not a live producer. UTF-8 serialized size <= 8192 bytes. Key is notificationId; topology-v1 partition is logicalSlot modulo 2048. All fields must be checked against PG state before durable handoff. No body, credentials or caller-supplied identity.",
+  "description": "Kafka dispatch contract. UTF-8 serialized size <= 8192 bytes. Key is notificationId; partition is logicalSlot modulo the deployment's immutable partition count (16 locally; 2048 in the capacity model). All fields are checked against PG state before durable handoff. No body, credentials or caller-supplied identity.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "eventId", "notificationId", "logicalSlot", "scheduleEpoch", "destinationId", "destinationVersion", "createdAt", "expiresAt"],
