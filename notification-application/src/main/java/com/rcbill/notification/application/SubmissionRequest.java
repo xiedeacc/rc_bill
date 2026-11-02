@@ -18,13 +18,14 @@ public record SubmissionRequest(String destinationId, int destinationVersion, St
                 || contentType == null || !Set.of("application/json","application/x-www-form-urlencoded","text/plain").contains(contentType)
                 || body == null || ttlSeconds() < 60 || ttlSeconds() > 86400) throw new ServiceFailure(400,"INVALID_REQUEST");
         if (bytes(body) > 65536) throw new ServiceFailure(413,"BODY_TOO_LARGE");
+        if (!StandardCharsets.UTF_8.newEncoder().canEncode(body)) throw new ServiceFailure(400,"INVALID_BODY_ENCODING");
         Map<String,String> normalized = new TreeMap<>();
         int total = 0;
         if (headers != null) for (var entry : headers.entrySet()) {
             String name = entry.getKey(), value = entry.getValue();
             if (name == null || !name.matches("[!#$%&'*+.^_`|~0-9A-Za-z-]{1,64}") || value == null
                     || value.length() > 1024 || value.indexOf('\r') >= 0 || value.indexOf('\n') >= 0
-                    || value.chars().anyMatch(c -> c < 32 && c != 9)) throw new ServiceFailure(400,"INVALID_HEADER");
+                    || value.chars().anyMatch(c -> (c < 32 && c != 9) || c > 126)) throw new ServiceFailure(400,"INVALID_HEADER");
             name = name.toLowerCase(Locale.ROOT);
             if (Set.of("host","authorization","cookie","content-length","transfer-encoding","connection",
                     "content-type","expect","upgrade","te","trailer","keep-alive").contains(name)

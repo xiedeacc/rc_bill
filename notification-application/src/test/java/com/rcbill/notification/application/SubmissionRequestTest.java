@@ -42,4 +42,8 @@ class SubmissionRequestTest {
         assertThat(value.toString()).doesNotContain("private-body","private-header");
         assertThatThrownBy(() -> value.headers().put("x-b","x")).isInstanceOf(UnsupportedOperationException.class);
     }
+    @Test void rejectsUnpairedSurrogatesAndNonPortableHeaderValues(){
+        assertThatThrownBy(()->request("\ud800",Map.of(),60).validated()).isInstanceOf(ServiceFailure.class);
+        assertThatThrownBy(()->request("",Map.of("X-Event","中文"),60).validated()).isInstanceOf(ServiceFailure.class);
+    }
 }

@@ -249,11 +249,11 @@ components:
           default: {}
           description: >-
             仅允许目标配置白名单；名称最多64字符，值最多1024字符，总UTF-8不超过8KiB。
-            禁止CR/LF、大小写重复、Host/Authorization/Cookie及连接和代理控制Header。
+            值只允许可打印ASCII和HTAB，禁止CR/LF、大小写重复、Host/Authorization/Cookie及连接和代理控制Header。
           additionalProperties:
             type: string
             maxLength: 1024
-            pattern: '^[^\r\n]*$'
+            pattern: '^[\t\x20-\x7E]*$'
         ttlSeconds:
           type: integer
           minimum: 60
