@@ -36,7 +36,9 @@ public interface DeliveryQueue {
     enum Disposition { CLAIMED, ALREADY_DURABLE, DEFERRED }
 
     /** Lease is present only for CLAIMED. This is a contract, not a business implementation. */
-    record Handoff(Disposition disposition, Lease lease) { }
+    record Handoff(Disposition disposition, Lease lease) {
+        public Handoff {if(disposition==null||((disposition==Disposition.CLAIMED)!=(lease!=null)))throw new IllegalArgumentException("Invalid durable handoff result");}
+    }
 
     record Lease(String tenantId, UUID notificationId, int logicalSlot, long scheduleEpoch, UUID token,
                  int attemptNo, Instant leaseUntil, Instant expiresAt, String deliveryKey) { }
