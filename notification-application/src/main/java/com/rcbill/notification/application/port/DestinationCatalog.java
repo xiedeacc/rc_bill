@@ -19,6 +19,8 @@ public interface DestinationCatalog {
         Set<String> allowedDynamicHeaders();
         Map<String, String> staticHeaders();
         String credentialRef();
+        default String credentialHeader() { return "Authorization"; }
+        default String credentialPrefix() { return "Bearer "; }
         String idempotencyHeader();
         DurationPolicy policy();
     }

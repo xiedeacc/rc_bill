@@ -14,7 +14,8 @@ public final class NotificationService implements NotificationUseCases {
         if(hit.isPresent())return existing(hit.get(),fingerprint);
         var d=catalog.resolveAuthorized(c,request.destinationId(),request.destinationVersion());
         if(!d.contentTypes().contains(request.contentType())||!d.allowedDynamicHeaders().containsAll(request.headers().keySet())
-                || (d.idempotencyHeader()!=null&&request.headers().containsKey(d.idempotencyHeader().toLowerCase(Locale.ROOT))))
+                || (d.idempotencyHeader()!=null&&request.headers().containsKey(d.idempotencyHeader().toLowerCase(Locale.ROOT)))
+                || (d.credentialRef()!=null&&request.headers().containsKey(d.credentialHeader().toLowerCase(Locale.ROOT))))
             throw new ServiceFailure(422,"INVALID_DESTINATION_REQUEST");
         return store.accept(c,key,fingerprint,request,d);
     }
