@@ -24,7 +24,7 @@ public class RuntimeApiSecurity {
         OAuth2TokenValidator<Jwt> claims=token->{boolean valid=token.getAudience().contains(audience)&&token.getExpiresAt()!=null&&token.getSubject()!=null&&token.getClaimAsString("tenant_id")!=null&&token.getClaimAsString("client_id")!=null;return valid?OAuth2TokenValidatorResult.success():OAuth2TokenValidatorResult.failure(new OAuth2Error("invalid_token"));};
         decoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(JwtValidators.createDefaultWithIssuer(issuer),claims));return decoder;
     }
-    @Bean SecurityFilterChain runtimeSecurity(HttpSecurity http)throws Exception{
+    @Bean SecurityFilterChain runtimeSecurity(HttpSecurity http,Environment environment)throws Exception{
         return http.csrf(AbstractHttpConfigurer::disable).httpBasic(AbstractHttpConfigurer::disable).formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(a->a.requestMatchers("/actuator/health/**","/actuator/health").permitAll()
@@ -33,6 +33,6 @@ public class RuntimeApiSecurity {
                         .requestMatchers(HttpMethod.GET,"/v1/notifications/**").hasAuthority("SCOPE_notifications:read").anyRequest().denyAll())
                 .exceptionHandling(e->e.authenticationEntryPoint((r,s,x)->ApiProblems.write(r,s,401,"UNAUTHORIZED")).accessDeniedHandler((r,s,x)->ApiProblems.write(r,s,403,"FORBIDDEN")))
                 .oauth2ResourceServer(o->o.jwt(j->{}).authenticationEntryPoint((r,s,x)->ApiProblems.write(r,s,401,"UNAUTHORIZED")))
-                .addFilterAfter(new EnvelopeLimitFilter(),org.springframework.security.web.access.intercept.AuthorizationFilter.class).build();
+                .addFilterAfter(new EnvelopeLimitFilter(environment.getProperty("notification.api.maximum-in-flight",Integer.class,512)),org.springframework.security.web.access.intercept.AuthorizationFilter.class).build();
     }
 }

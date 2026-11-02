@@ -5,7 +5,15 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 public final class EnvelopeLimitFilter extends OncePerRequestFilter {
+    private final java.util.concurrent.Semaphore capacity;
+    public EnvelopeLimitFilter() {this(512);}
+    public EnvelopeLimitFilter(int maximum) {if(maximum<1)throw new IllegalArgumentException("maximum");capacity=new java.util.concurrent.Semaphore(maximum);}
     @Override protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)throws ServletException,IOException{
+        if(!request.getRequestURI().startsWith("/v1/notifications")){chain.doFilter(request,response);return;}
+        if(!capacity.tryAcquire()){response.setHeader("Retry-After","1");ApiProblems.write(request,response,503,"API_CAPACITY");return;}
+        try{bounded(request,response,chain);}finally{capacity.release();}
+    }
+    private void bounded(HttpServletRequest request,HttpServletResponse response,FilterChain chain)throws ServletException,IOException{
         if(!request.getMethod().equals("POST")||!request.getRequestURI().startsWith("/v1/notifications")){chain.doFilter(request,response);return;}
         String encoding=request.getHeader("Content-Encoding");
         if(encoding!=null&&!encoding.equalsIgnoreCase("identity")){ApiProblems.write(request,response,415,"UNSUPPORTED_ENCODING");return;}
