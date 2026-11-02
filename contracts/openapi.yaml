@@ -1,0 +1,495 @@
+openapi: 3.0.3
+info:
+  title: Reliable API Notification Service
+  version: 1.0.0
+  description: >-
+    目标生产契约；当前骨架业务路由返回501，尚未实现安全、持久化或投递。
+    202仅表示持久接收。外部投递可能重复，稳定出站幂等键需供应商支持。
+    tenant_id/client_id来自验证后的令牌，不能由请求指定。
+servers:
+  - url: https://notifications.example.com
+    description: 示例生产域名，尚未部署
+tags:
+  - name: Notifications
+paths:
+  /v1/notifications:
+    post:
+      tags: [Notifications]
+      operationId: submitNotification
+      summary: 持久接收通知
+      description: >-
+        同租户、调用方和操作内的key保留30天且不早于终态。
+        同key同指纹返回原任务202，不同指纹409。响应丢失请使用同key重试。
+        envelope最多128KiB，body最多64KiB，按UTF-8字节计数。
+        原始JSON重复属性、未知属性和深度超过20拒绝。
+      security:
+        - oauth2: [notifications:write]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitNotification'
+            example:
+              destinationId: crm-contact-status
+              destinationVersion: 1
+              contentType: application/json
+              body: '{"contactId":"c-123","status":"PAID","eventId":"evt-123"}'
+              headers:
+                X-Correlation-ID: evt-123
+              ttlSeconds: 86400
+      responses:
+        '202':
+          $ref: '#/components/responses/Accepted'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '413':
+          $ref: '#/components/responses/TooLarge'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '422':
+          $ref: '#/components/responses/InvalidDestination'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+        '503':
+          $ref: '#/components/responses/Unavailable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /v1/notifications/{notificationId}:
+    parameters:
+      - $ref: '#/components/parameters/NotificationId'
+    get:
+      tags: [Notifications]
+      operationId: getNotification
+      summary: 查询当前调用方拥有的通知状态
+      security:
+        - oauth2: [notifications:read]
+      responses:
+        '200':
+          description: 状态元数据，不返回原始请求或供应商响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+        '503':
+          $ref: '#/components/responses/Unavailable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /v1/notifications/{notificationId}/attempts:
+    parameters:
+      - $ref: '#/components/parameters/NotificationId'
+    get:
+      tags: [Notifications]
+      operationId: listAttempts
+      summary: 按attemptNo升序查询投递尝试
+      security:
+        - oauth2: [notifications:read]
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: afterAttempt
+          in: query
+          description: 排他游标；不是跨请求快照，运行中的尝试结果可能更新
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: 尝试记录；无更多项时省略nextAfterAttempt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttemptPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+        '503':
+          $ref: '#/components/responses/Unavailable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /v1/notifications/{notificationId}/replays:
+    parameters:
+      - $ref: '#/components/parameters/NotificationId'
+    post:
+      tags: [Notifications]
+      operationId: replayNotification
+      summary: 从DEAD或EXPIRED任务创建审计重放
+      description: >-
+        仅同一tenant/client拥有者加replay权限可使用；原任务不变，新任务TTL为24小时。
+        保留Body、目标快照和delivery_key。每条delivery链仅一个活跃任务。
+        同一原任务内同key去重，不同请求冲突409。
+        供应商无幂等能力或去重窗口不足时必须明确确认重复风险。
+      security:
+        - oauth2: [notifications:replay]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplayRequest'
+      responses:
+        '202':
+          $ref: '#/components/responses/Accepted'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '410':
+          $ref: '#/components/responses/PayloadGone'
+        '413':
+          $ref: '#/components/responses/TooLarge'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+        '503':
+          $ref: '#/components/responses/Unavailable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: 由外部身份平台签发；tokenUrl仅为示例，未实现身份平台
+      flows:
+        clientCredentials:
+          tokenUrl: https://identity.example.com/oauth2/token
+          scopes:
+            notifications:write: 提交通知
+            notifications:read: 查询自己拥有的通知
+            notifications:replay: 重放自己拥有的失败通知
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 128
+        pattern: '^[A-Za-z0-9._:-]+$'
+    NotificationId:
+      name: notificationId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    SubmitNotification:
+      type: object
+      additionalProperties: false
+      required: [destinationId, destinationVersion, contentType, body]
+      properties:
+        destinationId:
+          type: string
+          pattern: '^[a-z][a-z0-9-]{2,63}$'
+        destinationVersion:
+          type: integer
+          format: int32
+          minimum: 1
+        contentType:
+          type: string
+          enum: [application/json, application/x-www-form-urlencoded, text/plain]
+        body:
+          type: string
+          maxLength: 65536
+          description: 精确UTF-8原文，实际另校验最多65536字节；允许空字符串
+        headers:
+          type: object
+          maxProperties: 16
+          default: {}
+          description: >-
+            仅允许目标配置白名单；名称最多64字符，值最多1024字符，总UTF-8不超过8KiB。
+            禁止CR/LF、大小写重复、Host/Authorization/Cookie及连接和代理控制Header。
+          additionalProperties:
+            type: string
+            maxLength: 1024
+            pattern: '^[^\r\n]*$'
+        ttlSeconds:
+          type: integer
+          minimum: 60
+          maximum: 86400
+          default: 86400
+    ReplayRequest:
+      type: object
+      additionalProperties: false
+      required: [reason]
+      properties:
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 512
+          pattern: '\S'
+        acknowledgeDuplicateRisk:
+          type: boolean
+          default: false
+    AcceptedNotification:
+      type: object
+      required: [notificationId, acceptedAt]
+      properties:
+        notificationId:
+          type: string
+          format: uuid
+        acceptedAt:
+          type: string
+          format: date-time
+          description: 原始任务接收时间，幂等命中时保持不变
+    Notification:
+      type: object
+      required: [notificationId, destinationId, destinationVersion, status, attemptCount, acceptedAt, expiresAt]
+      properties:
+        notificationId:
+          type: string
+          format: uuid
+        destinationId:
+          type: string
+        destinationVersion:
+          type: integer
+        status:
+          type: string
+          enum: [PENDING, IN_FLIGHT, RETRY_WAIT, SUCCEEDED, DEAD, EXPIRED]
+        attemptCount:
+          type: integer
+          minimum: 0
+          maximum: 20
+        acceptedAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        nextAttemptAt:
+          type: string
+          format: date-time
+        lastErrorCode:
+          type: string
+          maxLength: 64
+        replayOf:
+          type: string
+          format: uuid
+    Attempt:
+      type: object
+      required: [attemptNo, startedAt, outcome]
+      properties:
+        attemptNo:
+          type: integer
+          minimum: 1
+          maximum: 20
+        startedAt:
+          type: string
+          format: date-time
+        finishedAt:
+          type: string
+          format: date-time
+        outcome:
+          type: string
+          enum: [STARTED, SUCCEEDED, RETRYABLE, PERMANENT, UNKNOWN]
+        httpStatus:
+          type: integer
+          minimum: 100
+          maximum: 599
+        errorCode:
+          type: string
+          maxLength: 64
+        elapsedMs:
+          type: integer
+          format: int64
+          minimum: 0
+        providerRequestId:
+          type: string
+          maxLength: 128
+    AttemptPage:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/Attempt'
+        nextAfterAttempt:
+          type: integer
+          minimum: 1
+    Problem:
+      type: object
+      required: [type, title, status, detail, instance, code, traceId]
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+        detail:
+          type: string
+        instance:
+          type: string
+          description: 请求路径，不含敏感query
+        code:
+          type: string
+          example: IDEMPOTENCY_CONFLICT
+        traceId:
+          type: string
+  responses:
+    Accepted:
+      description: 持久接收或幂等命中；两者均返回原任务的ID和acceptedAt
+      headers:
+        Location:
+          schema:
+            type: string
+          description: /v1/notifications/{notificationId}
+        Idempotency-Replayed:
+          schema:
+            type: boolean
+          description: 首次false，幂等命中true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AcceptedNotification'
+    BadRequest:
+      description: 语法、字段、游标或Header约束无效
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Unauthorized:
+      description: 缺少或无效身份令牌
+      headers:
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Forbidden:
+      description: 已认证但缺少操作scope
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotFound:
+      description: 任务不存在或不在调用方授权范围
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Conflict:
+      description: 幂等指纹冲突、重放状态冲突、链已有活跃任务或未确认重复风险
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    PayloadGone:
+      description: 原始Body已按保留策略删除，不能重放
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    TooLarge:
+      description: envelope、body或Header字节限制超出
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    UnsupportedMediaType:
+      description: 接口仅接受application/json，或使用不支持的Content-Encoding
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    InvalidDestination:
+      description: destination不存在、未授权、停用、版本或配置无效，统一错误避免枚举
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    TooManyRequests:
+      description: 请求或字节配额耗尽，客户端用同key按Retry-After重试
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+            minimum: 1
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Unavailable:
+      description: 存储不可用、容量背压或必要配置未就绪，客户端用同key重试
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+            minimum: 1
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotImplemented:
+      description: 当前scaffold未实现业务能力；不表示已接收，不产生外部副作用
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    UnexpectedError:
+      description: 未预期失败，不返回堆栈或敏感内容；使用同key安全重试
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
