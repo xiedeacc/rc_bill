@@ -167,7 +167,7 @@ successPolicy: HTTP_2XX
 | idempotency_record | tenant_id, client_id, operation_scope, key, fingerprint, notification_id, created_at, retain_until | UNIQUE(tenant_id,client_id,operation_scope,key)；FK notification；保留任务 tombstone 直到去重窗口结束 |
 | delivery_attempt | notification_id, attempt_no, tenant_id, lease_token, started_at, finished_at, outcome, http_status, error_code, elapsed_ms, provider_request_id | PK(notification_id,attempt_no)；outcome STARTED/SUCCEEDED/RETRYABLE/PERMANENT/UNKNOWN；不存原始响应 |
 | replay_audit | id, tenant_id, actor, original_id, replay_id, reason, risk_acknowledged, created_at | 与 replay 创建同事务；只追加 |
-| dispatch_budget | destination_id, window_start, used_tokens, revision | 多实例共享速率预算；同供应商不同 destination 共用 credential/account 级 budget key |
+| dispatch_budget | budget_key, available_tokens, last_refill_at, capacity, refill_rate, revision | 多实例共享令牌桶；同供应商不同 destination 共用 credential/account 级 budget key，使用数据库时间补充令牌 |
 | dispatch_permit | budget_key, slot_id, owner_token, expires_at | 有限 slot 的并发租约；故障自动回收；不能把单实例信号量误认为全局限额 |
 
 表目前为设计，尚未提供可执行迁移；落地时用 Flyway 独立迁移任务，不让每个应用启动时竞争执行 DDL。
@@ -285,7 +285,7 @@ sequenceDiagram
 
 Worker 每实例最多 200 个在途请求，HTTP 连接池总上限 200，单路由默认 20；起始预算需要根据供应商账户限额调整。虚拟线程可用于等待 I/O，但不能替代并发上限。
 
-多副本共享供应商 token bucket/slot 的数据库适配器：使用短事务原子补充/消耗令牌、受 TTL 保护的并发许可；按 provider credential/account 聚合，防止多个 destination 绕过合同限额。预算服务/数据库不可用时不发新请求。可按小额许可租赁降低 DB 热点，但必须限制总租赁额度与超发界限；第一版不启用无限预取。大规模可迁移到外部 Redis 原子配额，但 Redis 不能成为任务唯一存储。
+多副本共享供应商 token bucket/slot 的数据库适配器：使用短事务原子补充/消耗令牌、受 TTL 保护的并发许可；按 provider credential/account 聚合，防止多个 destination 绕过合同限额。发送前同时复核任务租约与并发许可，许可过期则不得新发请求。预算服务/数据库不可用时不发新请求。可按小额许可租赁降低 DB 热点，但必须限制总租赁额度与超发界限；第一版不启用无限预取。大规模可迁移到外部 Redis 原子配额，但 Redis 不能成为任务唯一存储。
 
 单实例 Resilience4j 熔断：最近 50 次、至少 20 次调用，失败率≥50% 打开 30s，半开最多 3 个探测；429 主要触发供应商共享冷却，不计作网络可用性失败。熔断是进程内保护，全局效果由共享限额保证。熔断打开/配额不足是调度延后，不消耗网络尝试次数，但仍消耗 TTL。领取前检查，领取后遇到竞态未发出可标记明确的本地拒绝并释放租约，不能虚报供应商失败。
 
