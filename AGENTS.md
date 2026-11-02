@@ -21,7 +21,10 @@
 ## 架构约束
 
 - 依赖方向：domain 无框架；application 依赖 domain；adapters 实现 application 端口；api / worker 负责装配，不反向依赖。
-- PostgreSQL 是通知、幂等和调度的事实来源；禁止用仅内存队列接受生产通知。只有 durable commit 后才返回 202。
+- Kafka 是主投递分发通道，分片 PostgreSQL 是任务、幂等、租约和 Outbox 的责任账本；接收时必须同分片事务写任务、幂等及 Outbox，只有 durable commit 后才返回 202。禁止数据库和 Kafka 直接双写、内存兜底接收或承诺通用 HTTP 恰好一次。
+- 持久层使用 MyBatis Mapper 和参数绑定，不使用 JdbcTemplate 编写仓储；底层 JDBC、Spring 事务和连接池仍保留。所有同 key 请求必须路由到相同逻辑 slot，禁止靠随机盐破坏唯一性来掩盖热点。
+- Kafka offset 只能在持久移交责任后推进连续前缀；提交到内存线程池不算完成。生产者幂等不替代业务去重，Kafka 事务不包含 PG 或 HTTP。配置与故障协议遵循 `docs/kafka-reliability.md`。
+- 虚拟线程用于有界 I/O 执行；Kafka poll 使用平台线程。创建/提交 HTTP 任务前限制在途数，禁止无限虚拟线程、无限队列、跨线程共享 SqlSession 或数据库事务。
 - 网络请求不得处于数据库事务或行锁内。完成写入必须校验 lease token；重试由持久化调度统一控制，不叠加 HTTP 客户端重试。
 - tenant/client 身份来自经验证的令牌，不能信任请求 body 或自报 Header；所有读取和修改必须带授权范围。
 - 接口、设计和实现需一起更新；尚未实现的能力必须标明 TODO。默认不暴露未完成服务到公网。

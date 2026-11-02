@@ -1,10 +1,10 @@
 # 可靠 API 通知服务系统设计
 
-版本：1.0。日期：2026-11-02。项目：rc_bill。状态：设计基线与代码骨架，业务实现待后续迭代。
+版本：2.0。日期：2026-11-02。项目：rc_bill。状态：设计基线与代码骨架，业务实现待后续迭代。
 
-本服务接收内部业务系统的通知请求，将其可靠地投递给外部 HTTP(S) API。API 接收与外部投递解耦，以 PostgreSQL 持久任务、幂等记录和租约为一致性边界，采用 Spring Boot 与 Spring Cloud 构建两个可独立扩容的进程。系统承诺在配置的期限与故障假设下持续尝试投递，并显式保留失败任务；不能承诺任意供应商永远可用，也不能单方面保证外部业务恰好执行一次。
+本服务接收内部业务系统的通知请求，将其可靠地投递给外部 HTTP(S) API。API 接收与外部投递解耦，以分片 PostgreSQL 的任务/幂等/Outbox 短事务为接收一致性边界，以 Kafka 为主要投递分发通道，采用 MyBatis、Spring Boot 与 Spring Cloud 构建 API、Relay、Worker 三种可独立扩容的运行角色。Relay 与 Worker 暂共用 worker 模块，后续按启动角色隔离部署。系统承诺在配置的期限与故障假设下持续尝试投递，并显式保留失败任务；不能承诺任意供应商永远可用，也不能单方面保证外部业务恰好执行一次。
 
-本次只完成设计、OpenAPI、模块接口、构建和启动骨架。本文中的业务流程、数据库结构、安全控制、容量与 SLO 均为待实现的目标，不代表已通过生产验证。集成测试与 CI/CD 按作业范围标注 TODO，不在本阶段实现。完整开发周期计划另行编写。
+本次只完成设计、OpenAPI、模块接口、构建和启动骨架。本文中的业务流程、数据库结构、安全控制、容量与 SLO 均为待实现的目标，不代表已通过生产验证。集成测试与 CI/CD 按作业范围标注 TODO，不在本阶段实现。完整开发周期计划另行编写。Kafka 参数、部署、offset 协议、PG 热点和虚拟线程详见 [Kafka 高流量可靠性设计](kafka-reliability.md)，与本文同属必读基线。
 
 ## 1 需求与边界
 
@@ -58,40 +58,42 @@
 
 ```mermaid
 flowchart LR
-    B[外部边界 业务系统及其 Outbox] --> G[外部边界 入口网关及 OIDC]
-    G --> A[notification-api 多副本]
-    A --> D[(PostgreSQL 主库及同步备库)]
-    W[notification-worker 多副本] --> D
-    W --> E[外部边界 受控出口代理]
-    E --> V[外部边界 广告 CRM 库存 API]
-    C[版本化 destination 配置] --> A
-    C --> W
-    S[外部边界 Vault 或 KMS] --> W
-    A --> O[外部边界 指标 日志 追踪]
-    W --> O
+    B[外部业务系统及其Outbox] --> A[notification-api 多副本]
+    A --> D[(分片PostgreSQL 任务 幂等 Outbox)]
+    D --> R[Outbox Relay 独立部署角色]
+    R --> K[Kafka KRaft 跨区多副本]
+    K --> W[Worker 平台线程消费]
+    W --> D
+    W --> V[有界虚拟线程HTTP执行]
+    V --> E[受控出口及外部供应商]
+    Q[外部配额与密钥平台] --> V
 ```
 
-API 和 Worker 是同一个业务限界内的两个部署单元，共享服务拥有的数据库。模块化代码无需拆出注册中心、配置中心、独立幂等微服务或独立重试微服务。API 数据库角色只做接收/查询/重放；Worker 角色做领取/结果更新；迁移角色单独授予 DDL 权限。
+Kafka负责高吞吐分发和削峰，PG保留强一致幂等、状态、租约、重试计划和审计。正常投递由Kafka事件驱动，不再轮询PG任务表领取；PG只扫描到期Outbox与异常恢复索引。202只在任务、幂等及Outbox同一分片事务提交后返回，不等待Kafka同步发布。已接收任务即使Kafka暂不可用仍有责任账本；超过持久积压预算后拒绝新请求。
 
 | 技术 | 决策及理由 |
 | --- | --- |
-| Java 21 LTS | 编译目标 21；避免依赖预览特性。开发环境可使用兼容 JDK，CI 最终固定 21 |
-| Spring Boot 4.1.2 | MVC、Validation、Actuator；精确固定版本 |
-| Spring Cloud 2025.1.4 | 导入 BOM，使用 CircuitBreaker Resilience4j 集成；官方兼容矩阵支持 Boot 4.1 |
-| PostgreSQL 17 | ACID、唯一约束、SKIP LOCKED、部分索引；使用仍受支持的最新 17.x 补丁，上线时固定镜像 digest |
-| Spring JDBC 与 Flyway | 显式控制领取、事务和 CAS 更新；后续业务实现加入，不用 ORM 隐藏锁行为 |
-| HTTP 客户端 | 后续采用 Apache HttpClient 5，禁用自动重试与重定向，设置连接池和真实总 deadline |
-| Spring Security | 后续接入 OAuth2 Resource Server 校验 JWT；骨架不配置假 JWT 密钥 |
-| JUnit 与 AssertJ | 单元测试；Clock、随机源、端口替换。Mockito 按需使用 |
-| WireMock 与 Testcontainers | TODO 集成测试方案，真实 PostgreSQL 语义不能用 H2 替代 |
+| Java | 保持21编译目标，虚拟线程已纳入骨架；生产优先评估25 LTS，21的pinning风险需单独压测 |
+| Spring Boot 4.1.2 / Cloud 2025.1.4 | MVC、Actuator、CircuitBreaker；不额外搭建注册中心 |
+| MyBatis Starter 4.1.0 | 使用Mapper和显式SQL，支持批量、唯一冲突和租约CAS；不使用JdbcTemplate编写仓储 |
+| Spring事务 / Hikari / PostgreSQL驱动 | MyBatis依然经JDBC访问PG，保留Spring事务基础设施，不把“不用Spring JDBC写SQL”误解成删除底层JDBC依赖 |
+| PostgreSQL 17分片 | 4096逻辑slot初始映射64个物理主分片，跨区同步备库；SQL和事务只在一个分片内完成 |
+| Spring for Apache Kafka | 采用Boot管理的Spring Kafka 4.1.2、kafka-clients 4.2.2，直接管理offset与容器配置；无需额外Cloud Stream抽象 |
+| Kafka 4.2.2 KRaft | 初始12 brokers、3独立controllers、3可用区；详细可靠性参数见专项设计，上线固定镜像digest并审查补丁 |
+| Flyway | 后续独立迁移任务，不在每个应用启动时竞争DDL |
+| Apache HttpClient 5 | 后续单次有界发送，禁用自动重试与重定向；独立虚拟线程执行器，提交前限额 |
+| 配额与密钥平台 | 外部依赖只实现客户端适配，禁止在本项目重写其服务端 |
+| JUnit / AssertJ / WireMock / Testcontainers | 单元测试已提供；真实PG/Kafka与故障集成测试为TODO |
 
-版本依据见第 16 节。Spring Cloud 能力以真正需要的熔断为起点，服务发现使用平台 DNS；无需启动 Eureka/Config Server。骨架只验证这些依赖能共同启动，熔断策略接线尚未完成。
+### 3.1 MyBatis使用约束
 
-### 3.1 为什么先用数据库队列
+多行CAS、Outbox批量操作和claim SQL放在Mapper XML，简单查询可注解；所有参数使用`#{}`绑定，禁止用`${}`拼接租户值、表名或排序字段。动态分片/表名只能来自内部白名单路由。仓储方法负责事务边界，同一事务的Mapper和事务管理器必须使用同一DataSource；禁止业务方法中途切换分片或用两个数据库事务冒充原子操作。
 
-接收事务直接同时写任务与幂等记录，无数据库/MQ 双写窗口，无需以分布式锁承担持久性。Worker 通过小批量 `FOR UPDATE SKIP LOCKED` 领取到期任务，适合明确预算内的第一版。缺点是索引更新、膨胀、清理和热行竞争需要持续监控。
+关闭MyBatis二级缓存，`localCacheScope=STATEMENT`，读取幂等/租约不使用可能过时的ORM会话缓存。所有CAS检查影响行数，所有批量操作检查批次执行结果；不要依赖BATCH executor尚未flush时的返回值证明领取成功。配置statement timeout、lock timeout、连接等待上限与UTC时间映射，Mapper集成测试使用真实PG，不以H2替代ON CONFLICT/SKIP LOCKED语义。
 
-当持续任务写入/尝试写入超过压测安全线，或数据库 P99、锁等待、WAL/IO 成为瓶颈时，先归档、按租户分片并分离查询，再评估 PostgreSQL Outbox + Kafka/RabbitMQ。此时同事务写任务及 Outbox，relay 至少一次发布、消费者按任务版本去重，消息只做唤醒，DB 保留状态事实；禁止改成直接双写。不把 MQ 当作当前运行前提。
+PgBouncer若使用transaction pooling，不能依赖跨事务的会话变量、临时表或会话锁。上线前核对所选PgBouncer版本对协议级prepared statement的支持并配置池预算；兼容性未验收时使用PG JDBC `prepareThreshold=0`作为显式兼容方案并压测影响，不能只在直连PG单测中验证后就默认池化连接行为相同。
+
+starter依赖加入骨架不表示已有仓储实现。scaffold明确禁用DataSource自动连接，Kafka listener及自动建topic关闭，没有真实PG/Kafka服务也能启动；启用生产角色前必须完成迁移、事务和Kafka集成验收。
 
 ## 4 模块与组件设计
 
@@ -106,19 +108,21 @@ contracts/openapi.yaml    面向调用方的目标契约
 
 ### 4.1 接收组件
 
-执行顺序：验证身份/授权 → 限制原始 HTTP 字节数与解析深度 → DTO 校验 → 计算请求指纹 → 查询幂等记录 → 对新请求验证 destination 版本及权限 → 容量预检查 → 开启数据库事务 → 插入幂等记录和任务 → 提交 → 返回 202。幂等命中应在拒绝新流量的积压检查前处理；已接收请求不应因目标之后停用而失去可查询响应。
+执行顺序：验证身份/授权 → 限制原始 HTTP 字节数与解析深度 → DTO 校验 → 计算请求指纹 → 查询幂等记录 → 对新请求验证 destination 版本及权限 → 容量预检查 → 开启数据库事务 → 在同一分片插入幂等记录、任务、Body和Outbox → 提交 → 返回 202。幂等命中应在拒绝新流量的积压检查前处理；已接收请求不应因目标之后停用而失去可查询响应。
 
-同 key 冲突通过唯一约束解决，不能先查后插后假定无竞争。并发输家用 `INSERT ... ON CONFLICT DO NOTHING` 后在 READ COMMITTED 的下一条语句重读已提交赢家；如果事务超时返回 503，调用方仍用原 key 重试。幂等记录指向任务，二者同事务生灭，绝不先写“成功幂等”再异步保存任务。
+同 key 冲突通过唯一约束解决，不能先查后插后假定无竞争。并发输家用 `INSERT ... ON CONFLICT DO NOTHING` 后在 READ COMMITTED 的下一条语句重读已提交赢家；如果事务超时返回 503，调用方仍用原 key 重试。幂等记录指向任务，任务与Outbox同事务创建，绝不先写“成功幂等”再异步保存任务。
 
-### 4.2 调度与执行组件
+### 4.2 Kafka调度与执行组件
 
-到期扫描按 `(next_attempt_at, id)` 索引，默认每 200ms 扫描、空闲时带抖动退避到 2s。只有获得全局/供应商并发名额及速率许可后才领取，单批不超过本地空闲名额、最多 100。禁止先领取大量任务再排在内存队列中等租约过期。
+接收、人工重放、失败重试均在PG事务内创建稳定eventId的Outbox记录；Relay将到期事件发布到Kafka并等待确认后标记PUBLISHED。确认丢失或发布后崩溃允许重复发送同一事件，消费者按任务状态和scheduleEpoch去重。eventId标识事件，scheduleEpoch标识调度代次，deliveryKey标识外部业务去重身份，三者不能混用。
 
-领取短事务将状态改为 IN_FLIGHT，生成随机 `lease_token`、设置 `lease_until = DB now + 60s`、递增 `attempt_count`、插入 STARTED 尝试记录后提交。HTTP deadline 10s，租约初始 60s，写回预算 5s；网络不持有事务和数据库连接。正式启动 HTTP 前复核租约/剩余期限；超时暂停或 JVM 长 GC 仍不能消除所有重复外部效果，依赖供应商幂等。
+平台poll线程接收记录，先获得本地有限执行名额，再按notificationId精确路由PG，通过CAS领取当前epoch并持久写IN_FLIGHT租约及STARTED attempt。只有持久移交完成后才提交连续offset前缀。之后才交由虚拟线程执行HTTP；即使提交offset后进程立刻退出，也由PG租约恢复器补发调度。不能以“已提交到线程池”代替持久责任移交。
 
-执行器获取 destination 快照、按引用读取密钥，构造请求，通过受控出口发送。结果按第 7 节分类。完成短事务按 `(tenant_id, notification_id, status=IN_FLIGHT, lease_token)` CAS 更新任务及 attempt。CAS 失败意味着租约已失效，旧 Worker 不再修改任务，记录迟到结果计数。fencing token 防止旧进程覆盖新状态，不能撤销已经发出的 HTTP。
+HTTP租约60s，总deadline10s，结果写回预算5s；领取计入最多20次网络预算，崩溃发生在发送前也可能消耗一次保守预算。HTTP前复核租约、配额及TTL，网络期间不持有数据库连接。结果写回按tenant、task、IN_FLIGHT、lease_token做CAS，影响0行则只记录迟到结果。
 
-恢复扫描将过期租约的 STARTED 尝试标记 UNKNOWN，再按预算转 RETRY_WAIT/EXPIRED/DEAD。领取即计入尝试预算，即使崩溃发生在发送前，保持有界执行；审计保留 UNKNOWN，不捏造“已发送”。数据库时钟控制调度，应用使用可注入 Clock 计算纯策略，避免多机时钟偏差。
+可重试结果在同一事务更新attempt和RETRY_WAIT、计算nextAttemptAt、递增scheduleEpoch并插入available_at到期的Outbox。Relay到期发回dispatch topic，消费者不sleep等待、不热循环立即重发。过期租约标UNKNOWN后按相同事务协议恢复；TTL过期扫描必须覆盖不能被正常领取的行。限流/熔断延后不消耗网络次数，但消耗TTL。
+
+重平衡、offset提交失败、未知任务、毒消息与失效恢复的完整协议见 [Kafka消费与offset](kafka-reliability.md#3-消费与提交-offset)。实现骨架只有端口，没有实际consumer、relay或恢复器。
 
 ### 4.3 供应商配置组件
 
@@ -147,61 +151,63 @@ successPolicy: HTTP_2XX
 | --- | --- | --- |
 | NotificationUseCases | submit/get/attempts/replay | 身份上下文必传；越权资源返回 404 |
 | NotificationStore | 接收及幂等原子写、查询、重放原子写 | 返回 Created/Existing/Conflict；事务在适配器内部闭合 |
-| DeliveryQueue | claim、complete、recoverExpired | lease token 必传；不得暴露无保护 update |
+| DeliveryQueue | 按事件代次claim、complete、recoverExpired | 不扫描正常任务；lease token必传，重试与Outbox原子写 |
+| OutboxStore / DispatchPublisher | 到期发布租约、确认、Kafka发送 | 只在Kafka确认后markPublished，重复发布保持eventId不变 |
 | DestinationCatalog | 授权范围、目标 ID 和版本 → 配置 | 返回不可变版本；未知/无权配置统一 422 |
 | SecretProvider | 可信配置中的引用 → 短期密钥材料 | 业务方不能提交任意 secret URI；不得日志输出 |
 | HttpTransport | 已构造的 HTTP 请求 → 有界结果 | 不重试、不重定向、不无限读取响应 |
 | DispatchAdmission | destination → 可关闭的配额许可 | 同时限制速率和并发，不可用时不发送 |
 
-当前代码冻结最小用例和投递端口。数据库字段、异常分类和具体适配器将通过各自功能的 TDD 补齐，不预先生成大量空实现。
+当前代码冻结最小用例、事件、Outbox和投递端口。数据库字段、异常分类和具体适配器将通过各自功能的 TDD 补齐，不预先生成大量空实现。
 
 ## 5 数据设计与一致性
 
 ### 5.1 表结构设计
 
-所有时间使用 `timestamptz` 存 UTC；API 使用 RFC3339 UTC。ID 为应用生成 UUID，生产可选 UUIDv7；ID 不是访问凭证。Body 按 UTF-8 字节加密保存为 bytea，不能使用 jsonb 改写原始字符串。
+所有时间使用 `timestamptz` 存 UTC；API 使用 RFC3339 UTC。任务ID使用带12位logicalSlot路由字段的内部UUIDv8方案，完整布局实现时冻结；公共API保持opaque UUID，ID不是访问凭证。Body 按 UTF-8 字节加密保存为 bytea，不能使用 jsonb 改写原始字符串。
 
 | 表 | 主要字段 | 约束与用途 |
 | --- | --- | --- |
-| notification | id, tenant_id, client_id, destination_id/version, config_snapshot, request_fingerprint, body_ciphertext, content_type, dynamic_headers, delivery_key, status, attempt_count, next_attempt_at, expires_at, lease_token/until, created_at, completed_at, replay_of, last_error_code, revision | PK(id)；CHECK attempts≥0；IN_FLIGHT 必有租约，其余状态无租约；终态 completed_at 必填；Body 删除时另记 payload_deleted_at |
+| notification | id, tenant_id, client_id, destination_id/version, config_snapshot, request_fingerprint, payload_ref, delivery_key, status, attempt_count, next_attempt_at, expires_at, lease_token/until, created_at, completed_at, replay_of, last_error_code, revision, logical_slot, schedule_epoch | PK(id)；CHECK attempts≥0；IN_FLIGHT 必有租约，其余状态无租约；终态 completed_at 必填；Body 删除时另记 payload_deleted_at |
 | idempotency_record | tenant_id, client_id, operation_scope, key, fingerprint, notification_id, created_at, retain_until | UNIQUE(tenant_id,client_id,operation_scope,key)；FK notification；保留任务 tombstone 直到去重窗口结束 |
 | delivery_attempt | notification_id, attempt_no, tenant_id, lease_token, started_at, finished_at, outcome, http_status, error_code, elapsed_ms, provider_request_id | PK(notification_id,attempt_no)；outcome STARTED/SUCCEEDED/RETRYABLE/PERMANENT/UNKNOWN；不存原始响应 |
 | replay_audit | id, tenant_id, actor, original_id, replay_id, reason, risk_acknowledged, created_at | 与 replay 创建同事务；只追加 |
-| dispatch_budget | budget_key, available_tokens, last_refill_at, capacity, refill_rate, revision | 多实例共享令牌桶；同供应商不同 destination 共用 credential/account 级 budget key，使用数据库时间补充令牌 |
-| dispatch_permit | budget_key, slot_id, owner_token, expires_at | 有限 slot 的并发租约；故障自动回收；不能把单实例信号量误认为全局限额 |
+| delivery_chain | root_id, active_notification_id, logical_slot | 同一原始投递链同分片加锁，防止祖先重放绕过活跃约束 |
+| outbox_event | event_id, notification_id, schedule_epoch, event_type, available_at, publish_state, lease_token/until, payload, published_at | UNIQUE(notification_id,schedule_epoch,event_type)；不含业务Body，未发布不清理 |
+| notification_payload | notification_id, body_ciphertext, content_type, dynamic_headers, deleted_at | 与窄状态行分离，同分片，默认终态7天清理；避免状态更新反复改写大Body |
 
 表目前为设计，尚未提供可执行迁移；落地时用 Flyway 独立迁移任务，不让每个应用启动时竞争执行 DDL。
 
-### 5.2 索引和查询
+### 5.2 索引与事件驱动领取
 
-- `notification(next_attempt_at, id) WHERE status IN ('PENDING','RETRY_WAIT')` 用于到期领取。
-- `notification(lease_until, id) WHERE status='IN_FLIGHT'` 用于租约恢复。
-- `notification(tenant_id, client_id, created_at DESC, id)` 用于授权范围内运维检索，第一版公共 API 只按 ID 查询。
-- `notification(completed_at, id) WHERE completed_at IS NOT NULL` 支持分批归档；FK 清理顺序：attempt/audit 依保留政策处理、幂等记录过期、任务 tombstone 最后清理。
-- attempt 按通知 ID 和 attempt_no 游标分页，不用大 OFFSET。第一版默认主库查询避免刚接收后读副本延迟造成 404。
-- 任务表第一版不按时间分区，避免全局唯一幂等键/主键受分区约束破坏。attempt 可后续按时间分区，但必须保持逻辑唯一与查询路径，并先压测。
+- 幂等唯一索引包含tenant/client/operation/key，所有同key请求按稳定logicalSlot落同一物理分片；不能仅在每个库创建相同索引后随机路由。
+- notification按ID定位并CAS当前epoch；`(lease_until,id) WHERE status='IN_FLIGHT'`用于异常租约恢复，`(expires_at,id) WHERE status IN ('PENDING','RETRY_WAIT')`用于过期处理。
+- Outbox采用`(available_at,event_id) WHERE publish_state='PENDING'`和发布租约过期索引；分片内固定lane分工避免一个全局扫描器，分批更新与归档。
+- attempt按notification_id/attempt_no游标分页；状态查询从ID解析slot，默认主库，避免接收后读副本404。禁止每次查询广播64库。
+- 幂等表保留30天且不早于终态；不能按事件日期分区后让同key跨日期获得多个唯一约束。采用hash slot保证去重局部性；attempt/Outbox等追加表可按日期分区清理，约束须包含分区键并保持应用唯一不变量。
+- Body独立表加密；窄状态表保留可查询元数据。终态元数据30天的成本已计入高流量容量预算，不假定Kafka可以承担所有随机状态查询。
 
-领取伪 SQL，整个事务不得包含 HTTP：
+正常领取伪SQL，业务层需先完成TTL、预算、配额和事件校验，真实实现用MyBatis Mapper绑定参数：
 
 ```sql
 BEGIN;
-SELECT id FROM notification
- WHERE status IN ('PENDING','RETRY_WAIT')
+UPDATE notification
+   SET status='IN_FLIGHT', lease_token=:token,
+       lease_until=clock_timestamp()+interval '60 seconds',
+       attempt_count=attempt_count+1
+ WHERE id=:id AND tenant_id=:tenant
+   AND schedule_epoch=:event_epoch
+   AND status IN ('PENDING','RETRY_WAIT')
    AND next_attempt_at <= clock_timestamp()
-   AND expires_at > clock_timestamp()
- ORDER BY next_attempt_at, id
- FOR UPDATE SKIP LOCKED LIMIT :available_slots;
--- 对选中的行原子更新租约/计数，并 INSERT delivery_attempt STARTED
+   AND expires_at > clock_timestamp()+interval '10 seconds'
+   AND attempt_count < 20;
+-- 影响1行才INSERT STARTED attempt；0行重读分类，不能直接当成功
 COMMIT;
--- 网络 I/O
-BEGIN;
-UPDATE notification SET status=:next_state, lease_token=NULL, lease_until=NULL
- WHERE id=:id AND tenant_id=:tenant AND status='IN_FLIGHT' AND lease_token=:token;
--- 仅当影响行数为 1 时更新该 attempt、next_attempt_at/completed_at 等字段
-COMMIT;
+-- 此后才能推进Kafka offset，之后异步HTTP
+-- complete事务同时更新任务/attempt，重试时INSERT下一代Outbox
 ```
 
-SQL 是协议示意，不可直接作为完整实现运行。READ COMMITTED 足够配合唯一约束与行级 CAS；数据库死锁/序列化冲突可对纯 DB 事务有限重试，不能重新包住 HTTP 重试。
+SQL为协议示意，实际Mapper参数采用`#{}`而不是字符串拼接。READ COMMITTED配合唯一约束与CAS；DB纯事务冲突可有限重试，不包住HTTP。Kafka offset与PG不在一个事务，因此顺序为PG先提交、offset后提交；中间失败允许消息重读，用PG已提交状态消除重复推进。
 
 ### 5.3 入口指纹与出站幂等
 
@@ -215,7 +221,7 @@ SQL 是协议示意，不可直接作为完整实现运行。READ COMMITTED 足�
 
 仅具备 `notifications:replay` 且属于原 client 的操作者可将 DEAD/EXPIRED 任务创建为新子任务；原状态不回滚。原任务不存在/跨租户返回 404，非终态或 SUCCEEDED 返回 409，Body 已删除返回 410。重放保留原 Body、快照、delivery_key，新 task ID、24h TTL、尝试预算从 0 开始，审计 reason 必填。
 
-原任务行加锁，保证同一个 delivery_key 链同时最多一个非终态任务。相同 replay key 返回相同子任务；不同 key 并发时只有一个创建成功，其余 409。重复子任务可在其终态后继续重放，但不能通过重放早先祖先绕过链检查。链的根 ID 可增加 `delivery_chain` 锁行或部分唯一活跃约束实现，具体迁移需在该功能落地时固定。
+原任务行加锁，保证同一个 delivery_key 链同时最多一个非终态任务。相同 replay key 返回相同子任务；不同 key 并发时只有一个创建成功，其余 409。重复子任务可在其终态后继续重放，但不能通过重放早先祖先绕过链检查。使用同分片`delivery_chain`根行锁约束，原始与所有重放子任务始终位于原logicalSlot；新子任务和审计、幂等、Outbox同事务写入。
 
 供应商不支持幂等或最早一次投递至新 TTL 结束可能超过供应商去重窗口时，只有 `acknowledgeDuplicateRisk=true` 且具备 replay scope 才允许重放，否则 409。这只是操作者知情确认，不提供技术去重保证。
 
@@ -240,19 +246,28 @@ stateDiagram-v2
 sequenceDiagram
     participant B as 业务系统
     participant A as API
-    participant D as PostgreSQL
+    participant D as 分片PG
+    participant R as Relay
+    participant K as Kafka
     participant W as Worker
     participant V as 供应商
-    B->>A: POST + Idempotency-Key
-    A->>D: 同事务写幂等及PENDING
-    D-->>A: COMMIT成功
-    A-->>B: 202 + notificationId
-    W->>D: 领取及写STARTED后提交
-    W->>V: HTTP + 稳定delivery_key
-    V-->>W: 响应或超时
-    W->>D: 按lease_token写结果
-    Note over W,D: 崩溃后由过期租约恢复，不依赖内存队列
+    B->>A: POST加Idempotency-Key
+    A->>D: 同事务任务 幂等 Outbox
+    D-->>A: COMMIT
+    A-->>B: 202
+    R->>D: 短事务租赁到期Outbox
+    R->>K: 稳定eventId与scheduleEpoch
+    K-->>R: acks all
+    R->>D: CAS标记已发布
+    K->>W: 可重复的调度消息
+    W->>D: CAS领取并持久化租约及STARTED
+    W->>K: 提交连续offset前缀
+    W->>V: 有界虚拟线程HTTP加deliveryKey
+    V-->>W: 响应或结果未知
+    W->>D: CAS结果及必要的下一次Outbox
 ```
+
+offset已提交只表示持久移交，不等于供应商成功。任意中间崩溃都有PG状态、Outbox或租约恢复路径；恢复器必须作为生产ready条件纳入验收。
 
 ## 7 超时重试与供应商隔离
 
@@ -283,13 +298,13 @@ sequenceDiagram
 
 ### 7.3 限流与熔断
 
-Worker 每实例最多 200 个在途请求，HTTP 连接池总上限 200，单路由默认 20；起始预算需要根据供应商账户限额调整。虚拟线程可用于等待 I/O，但不能替代并发上限。
+Worker每实例最多1024个在途HTTP，提交到虚拟线程执行器之前取得本地名额；平台Kafka消费线程起始32个，二者不是同一个concurrency。HTTP连接池总量与在途预算对应，单路由按供应商合同设置，数据库连接池单独限额。虚拟线程便宜不代表连接、堆内存和下游服务无限。
 
-多副本共享供应商 token bucket/slot 的数据库适配器：使用短事务原子补充/消耗令牌、受 TTL 保护的并发许可；按 provider credential/account 聚合，防止多个 destination 绕过合同限额。发送前同时复核任务租约与并发许可，许可过期则不得新发请求。预算服务/数据库不可用时不发新请求。可按小额许可租赁降低 DB 热点，但必须限制总租赁额度与超发界限；第一版不启用无限预取。大规模可迁移到外部 Redis 原子配额，但 Redis 不能成为任务唯一存储。
+原先“每次请求更新同一个PG供应商配额行”的方案取消。供应商配额使用外部配额/出口能力，按account归集，短窗口批量grant、稳定grantId去重、本地令牌与并发信号量配合；单provider仍存在需要串行的预算裁决，通过批次降低中央操作频率。Redis异步故障切换不能证明绝不超额，需暂停不确定epoch或由受控出口作最终硬限制；详细边界见专项设计第8节。
 
-单实例 Resilience4j 熔断：最近 50 次、至少 20 次调用，失败率≥50% 打开 30s，半开最多 3 个探测；429 主要触发供应商共享冷却，不计作网络可用性失败。熔断是进程内保护，全局效果由共享限额保证。熔断打开/配额不足是调度延后，不消耗网络尝试次数，但仍消耗 TTL。领取前检查，领取后遇到竞态未发出可标记明确的本地拒绝并释放租约，不能虚报供应商失败。
+Resilience4j进程内熔断起点为最近50次、至少20次调用、失败率≥50%打开30s、半开最多3次探测。429主要驱动共享冷却，不当成网络故障无限重试。使用SemaphoreBulkhead避免再套线程池；熔断状态不是全局配额。没有配额/熔断打开则持久延后，不消耗网络attempt但消耗TTL。
 
-供应商之间按预算和并发隔离；租户使用有权重轮询或分片扫描，单租户默认不超过全局待执行名额 20%，避免单一积压饿死其他租户；实现时需要验证公平性，不能只依赖全局时间排序。
+Kafka按通知slot散列，不按provider形成单分区热点。大客户按key散列至多个PG分片；消费者对单目标积压通过持久延后和配额隔离，让同partition其他目标继续推进。调度公平性、最大延期事件率与重放限速均需压测，不能只凭增加partition宣称无饥饿。
 
 ## 8 HTTP API 契约
 
@@ -324,39 +339,22 @@ API v1 只允许向后兼容的可选响应字段扩展，新增枚举值需与�
 
 ## 10 容量与并发预算
 
-### 10.1 工作负载假设
+当前假设为平均20,000通知/s、峰值100,000通知/s持续10分钟、平均Body2KiB、正常尝试放大1.05、供应商平均耗时200ms。它替代v1的100/1000 QPS假设，属于待压测目标。
 
-100 个业务调用方、200 个 destination；平均 100 条通知/秒，持续峰值 1000 条/秒最长 10 分钟；平均 Body 2 KiB，极限 64 KiB；供应商平均耗时 200ms，P99 2s；正常平均尝试放大系数 1.05。高重试故障态不沿用 1.05 假设，需由熔断、配额和背压控制。
-
-| 估算 | 数值及解释 |
+| 核心预算 | 结果 |
 | --- | --- |
-| 日通知量 | 100 × 86400 = 864 万 |
-| 日原始 Body | 864 万 × 2 KiB ≈ 16.5 GiB |
-| Body 7天窗口 | ≈115 GiB，另加活跃任务；需要清理，不把全量永久留在主库 |
-| 30天任务元数据 | 约 2.592 亿行；按任务+索引 1 KiB 估算约247 GiB |
-| 30天 attempt | 约2.72亿行；按平均512 B含索引估算约130 GiB |
-| 30天幂等记录 | 约2.592亿行；按384 B含索引估算约93 GiB |
-| 综合主库预算 | 上述约585 GiB，加膨胀、WAL、临时空间、裕量后初始至少1.5 TiB可用；每个完整副本另计，备份容量另计 |
-| 2小时供应商故障积压 | 100 × 7200 = 72万任务，约1.37 GiB Body，不含记录/索引 |
-| 峰值入口 Body带宽 | 1000 × 2 KiB ≈1.95 MiB/s；全部64 KiB时≈62.5 MiB/s，必须字节配额背压 |
+| 每日通知 | 17.28亿 |
+| Kafka峰值dispatch | 105k事件/s；每事件约600B，逻辑60.1MiB/s |
+| Kafka分区/部署 | dispatch2048分区，RF3、minISR2，12broker与3独立controller跨3AZ |
+| Kafka7天dispatch副本容量 | 约20.79TiB，集群起始48TiB可用盘，另核算dead/quarantine与恢复余量 |
+| PG峰值事务下限 | 接收+领取+写回约310k事务/s，另有Outbox、清理与查询 |
+| PG分片起点 | 4096逻辑slot→64物理主分片，平均约4844事务/s/分片，真实事务压测目标留到约6500 |
+| PG原始保留成本 | 7天Body+30天任务/幂等/attempt约114.26TiB；2倍余量后约228.5TiB主容量，副本/备份另计 |
+| HTTP并发 | 105k×0.2s≈21k；2倍余量42k，64Worker×1024≈65k，单AZ失效后仍约43k |
 
-这些数量说明“100 QPS”也不能无限保留热数据。30天元数据规模需真实数据集压测、清理速率验证与专用数据库预算；若单实例无法达到预算，降低接收配额或按 tenant 分片后再承诺 SLO。幂等表独立于 Body 归档，去重窗口不随归档提前结束。
+PG仍承受每条接收的唯一约束和持久写，Kafka不能消除这个上限。MyBatis改善SQL可控性，也不等于自动提高TPS。同key是必须串行裁决的热点，用有界single-flight、结果缓存及限流缓解；不能通过随机加盐分散同key而破坏幂等。
 
-### 10.2 并发计算与部署起点
-
-Little 定律的近似：在途数 `L = attempt rate × mean latency`。1000 ×1.05×0.2≈210；按 2 倍裕量约420。初始 4 个 Worker 各200并发共800，一个实例故障后剩600，满足这个平均延迟假设。若平均耗时恶化到2s，需要约2100在途，不能无界放大线程；实际吞吐降到≤400次/秒并开始积压，触发供应商隔离与背压。
-
-API 初始3副本每个2 vCPU/2GiB；Worker4副本每个2 vCPU/2GiB；这些是压测起点而不是硬件保证。每进程 Hikari 上限10，7个实例共70；加迁移/监控≤10，数据库 max_connections 初始120留出故障操作余量。自动扩容上限必须同步核算连接预算，必要时 PgBouncer，不能让每个新副本默认30连接耗尽数据库。
-
-正常峰值至少约1000次接收事务+1050次领取+1050次写回，即约3100事务/秒，另有 attempt 写入、共享预算操作和查询；批量领取可降低事务开销，但不能省略写回与索引成本。数据库需要针对这类真实事务与清理并发压测，不能仅以“PostgreSQL 通常很快”证明容量。
-
-### 10.3 背压与清理
-
-单租户请求/字节配额耗尽返回429；系统 pending+retry 总数达200万或可用磁盘低于25%开始软拒绝新接收503，低于15%或队列达500万进入硬保护，保留重试和结果写回资源。阈值为初始配置，按数据分布调整；已命中幂等记录的请求仍允许返回已有结果。接收限流不得把内存缓存误当精确全局计数，配额状态使用共享原子更新或网关与本服务配合。
-
-积压恢复吞吐取 `min(Worker能力, DB能力, 供应商合同QPS)`。例如出口500次/秒、正常流入100且重试放大1.05，净消化约395次/秒，72万积压约30.4分钟；不能超过供应商限额“补偿式猛发”。按租户加权分配，TTL临近任务告警但不能持续挤占其他租户。
-
-归档/清理每批1000行、小事务、限制每秒删除速率，监控 autovacuum、索引膨胀、复制延迟。过期扫描必须覆盖未被普通 claim 命中的 pending/retry 过期行，不能让 `expires_at > now()` 过滤的任务永久滞留。
+分片路由、Kafka自定义partition映射、数据库连接总额、Body独立存储、索引与清理成本、延迟恶化时并发不足、背压门限及完整计算见 [容量与热点专题](kafka-reliability.md#8-postgresql-是否仍然需要)。未取得真实事务/磁盘/同步复制压测证据前，不承诺达到该吞吐。
 
 ## 11 故障与恢复矩阵
 
@@ -367,18 +365,23 @@ API 初始3副本每个2 vCPU/2GiB；Worker4副本每个2 vCPU/2GiB；这些是�
 | Worker领取后发送前崩溃 | STARTED无完成 | 租约超时标UNKNOWN再调度，计入预算 |
 | 供应商成功后写回前崩溃 | 外部可能已成功 | 重试用相同delivery_key；无供应商幂等则可能重复 |
 | 旧Worker晚到结果 | CAS影响0行 | 不覆盖新租约结果，记录迟到指标 |
-| 数据库不可用 | API503，Worker停止领取 | 不用内存兜底接收；恢复后扫描持久任务 |
+| 单PG分片不可用 | 受影响slot的API503、consumer暂停 | 不ack未持久移交消息；其他分片继续，禁止广播式整体停机 |
+| Kafka不可用/ISR不足 | Relay失败，Outbox增长 | 不markPublished；达到持久积压门限后拒绝新接收 |
+| 发布成功但未标记Outbox | Kafka可能已有消息 | 重发相同eventId，按epoch/状态去重 |
+| PG移交后offset提交失败 | 消费者会重读 | 已持久租约/终态可判重；不能重复推进同代次 |
+| offset已提交但未执行HTTP就退出 | Kafka不一定再给该事件 | 强制依赖租约恢复器补发Outbox，不能仅依赖offset重放 |
+| 消费组offset丢失/过期 | reset=none停下 | 按PG账本对账并初始化恢复水位，禁止自动latest |
 | 密钥平台不可用 | 无法构造请求 | 有效缓存可用；无缓存延后并告警，不消耗网络预算 |
 | 供应商持续429/5xx | RETRY_WAIT积压 | 尊重Retry-After、熔断、配额与TTL |
 | 配置发布不一致 | API/Worker版本不匹配 | 先发布Worker支持版本再开放API；缺失版本暂停并告警，快照不可静默换版 |
 | 主库切换 | 短时503/结果未知 | 同步复制RPO目标；旧主隔离防双主；客户端重试 |
 | 从备份恢复 | 部分成功记录可能丢失 | 默认暂停所有出站，核对审计/供应商结果/去重窗口后分批恢复，禁止盲目全量重发 |
 
-优雅停机：readiness摘流→停止领取→等待当前请求和结果写回最多30s→退出；Pod终止宽限期45s，租约60s提供余量。超时退出交给租约恢复。liveness只检查进程自身，不因数据库/供应商故障触发全体重启；readiness检查数据库和必要配置，单个供应商故障不使全服务不可用。
+优雅停机：readiness摘流→停止领取→等待当前请求和结果写回最多30s→退出；Pod终止宽限期45s，租约60s提供余量。超时退出交给租约恢复。liveness只检查进程自身，不因数据库/供应商故障触发全体重启；readiness按角色检查必要分片、配置、Kafka消费/发布与恢复器；短暂Kafka故障时API仅在Outbox预算内继续接收，单个供应商故障不使全服务不可用。
 
 ## 12 可观测性与运行手册
 
-指标包括 accepted/deduplicated/conflict/rejected 计数、接收延迟、状态队列深度、最老待投递年龄、attempt结果与耗时、租约过期/迟到结果、熔断状态、限流、DB池等待、磁盘/WAL/复制延迟。指标标签只用受控 destination/错误类别，不以 notificationId/client自由文本作为高基数标签；task ID只放日志/trace。
+额外监控Kafka ISR/离线分区/lag年龄/offset失败/重平衡、Outbox最老未发布年龄、各slot负载与唯一索引等待、配额grant和虚拟线程pinning。指标包括 accepted/deduplicated/conflict/rejected 计数、接收延迟、状态队列深度、最老待投递年龄、attempt结果与耗时、租约过期/迟到结果、熔断状态、限流、DB池等待、磁盘/WAL/复制延迟。指标标签只用受控 destination/错误类别，不以 notificationId/client自由文本作为高基数标签；task ID只放日志/trace。
 
 初始告警：正常目标最老待投递>60s持续5分钟；DEAD/EXPIRED>0立即产生事件并按目标聚合；入口5xx>1%持续5分钟；DB连接使用>80%持续5分钟；磁盘<25%；租约过期率>0.1%；积压持续上升15分钟；同步副本不可用触发持久性风险告警。
 
@@ -405,39 +408,41 @@ API 初始3副本每个2 vCPU/2GiB；Worker4副本每个2 vCPU/2GiB；这些是�
 状态：TODO，设计纳入上线门禁，本次不实现测试环境和测试套件。
 
 - Testcontainers启动真实PostgreSQL并执行Flyway；测试100并发相同key只产生1任务、不同内容409、事务回滚无孤儿记录。
-- 至少2个Worker同时领取，验证SKIP LOCKED、租约抢占、旧token无法提交、全局配额与公平性；不以单实例mock证明分布式正确性。
+- 至少2个Worker消费重复/乱序epoch，验证精确CAS领取、持久handoff后的offset提交、rebalance和租约抢占、旧token无法提交、全局配额与公平性；不以单实例mock证明分布式正确性。
 - WireMock模拟2xx/业务失败/429/5xx/延迟/断连/大响应，并在“供应商已处理、本服务未记成功”窗口杀Worker，验证重复风险及稳定delivery_key。
 - 验证数据库故障切换、同步复制丢失、清理与查询并发、Body删除后重放、恢复备份时暂停发送、密钥轮换和配置先后发布。
 - 独立网络安全测试验证受控出口、DNS重绑定、IPv4/IPv6地址变体和禁止直连；普通mock URL校验不足以完成验收。
-- 端到端用“生产者mock→真实API→真实DB→真实Worker→供应商mock”闭环；真实外部业务系统不在测试实现范围。
-- 压测1000/s持续10分钟、100/s至少2小时稳定性及缩比30天数据索引测试；记录P95/P99、最大DB TPS、队列恢复、CPU/内存/连接和数据不丢失断言。更长耐久测试作为生产门禁。
+- 端到端用“生产者mock→真实API/MyBatis/PG→Outbox Relay→真实Kafka→真实Worker→供应商mock”闭环；真实外部业务系统不在测试实现范围。
+- 压测100k/s持续10分钟、20k/s至少2小时稳定性及等效30天数据索引测试；对比平台/虚拟线程与JDK21/25，执行单AZ失效及重复消息风暴测试；记录P95/P99、最大DB TPS、队列恢复、CPU/内存/连接和数据不丢失断言。更长耐久测试作为生产门禁。
 
 ## 14 TODO CI/CD 与部署
 
 状态：TODO；本阶段不添加名为成功但未验证的流水线，也不部署生产。
 
-PR流水线目标：JDK21→固定Maven Wrapper→格式/静态分析→单元测试→OpenAPI lint与兼容性差异→架构依赖检查→集成测试→依赖/密钥扫描→生成SBOM→构建非root镜像。缓存按pom与wrapper校验和分键；GitHub Actions固定commit SHA，最小permissions；外部PR不得取得部署密钥。依赖漏洞按组织策略阻断并记录豁免期限。
+PR流水线目标：JDK21编译与JDK21/25运行矩阵→固定Maven Wrapper→格式/静态分析→单元测试→OpenAPI lint与兼容性差异→架构依赖检查→PG/Kafka/Testcontainers集成与Outbox/offset故障测试→依赖/密钥扫描→生成SBOM→构建非root镜像。缓存按pom与wrapper校验和分键；GitHub Actions固定commit SHA，最小permissions；外部PR不得取得部署密钥。依赖漏洞按组织策略阻断并记录豁免期限。
 
 交付流水线目标：受保护分支和review→镜像签名/摘要→临时环境部署→独立Flyway迁移Job→冒烟与契约测试→人工发布门禁→API/Worker分别滚动或金丝雀→SLO观察→提升或回滚。生产OIDC短期凭证，不在仓库保存Kubeconfig或云密钥。
 
 数据库采用expand/contract：先新增可兼容字段/索引→兼容旧版本Worker的应用→回填→观察→后续版本删旧字段。回滚应用不自动执行破坏性数据库down migration。新destination版本先让Worker可处理再允许API接收；禁止在回滚后留下只有新代码认识的不可处理任务。
 
-部署需配置Pod资源requests/limits、反亲和、至少2可用区、PodDisruptionBudget、就绪/存活探针、45s终止宽限、NetworkPolicy、出口代理、secret注入、同步备库、WAL归档和恢复演练。HPA参考最老任务年龄与实际出口容量，不能仅以CPU或队列深度无限增加Worker。
+部署需配置Pod资源requests/limits、反亲和、至少3可用区、PodDisruptionBudget、就绪/存活探针、45s终止宽限、NetworkPolicy、出口代理、secret注入、同步备库、WAL归档和恢复演练。HPA参考最老任务年龄与实际出口容量，不能仅以CPU或队列深度无限增加Worker。
 
 ## 15 当前骨架验收与后续门禁
 
 本阶段验收：Maven多模块可构建；domain无框架；应用端口可以mock；API和Worker仅在显式scaffold profile启动；业务路由501；liveness可检查，readiness明确DOWN；没有真实投递、存储和外部模块实现。运行方式及实际验证结果记录在README。
 
-生产启用前必须完成：真实数据库迁移和事务→持久入口幂等→身份/租户与字节校验→安全目标配置→租约调度→真实HTTP投递→持久重试与配额→状态查询/审计重放→指标和清理→第13节集成/故障/容量测试→第14节CI/CD与恢复演练。该顺序是实现依赖说明，不替代下一会话的开发周期计划。
+生产启用前必须完成：MyBatis分片路由/迁移/事务→持久入口幂等与Outbox→身份/租户与字节校验→安全目标配置→Kafka发布及消费handoff→租约恢复→有界虚拟线程HTTP投递→持久重试与配额→状态查询/审计重放→指标和清理→第13节集成/故障/容量测试→第14节CI/CD与恢复演练。该顺序是实现依赖说明，不替代下一会话的开发周期计划。
 
-最终作业交付还需：确认GitHub仓库名称符合`rc_{your_nickname}`并发布；导出所有实际参与作业的完整未删改AI会话为zip入库，记录来源和校验和。不可用摘要代替原始日志，不将未结束的当前会话归档描述为完整记录。
+最终作业交付还需：GitHub仓库已通过SSH发布到`xiedeacc/rc_bill`；后续变更按授权范围更新。仍需导出所有实际参与作业的完整未删改AI会话为zip入库，记录来源和校验和。不可用摘要代替原始日志，不将未结束的当前会话归档描述为完整记录。
 
 ## 16 参考依据
 
 - [Spring Cloud官方兼容矩阵](https://spring.io/projects/spring-cloud/)：2025.1系列自2025.1.2起支持Boot4.1，用于选型兼容性。
 - [Spring Boot系统要求](https://docs.spring.io/spring-boot/system-requirements.html)：4.1.2支持Java17至27，本项目编译目标固定21。
 - [Spring Cloud CircuitBreaker Resilience4j](https://docs.spring.io/spring-cloud-circuitbreaker/reference/spring-cloud-circuitbreaker-resilience4j.html)：熔断、隔离集成能力。
-- [PostgreSQL SELECT锁定语义](https://www.postgresql.org/docs/17/sql-select.html)：SKIP LOCKED可用于多个消费者访问队列式表；不用于一般一致性查询。
+- [MyBatis Spring Boot要求](https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)与[事务集成](https://mybatis.org/spring/transactions.html)：选择MyBatis，底层保留Spring事务/JDBC。
+- [Kafka专项参数及官方依据](kafka-reliability.md)：Kafka 4.2配置、部署、EOS边界、虚拟线程与JDK版本约束。
+- [PostgreSQL SELECT锁定语义](https://www.postgresql.org/docs/17/sql-select.html)：SKIP LOCKED用于并发Relay的Outbox批次租赁与恢复扫描；Kafka主流程按ID精确CAS领取。
 - [RFC 9110 HTTP语义](https://www.rfc-editor.org/rfc/rfc9110.html)：HTTP状态和Retry-After的协议依据。
 - [OWASP SSRF防护](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html)：目标白名单、DNS/IP验证与重定向控制。
 

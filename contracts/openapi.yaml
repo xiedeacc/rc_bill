@@ -4,7 +4,8 @@ info:
   version: 1.0.0
   description: >-
     目标生产契约；当前骨架业务路由返回501，尚未实现安全、持久化或投递。
-    202仅表示持久接收。外部投递可能重复，稳定出站幂等键需供应商支持。
+    202仅表示任务、幂等与Outbox已在同一PG分片持久提交，Kafka异步发布。
+    外部投递可能重复，稳定出站幂等键需供应商支持。
     tenant_id/client_id来自验证后的令牌，不能由请求指定。
 servers:
   - url: https://notifications.example.com
