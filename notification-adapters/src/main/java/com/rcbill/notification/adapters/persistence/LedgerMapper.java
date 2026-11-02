@@ -58,6 +58,8 @@ public interface LedgerMapper {
     @Update("UPDATE outbox_event SET publish_state='PENDING',lease_token=NULL,lease_until=NULL WHERE event_id IN (SELECT event_id FROM outbox_event WHERE publish_state='IN_FLIGHT' AND lease_until<clock_timestamp() LIMIT #{limit} FOR UPDATE SKIP LOCKED)") int recoverOutbox(@Param("limit") int limit);
     @Insert("INSERT INTO topology_guard(singleton,shard_count,partition_count) VALUES(true,#{shards},#{partitions}) ON CONFLICT DO NOTHING") int initializeTopology(Map<String,Object> args);
     @Select("SELECT * FROM topology_guard WHERE singleton=true") Map<String,Object> topology();
+    @Insert("INSERT INTO destination_version(destination_id,version,fingerprint) VALUES(#{id},#{version},#{fingerprint}) ON CONFLICT DO NOTHING") int registerDestination(Map<String,Object> args);
+    @Select("SELECT fingerprint FROM destination_version WHERE destination_id=#{id} AND version=#{version}") String destinationFingerprint(Map<String,Object> args);
     @Select("SELECT min(created_at) FROM outbox_event WHERE publish_state<>'PUBLISHED'") java.time.Instant oldestUnpublished();
     @Delete("DELETE FROM payload WHERE notification_id IN (SELECT n.id FROM notification n JOIN payload p ON p.notification_id=n.id WHERE n.completed_at<clock_timestamp()-interval '7 days' ORDER BY n.completed_at,n.id LIMIT #{limit})") int purgePayload(@Param("limit") int limit);
     @Delete("DELETE FROM outbox_event WHERE event_id IN (SELECT event_id FROM outbox_event WHERE publish_state='PUBLISHED' AND published_at<clock_timestamp()-interval '1 day' LIMIT #{limit})") int purgeOutbox(@Param("limit") int limit);

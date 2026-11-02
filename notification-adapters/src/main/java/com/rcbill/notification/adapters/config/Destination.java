@@ -20,7 +20,9 @@ public record Destination(String id,int version,Set<String> allowedTenants,Set<S
                 || !Set.of("POST","PUT","PATCH").contains(method))throw new IllegalArgumentException("Invalid destination configuration");
         allowedTenants=Set.copyOf(allowedTenants);allowedClients=Set.copyOf(allowedClients);contentTypes=Set.copyOf(contentTypes);
         allowedDynamicHeaders=allowedDynamicHeaders.stream().map(v->v.toLowerCase(Locale.ROOT)).collect(java.util.stream.Collectors.toUnmodifiableSet());
-        staticHeaders=Map.copyOf(staticHeaders);
+        var normalizedStatic=new TreeMap<String,String>();
+        staticHeaders.forEach((k,v)->{if(normalizedStatic.putIfAbsent(k.toLowerCase(Locale.ROOT),v)!=null)throw new IllegalArgumentException("Duplicate static header");});
+        staticHeaders=Map.copyOf(normalizedStatic);
         if(policy==null||policy.timeoutSeconds()<1||policy.timeoutSeconds()>10||policy.maxAttempts()<1||policy.maxAttempts()>20)
             throw new IllegalArgumentException("Invalid delivery budgets");
         if(credentialRef!=null&&!credentialRef.matches("env:[A-Z][A-Z0-9_]*"))throw new IllegalArgumentException("Unsupported credential reference");

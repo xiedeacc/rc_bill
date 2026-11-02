@@ -16,6 +16,7 @@ public final class PgNotificationStore implements NotificationStore {
         @Override public String toString(){return "Body[REDACTED]";}
     }
     private final Shards shards;private final PayloadCipher cipher;private final JsonMapper json;
+    private final Map<String,String> destinationVersions=new java.util.concurrent.ConcurrentHashMap<>();
     public PgNotificationStore(Shards shards,PayloadCipher cipher,JsonMapper json){this.shards=shards;this.cipher=cipher;this.json=json;}
     private static int slot(Caller c,String scope,String key){return scope.startsWith("replay:")?Routing.slot(UUID.fromString(scope.substring(7))):Routing.slot(c.tenantId(),c.clientId(),scope,key);}
     @Override public Optional<IdempotencyHit> findIdempotency(Caller c,String scope,String key){
@@ -23,6 +24,7 @@ public final class PgNotificationStore implements NotificationStore {
         return row==null?Optional.empty():Optional.of(new IdempotencyHit((String)row.get("fingerprint"),new Acceptance(id(row.get("notification_id")),instant(row.get("created_at")),true)));
     }
     @Override public Acceptance accept(Caller c,String key,String fingerprint,Submission s,DestinationCatalog.Snapshot d){
+        registerDestination(d);
         int slot=slot(c,"submit",key);var shard=shards.slot(slot);
         try{return shard.transaction(m->{
             Instant now=m.now(),oldest=m.oldestUnpublished();
@@ -34,6 +36,15 @@ public final class PgNotificationStore implements NotificationStore {
             m.insertChain(task);event(m,task,slot,0,"DISPATCH",now);
             return new Acceptance(task,instant(m.task(task).get("created_at")),false);
         });}catch(Duplicate race){return NotificationService.existing(findIdempotency(c,"submit",key).orElseThrow(),fingerprint);}
+    }
+    public void registerDestination(DestinationCatalog.Snapshot d){
+        String key=d.id()+":"+d.version(),fingerprint=DestinationFingerprint.of(d);
+        String cached=destinationVersions.get(key);
+        if(cached==null){
+            cached=shards.all().getFirst().transaction(m->{var args=map("id",d.id(),"version",d.version(),"fingerprint",fingerprint);m.registerDestination(args);return m.destinationFingerprint(args);});
+            destinationVersions.putIfAbsent(key,cached);
+        }
+        if(!cached.equals(fingerprint))throw new ServiceFailure(422,"DESTINATION_VERSION_CHANGED");
     }
     private void create(LedgerMapper m,Caller c,UUID task,UUID root,UUID replay,String delivery,int slot,String snapshot,String fp,String destination,int version,Instant expires){
         m.insertTask(map("id",task,"tenant",c.tenantId(),"client",c.clientId(),"slot",slot,"destination",destination,"version",version,"snapshot",snapshot,"fingerprint",fp,"root",root,"replayOf",replay,"deliveryKey",delivery,"expires",expires));

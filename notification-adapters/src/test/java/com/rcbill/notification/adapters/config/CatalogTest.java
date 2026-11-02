@@ -24,4 +24,10 @@ class CatalogTest {
         assertThatIllegalArgumentException().isThrownBy(()->provider.resolve("http://attacker/secret"));
         assertThatIllegalStateException().isThrownBy(()->provider.resolve("env:MISSING"));
     }
+    @Test void deliveryIdentityIgnoresPauseButIncludesActualTarget(){
+        var d=target();var paused=new Destination(d.id(),d.version(),d.allowedTenants(),d.allowedClients(),false,d.endpoint(),d.method(),d.contentTypes(),d.allowedDynamicHeaders(),d.staticHeaders(),d.credentialRef(),d.idempotencyHeader(),d.policy(),d.credentialHeader(),d.credentialPrefix());
+        assertThat(DestinationFingerprint.of(d)).isEqualTo(DestinationFingerprint.of(paused));
+        var changed=new Destination(d.id(),d.version(),d.allowedTenants(),d.allowedClients(),true,URI.create("https://other.example.com/notify"),d.method(),d.contentTypes(),d.allowedDynamicHeaders(),d.staticHeaders(),d.credentialRef(),d.idempotencyHeader(),d.policy(),d.credentialHeader(),d.credentialPrefix());
+        assertThat(DestinationFingerprint.of(d)).isNotEqualTo(DestinationFingerprint.of(changed));
+    }
 }

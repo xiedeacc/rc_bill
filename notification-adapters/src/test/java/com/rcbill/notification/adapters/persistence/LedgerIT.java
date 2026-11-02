@@ -113,4 +113,11 @@ class LedgerIT {
         assertThat(count("idempotency_record")).isZero();assertThat(count("delivery_chain")).isZero();
         assertThat(service.submit(caller,"retention-event-key",request("new-body")).notificationId()).isNotEqualTo(task);
     }
+    @Test void anotherProcessCannotRedefineAnExistingDestinationVersion(){
+        service.submit(caller,"original-version-key",request("body"));
+        var changed=new Destination("crm-test",1,Set.of("tenant-a"),Set.of("client-a"),true,URI.create("https://different.example.com/notify"),"POST",Set.of("text/plain"),Set.of(),Map.of(),null,"Idempotency-Key",new DestinationCatalog.DurationPolicy(10,20,2592000));
+        var restarted=new PgNotificationStore(shards,new PayloadCipher(Base64.getEncoder().encodeToString(new byte[32])),JsonMapper.builder().build());
+        var other=new NotificationService(restarted,new ConfiguredCatalog(List.of(changed)));
+        assertThatThrownBy(()->other.submit(caller,"new-version-request",request("body"))).isInstanceOfSatisfying(ServiceFailure.class,e->assertThat(e.code()).isEqualTo("DESTINATION_VERSION_CHANGED"));
+    }
 }
