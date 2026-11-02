@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: notification-worker
+  autoconfigure:
+    exclude: org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration
+server:
+  address: 127.0.0.1
+  port: 8081
+  shutdown: graceful
+  error:
+    include-message: never
+    include-stacktrace: never
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState,scaffold
