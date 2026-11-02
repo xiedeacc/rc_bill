@@ -1,4 +1,9 @@
 spring:
+  threads:
+    virtual:
+      enabled: true
+  main:
+    keep-alive: true
   application:
     name: notification-worker
   autoconfigure:
