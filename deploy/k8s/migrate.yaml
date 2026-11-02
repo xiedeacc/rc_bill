@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: notification-migrate
+  namespace: notifications
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 3600
+  ttlSecondsAfterFinished: 86400
+  template:
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      securityContext: {runAsNonRoot: true, runAsUser: 10001, runAsGroup: 10001, fsGroup: 10001, seccompProfile: {type: RuntimeDefault}}
+      containers:
+        - name: migrate
+          image: rc-bill-worker:verified
+          command: [java, '-Dloader.main=com.rcbill.notification.worker.MigrationApplication', '-cp', /app/app.jar, org.springframework.boot.loader.launch.PropertiesLauncher]
+          envFrom: [{configMapRef: {name: notification-config}}, {secretRef: {name: notification-migration}}]
+          resources: {requests: {cpu: 250m, memory: 256Mi}, limits: {cpu: '1', memory: 1Gi}}
+          securityContext: {allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: {drop: [ALL]}}

@@ -1,0 +1,91 @@
+name: notification-release
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish verified images to GHCR
+        type: boolean
+        default: false
+      deploy:
+        description: Deploy using the production environment's kubeconfig and existing runtime secrets
+        type: boolean
+        default: false
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: notification-production-release
+  cancel-in-progress: false
+jobs:
+  images:
+    if: github.ref == 'refs/heads/master' && inputs.publish
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
+      packages: write
+    outputs:
+      api: ${{ steps.publish.outputs.api }}
+      worker: ${{ steps.publish.outputs.worker }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Require successful full verification for this exact commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          count=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs?head_sha=$GITHUB_SHA&status=success" --jq '.workflow_runs | length')
+          test "$count" -gt 0
+      - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00
+        with: {distribution: temurin, java-version: '21', cache: maven}
+      - run: ./mvnw -B -ntp -DskipTests package
+      - name: Publish immutable image digests
+        id: publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          api="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/rc-bill-api:$GITHUB_SHA"
+          worker="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/rc-bill-worker:$GITHUB_SHA"
+          docker build --build-arg MODULE=notification-api -t "$api" .
+          docker build --build-arg MODULE=notification-worker -t "$worker" .
+          docker push "$api"
+          docker push "$worker"
+          echo "api=$(docker image inspect "$api" --format '{{index .RepoDigests 0}}')" >> "$GITHUB_OUTPUT"
+          echo "worker=$(docker image inspect "$worker" --format '{{index .RepoDigests 0}}')" >> "$GITHUB_OUTPUT"
+  deploy:
+    needs: images
+    if: inputs.deploy
+    runs-on: ubuntu-24.04
+    environment: production
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Configure the explicitly provisioned cluster
+        env:
+          KUBECONFIG_B64: ${{ secrets.KUBECONFIG_B64 }}
+        run: |
+          test -n "$KUBECONFIG_B64"
+          printf '%s' "$KUBECONFIG_B64" | base64 -d > "$RUNNER_TEMP/notification-kubeconfig"
+          chmod 600 "$RUNNER_TEMP/notification-kubeconfig"
+          echo "KUBECONFIG=$RUNNER_TEMP/notification-kubeconfig" >> "$GITHUB_ENV"
+          command -v kubectl
+      - name: Apply reviewed configuration and migrations
+        env:
+          API_IMAGE: ${{ needs.images.outputs.api }}
+          WORKER_IMAGE: ${{ needs.images.outputs.worker }}
+        run: |
+          test "${API_IMAGE#*@sha256:}" != "$API_IMAGE"
+          test "${WORKER_IMAGE#*@sha256:}" != "$WORKER_IMAGE"
+          python3 -m venv .release-python
+          .release-python/bin/pip install PyYAML==6.0.3
+          .release-python/bin/python scripts/render-deployment.py --api "$API_IMAGE" --worker "$WORKER_IMAGE" --output "$RUNNER_TEMP/rendered"
+          kubectl -n notifications get configmap notification-config notification-destinations
+          active=$(kubectl -n notifications get job notification-migrate -o jsonpath='{.status.active}' --ignore-not-found)
+          test -z "$active" || test "$active" = 0
+          kubectl -n notifications delete job notification-migrate --ignore-not-found
+          kubectl apply -f "$RUNNER_TEMP/rendered/migrate.yaml"
+          kubectl -n notifications wait --for=condition=complete --timeout=1800s job/notification-migrate
+          kubectl apply -f "$RUNNER_TEMP/rendered/api.yaml"
+          kubectl apply -f "$RUNNER_TEMP/rendered/worker.yaml"
+          kubectl apply -f deploy/k8s/network-policy.yaml
+          kubectl -n notifications rollout status deployment/notification-api --timeout=300s
+          kubectl -n notifications rollout status deployment/notification-worker --timeout=300s

@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: notification-ingress
+  namespace: notifications
+spec:
+  podSelector:
+    matchLabels: {app.kubernetes.io/part-of: rc-bill}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: ingress-nginx}}
+      ports: [{protocol: TCP, port: 8080}]
+    - from:
+        - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: monitoring}}
+      ports: [{protocol: TCP, port: 9090}]
+# Egress must be supplied per environment: permit only the actual PG/Kafka, identity,
+# quota, DNS and reviewed provider endpoints. A fake universal egress rule is not shipped.
