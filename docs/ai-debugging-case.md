@@ -1,6 +1,57 @@
-# AI协作排障案例 从Kafka消费成功到通知实际丢失
+# AI协作排障实录与故障演练
 
-这是基于本项目协议设计的可复现故障演练，不是真实生产事故。故障注入点是“数据库已持久领取、Kafka已提交offset、HTTP尚未开始时Worker退出”。场景选择先于实现，执行证据在对应测试完成后补充，不能把预期结果写成实测结果。
+本文件区分两类证据：前半部分是本轮开发中真实发生的CI失败与修复，后半部分是主动设计并执行的可靠性故障演练。它们都不是被包装成真实事故的虚构生产故事。
+
+## 实际案例一 MyBatis参数绑定失败
+
+第一次真实PG CI中，本地单元/组件测试已通过，但5个数据库集成场景全部报错：
+
+```text
+There is no getter for property named 'id' in 'class java.util.UUID'
+Mapper: LedgerMapper.insertChain
+```
+
+[原始失败CI](https://github.com/xiedeacc/rc_bill/actions/runs/41485481447)，源码基线`63a3172`。最初的Mapper测试只验证SQL能解析、存在参数占位符，没有执行实际参数绑定；因此绿色结果没有覆盖真正出错的边界。
+
+排查时先把假设拆成UUID格式错误、PG类型不支持、MyBatis参数命名三类。错误发生在JDBC执行之前，栈指向`DefaultParameterHandler`与反射getter，所以无需先改数据库列或把UUID转成字符串。直接用真实`ParamNameResolver`和`DefaultParameterHandler`、仅mock JDBC PreparedStatement，即可在本地复现五个失败。
+
+修复是给单参数Mapper方法显式加`@Param("id")`。UUID不是MyBatis默认识别的普通标量参数，裸对象可能被按bean访问`id`属性；显式命名建立参数Map后才会正确取出UUID并交给驱动。`-parameters`不能替代这一绑定契约。
+
+验证：新增5个参数化用例，修复前5个错误，修复后全部通过；提交`79f6410`。没有改HTTP契约、数据库UUID类型或业务幂等算法。
+
+## 实际案例二 bytea被误认为多行byte结果
+
+第二次PG CI中，前四个场景已通过，重放仍失败：
+
+```text
+Bad value for type byte: \x...
+MapperMethod.executeForMany
+ByteTypeHandler.getNullableResult
+```
+
+[第二次失败CI](https://github.com/xiedeacc/rc_bill/actions/runs/41486235156)。这次不是AES解密失败：异常在读取数据库字段时发生。裸`byte[]`返回类型被Mapper方法分派解释为“多行结果组成数组”，从而用单个byte的TypeHandler读取整个bytea。
+
+最小复现使用真实MapperProxy和配置，仅替换SqlSession的边界返回值；测试期望密文字节，却得到空数组。修复将查询映射为单行`Map<String,Object>`，再通过默认方法取出`ciphertext`的byte[]。这是明确单行形状，而不是把密文转成字符串或关闭校验。
+
+提交`b1199b0`后，[真实PG/Kafka端到端CI通过](https://github.com/xiedeacc/rc_bill/actions/runs/41486832737)：123个单元/组件测试、6个集成测试，零失败、零跳过。后续新增测试的最新结果以验证文档和对应CI SHA为准，不能把这组历史数字冒充最新结果。
+
+## 实际案例三 topic创建确认与broker可见性不同步
+
+增加独立Kafka初始化命令后，CI发现创建topic的Future已经成功，但紧接着的describe仍可能得到`UnknownTopicOrPartitionException`。[该次CI记录](https://github.com/xiedeacc/rc_bill/actions/runs/41511974823)。这不是“加一个固定sleep就好”的问题：控制面确认与各broker元数据传播并非同一个完成点。
+
+修复`839547c`增加有限的元数据就绪等待，仅重试可恢复错误，并等待leader/ISR可用；权限错误立即失败，已有topic不反复创建，已有消费offset不重置。纯逻辑测试用可替换的纳秒时间与pause函数验证收敛、权限失败及截止时间，没有在单元测试中真实sleep。
+
+## 如何证明AI帮助了排查而不是掩盖问题
+
+本轮保留失败CI、最小回归测试和修复提交。AI帮助归纳假设、缩小边界、寻找框架语义并生成反例；证据来自真实执行，而不是AI说“应该没问题”。候选人应主动说明：纯策略和边界组件按Red/Green推进；部分基础设施适配先实现后由真实CI暴露缺陷，不能把整个过程包装成完美的全程TDD。
+
+可复演的提示模板：
+
+> 以下是真实堆栈和失败测试。请先区分错误发生在参数绑定、JDBC执行还是结果物化阶段，提出能证伪的最小实验。不要先改业务数据类型，也不要用全套mock绕过框架行为。修复后说明原测试为何漏检。
+
+## 故障演练 Kafka已提交offset但HTTP尚未执行
+
+下面是受控故障注入，不是实际生产事故。测试在同一消费组提交offset后故意丢弃内存执行，再通过持久租约恢复推进任务。它验证责任移交协议，不伪称已经完成跨AZ杀节点演练。
 
 ## 业务现象与初始证据
 
@@ -49,4 +100,6 @@ AI负责生成候选假设、辅助定位、起草测试和寻找反例；候选
 
 ## 执行证据
 
-待本轮业务实现和故障测试完成后填写测试类、命令、失败/通过结果及提交号。当前没有声称该演练已在真实PG/Kafka环境执行。
+`LedgerIT.durableHandoffCrashRecoversAndFencesLateWorker`验证PG租约、UNKNOWN记录、下一代事件和旧token围栏；`PipelineIT.deliveryRetryDuplicateAndDurableHandoffRecovery`在真实Kafka提交offset后注入执行丢失，并等待后续成功。最新同组版本使用原消费组，不靠另一个组重新读旧记录。
+
+执行命令为`./mvnw -Pintegration clean verify`，需要真实PG/Kafka。原始报告保存在Actions artifacts及`ci-evidence/runs/<commit>/`。测试环境、最新通过commit和实际规模见[验证记录](verification.md)。
