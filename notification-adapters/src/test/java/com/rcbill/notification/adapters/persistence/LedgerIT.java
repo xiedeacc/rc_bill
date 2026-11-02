@@ -120,4 +120,22 @@ class LedgerIT {
         var other=new NotificationService(restarted,new ConfiguredCatalog(List.of(changed)));
         assertThatThrownBy(()->other.submit(caller,"new-version-request",request("body"))).isInstanceOfSatisfying(ServiceFailure.class,e->assertThat(e.code()).isEqualTo("DESTINATION_VERSION_CHANGED"));
     }
+    @Test void intentionalFutureRetryIsNotKafkaPublicationBackpressure()throws Exception{
+        var longTtl=new SubmissionRequest("crm-test",1,"text/plain","body",Map.of(),86400);
+        UUID task=service.submit(caller,"long-delay-key",longTtl).notificationId();var lease=queue.claim(event(),Duration.ofSeconds(60)).lease();
+        queue.complete(lease,new DeliveryQueue.Completion(NotificationStatus.RETRY_WAIT,AttemptOutcome.RETRYABLE,Instant.now().plusSeconds(3600),429,"HTTP_429",1,null));
+        sql("UPDATE outbox_event SET created_at=clock_timestamp()-interval '10 minutes' WHERE notification_id=? AND schedule_epoch=1",task);
+        assertThatCode(()->service.submit(caller,"unrelated-new-key",request("another"))).doesNotThrowAnyException();
+        sql("UPDATE outbox_event SET scheduled_at=clock_timestamp()-interval '10 minutes',available_at=clock_timestamp()+interval '5 seconds' WHERE notification_id=? AND schedule_epoch=1",task);
+        assertThatThrownBy(()->service.submit(caller,"backpressure-key",request("another"))).isInstanceOfSatisfying(ServiceFailure.class,e->assertThat(e.code()).isEqualTo("OUTBOX_BACKPRESSURE"));
+        assertThat(service.submit(caller,"long-delay-key",longTtl).notificationId()).isEqualTo(task);
+    }
+    @Test void totalPendingCapacityRejectsNewWorkButNotAnExistingReceipt(){
+        var limitedStore=new PgNotificationStore(shards,new PayloadCipher(Base64.getEncoder().encodeToString(new byte[32])),JsonMapper.builder().build(),1,Duration.ZERO);
+        var d=new Destination("crm-test",1,Set.of("tenant-a"),Set.of("client-a"),true,URI.create("https://crm.example.com/notify"),"POST",Set.of("text/plain"),Set.of(),Map.of(),null,"Idempotency-Key",new DestinationCatalog.DurationPolicy(10,20,2592000));
+        var limited=new NotificationService(limitedStore,new ConfiguredCatalog(List.of(d)));
+        var first=limited.submit(caller,"capacity-first-key",request("body"));
+        assertThatThrownBy(()->limited.submit(caller,"capacity-second-key",request("body"))).isInstanceOfSatisfying(ServiceFailure.class,e->assertThat(e.code()).isEqualTo("BACKLOG_CAPACITY"));
+        assertThat(limited.submit(caller,"capacity-first-key",request("body")).notificationId()).isEqualTo(first.notificationId());
+    }
 }

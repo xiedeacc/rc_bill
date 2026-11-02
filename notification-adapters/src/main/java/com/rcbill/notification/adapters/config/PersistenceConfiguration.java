@@ -14,7 +14,7 @@ public class PersistenceConfiguration {
     @Bean(destroyMethod="close") Shards shards(Environment env){return new Shards(Arrays.asList(env.getRequiredProperty("notification.database.urls").split(",")),env.getRequiredProperty("notification.database.user"),env.getRequiredProperty("notification.database.password"),env.getProperty("notification.database.migrate",Boolean.class,false),env.getProperty("notification.kafka.partitions",Integer.class,16));}
     @Bean PayloadCipher payloadCipher(Environment env){return new PayloadCipher(env.getRequiredProperty("notification.encryption-key"));}
     @Bean ConfiguredCatalog catalog(Environment env,JsonMapper json)throws Exception{return ConfiguredCatalog.load(Path.of(env.getRequiredProperty("notification.destinations-file")),json);}
-    @Bean PgNotificationStore notificationStore(Shards shards,PayloadCipher cipher,JsonMapper json,ConfiguredCatalog catalog){var store=new PgNotificationStore(shards,cipher,json);catalog.all().forEach(store::registerDestination);return store;}
+    @Bean PgNotificationStore notificationStore(Shards shards,PayloadCipher cipher,JsonMapper json,ConfiguredCatalog catalog,Environment env){var store=new PgNotificationStore(shards,cipher,json,env.getProperty("notification.admission.maximum-pending",Integer.class,50000),java.time.Duration.ofSeconds(1));catalog.all().forEach(store::registerDestination);return store;}
     @Bean PgDeliveryQueue deliveryQueue(Shards shards,PayloadCipher cipher,JsonMapper json){return new PgDeliveryQueue(shards,cipher,json);}
     @Bean PgOutboxStore outboxStore(Shards shards){return new PgOutboxStore(shards);}
     @Bean NotificationService notificationService(PgNotificationStore store,ConfiguredCatalog catalog){return new NotificationService(store,catalog);}

@@ -25,8 +25,8 @@ public interface LedgerMapper {
     @Update("UPDATE delivery_chain SET active_id=#{active} WHERE root_id=#{root}") int active(Map<String,Object> args);
     @Insert("INSERT INTO replay_audit(id,original_id,replay_id,actor,reason,risk_acknowledged) VALUES(#{auditId},#{original},#{id},#{actor},#{reason},#{risk})") int audit(Map<String,Object> args);
     @Insert("""
-        INSERT INTO outbox_event(event_id,notification_id,slot,schedule_epoch,event_type,available_at)
-        VALUES(#{event},#{id},#{slot},#{epoch},#{type},#{available}) ON CONFLICT(notification_id,schedule_epoch,event_type) DO NOTHING
+        INSERT INTO outbox_event(event_id,notification_id,slot,schedule_epoch,event_type,available_at,scheduled_at)
+        VALUES(#{event},#{id},#{slot},#{epoch},#{type},#{available},#{available}) ON CONFLICT(notification_id,schedule_epoch,event_type) DO NOTHING
         """) int outbox(Map<String,Object> args);
     @Update("""
         UPDATE notification SET status='IN_FLIGHT',attempt_count=attempt_count+1,lease_token=#{token},lease_until=#{until}
@@ -38,35 +38,36 @@ public interface LedgerMapper {
         completed_at=#{completed},lease_token=NULL,lease_until=NULL WHERE id=#{id}
         """) int transition(Map<String,Object> args);
     @Update("""
-        UPDATE delivery_attempt SET finished_at=clock_timestamp(),outcome=#{outcome},http_status=#{http},error_code=#{error},elapsed_ms=#{elapsed},provider_request_id=#{provider}
+        UPDATE delivery_attempt SET finished_at=CURRENT_TIMESTAMP,outcome=#{outcome},http_status=#{http},error_code=#{error},elapsed_ms=#{elapsed},provider_request_id=#{provider}
         WHERE notification_id=#{id} AND lease_token=#{token} AND outcome='STARTED'
         """) int finish(Map<String,Object> args);
     @Select("SELECT a.* FROM delivery_attempt a JOIN notification n ON n.id=a.notification_id WHERE a.notification_id=#{id} AND n.tenant_id=#{tenant} AND n.client_id=#{client} AND a.attempt_no>#{after} ORDER BY a.attempt_no LIMIT #{limit}")
     List<Map<String,Object>> attempts(Map<String,Object> args);
-    @Select("SELECT * FROM notification WHERE status='IN_FLIGHT' AND lease_until<clock_timestamp() ORDER BY lease_until LIMIT #{limit} FOR UPDATE SKIP LOCKED")
+    @Select("SELECT * FROM notification WHERE status='IN_FLIGHT' AND lease_until<CURRENT_TIMESTAMP ORDER BY lease_until LIMIT #{limit} FOR UPDATE SKIP LOCKED")
     List<Map<String,Object>> abandoned(@Param("limit") int limit);
-    @Select("SELECT * FROM notification WHERE status IN ('PENDING','RETRY_WAIT') AND expires_at<=clock_timestamp() ORDER BY expires_at LIMIT #{limit} FOR UPDATE SKIP LOCKED")
+    @Select("SELECT * FROM notification WHERE status IN ('PENDING','RETRY_WAIT') AND expires_at<=CURRENT_TIMESTAMP ORDER BY expires_at LIMIT #{limit} FOR UPDATE SKIP LOCKED")
     List<Map<String,Object>> expired(@Param("limit") int limit);
     @Select("""
         SELECT o.*,n.destination_id,n.destination_version,n.expires_at FROM outbox_event o JOIN notification n ON n.id=o.notification_id
-        WHERE o.publish_state='PENDING' AND o.available_at<=clock_timestamp()
+        WHERE o.publish_state='PENDING' AND o.available_at<=CURRENT_TIMESTAMP
         ORDER BY o.available_at,o.event_id LIMIT #{limit} FOR UPDATE OF o SKIP LOCKED
         """) List<Map<String,Object>> dueOutbox(@Param("limit") int limit);
-    @Update("UPDATE outbox_event SET publish_state='IN_FLIGHT',lease_token=#{token},lease_until=#{until} WHERE event_id=#{event}") int leaseOutbox(Map<String,Object> args);
-    @Update("UPDATE outbox_event SET publish_state='PUBLISHED',published_at=clock_timestamp(),lease_token=NULL,lease_until=NULL WHERE event_id=#{event} AND lease_token=#{token} AND publish_state='IN_FLIGHT'") int published(Map<String,Object> args);
-    @Update("UPDATE outbox_event SET publish_state='PENDING',available_at=#{available},lease_token=NULL,lease_until=NULL WHERE event_id=#{event} AND lease_token=#{token} AND publish_state='IN_FLIGHT'") int republish(Map<String,Object> args);
-    @Update("UPDATE outbox_event SET publish_state='PENDING',lease_token=NULL,lease_until=NULL WHERE event_id IN (SELECT event_id FROM outbox_event WHERE publish_state='IN_FLIGHT' AND lease_until<clock_timestamp() LIMIT #{limit} FOR UPDATE SKIP LOCKED)") int recoverOutbox(@Param("limit") int limit);
+    @Update("UPDATE outbox_event SET publish_state='IN_FLIGHT',scheduled_at=COALESCE(scheduled_at,available_at),lease_token=#{token},lease_until=#{until} WHERE event_id=#{event}") int leaseOutbox(Map<String,Object> args);
+    @Update("UPDATE outbox_event SET publish_state='PUBLISHED',published_at=CURRENT_TIMESTAMP,lease_token=NULL,lease_until=NULL WHERE event_id=#{event} AND lease_token=#{token} AND publish_state='IN_FLIGHT'") int published(Map<String,Object> args);
+    @Update("UPDATE outbox_event SET publish_state='PENDING',scheduled_at=COALESCE(scheduled_at,available_at),available_at=#{available},lease_token=NULL,lease_until=NULL WHERE event_id=#{event} AND lease_token=#{token} AND publish_state='IN_FLIGHT'") int republish(Map<String,Object> args);
+    @Update("UPDATE outbox_event SET publish_state='PENDING',lease_token=NULL,lease_until=NULL WHERE event_id IN (SELECT event_id FROM outbox_event WHERE publish_state='IN_FLIGHT' AND lease_until<CURRENT_TIMESTAMP LIMIT #{limit} FOR UPDATE SKIP LOCKED)") int recoverOutbox(@Param("limit") int limit);
     @Insert("INSERT INTO topology_guard(singleton,shard_count,partition_count) VALUES(true,#{shards},#{partitions}) ON CONFLICT DO NOTHING") int initializeTopology(Map<String,Object> args);
     @Select("SELECT * FROM topology_guard WHERE singleton=true") Map<String,Object> topology();
     @Insert("INSERT INTO destination_version(destination_id,version,fingerprint) VALUES(#{id},#{version},#{fingerprint}) ON CONFLICT DO NOTHING") int registerDestination(Map<String,Object> args);
     @Select("SELECT fingerprint FROM destination_version WHERE destination_id=#{id} AND version=#{version}") String destinationFingerprint(Map<String,Object> args);
-    @Select("SELECT min(created_at) FROM outbox_event WHERE publish_state<>'PUBLISHED'") java.time.Instant oldestUnpublished();
-    @Delete("DELETE FROM payload WHERE notification_id IN (SELECT n.id FROM notification n JOIN payload p ON p.notification_id=n.id WHERE n.completed_at<clock_timestamp()-interval '7 days' ORDER BY n.completed_at,n.id LIMIT #{limit})") int purgePayload(@Param("limit") int limit);
-    @Delete("DELETE FROM outbox_event WHERE event_id IN (SELECT event_id FROM outbox_event WHERE publish_state='PUBLISHED' AND published_at<clock_timestamp()-interval '1 day' LIMIT #{limit})") int purgeOutbox(@Param("limit") int limit);
+    @Select("SELECT min(COALESCE(scheduled_at,available_at)) FROM outbox_event WHERE publish_state<>'PUBLISHED' AND COALESCE(scheduled_at,available_at)<=CURRENT_TIMESTAMP") java.time.Instant oldestUnpublished();
+    @Select("SELECT count(*) FROM (SELECT id FROM notification WHERE status IN ('PENDING','RETRY_WAIT','IN_FLIGHT') LIMIT #{limit}) backlog") long boundedPending(@Param("limit") int limit);
+    @Delete("DELETE FROM payload WHERE notification_id IN (SELECT n.id FROM notification n JOIN payload p ON p.notification_id=n.id WHERE n.completed_at<CURRENT_TIMESTAMP-interval '7 days' ORDER BY n.completed_at,n.id LIMIT #{limit})") int purgePayload(@Param("limit") int limit);
+    @Delete("DELETE FROM outbox_event WHERE event_id IN (SELECT event_id FROM outbox_event WHERE publish_state='PUBLISHED' AND published_at<CURRENT_TIMESTAMP-interval '1 day' LIMIT #{limit})") int purgeOutbox(@Param("limit") int limit);
     @Select("""
         SELECT c.root_id FROM delivery_chain c WHERE c.active_id IS NULL
-        AND NOT EXISTS (SELECT 1 FROM notification n WHERE n.root_id=c.root_id AND (n.completed_at IS NULL OR n.completed_at>=clock_timestamp()-interval '30 days'))
-        AND NOT EXISTS (SELECT 1 FROM idempotency_record d JOIN notification n ON n.id=d.notification_id WHERE n.root_id=c.root_id AND d.retain_until>=clock_timestamp())
+        AND NOT EXISTS (SELECT 1 FROM notification n WHERE n.root_id=c.root_id AND (n.completed_at IS NULL OR n.completed_at>=CURRENT_TIMESTAMP-interval '30 days'))
+        AND NOT EXISTS (SELECT 1 FROM idempotency_record d JOIN notification n ON n.id=d.notification_id WHERE n.root_id=c.root_id AND d.retain_until>=CURRENT_TIMESTAMP)
         AND NOT EXISTS (SELECT 1 FROM outbox_event o JOIN notification n ON n.id=o.notification_id WHERE n.root_id=c.root_id AND o.publish_state<>'PUBLISHED')
         ORDER BY c.root_id LIMIT #{limit} FOR UPDATE OF c SKIP LOCKED
         """) List<Map<String,Object>> expiredChains(@Param("limit") int limit);

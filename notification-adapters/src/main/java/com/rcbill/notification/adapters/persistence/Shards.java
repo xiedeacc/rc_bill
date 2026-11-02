@@ -27,11 +27,12 @@ public final class Shards implements AutoCloseable {
         try {
             for(String url:urls) {
                 HikariConfig h=new HikariConfig();h.setJdbcUrl(url);h.setUsername(user);h.setPassword(password);
-                h.setMaximumPoolSize(8);h.setMinimumIdle(0);h.setConnectionTimeout(3000);h.setPoolName("ledger-"+shards.size());
-                h.setConnectionInitSql("SET statement_timeout='5s'");
+                h.setMaximumPoolSize(Math.min(8,Math.max(1,64/urls.size())));h.setMinimumIdle(0);h.setConnectionTimeout(3000);h.setPoolName("ledger-"+shards.size());
+                h.setConnectionInitSql(migrate?"SET statement_timeout='30min'":"SET statement_timeout='5s'");
+                h.addDataSourceProperty("options","-c lock_timeout=5000");h.addDataSourceProperty("prepareThreshold","0");
                 HikariDataSource ds=new HikariDataSource(h);
                 try {
-                    if(migrate)Flyway.configure().dataSource(ds).locations("classpath:db/migration").load().migrate();
+                    if(migrate)Flyway.configure().dataSource(ds).configuration(Map.of("flyway.postgresql.transactional.lock","false")).locations("classpath:db/migration").load().migrate();
                     var cfg=new org.apache.ibatis.session.Configuration();cfg.setCacheEnabled(false);cfg.setLocalCacheScope(LocalCacheScope.STATEMENT);
                     cfg.addMapper(LedgerMapper.class);
                     var bean=new SqlSessionFactoryBean();bean.setDataSource(ds);bean.setConfiguration(cfg);

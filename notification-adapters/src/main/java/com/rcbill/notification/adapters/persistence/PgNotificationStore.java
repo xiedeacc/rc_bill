@@ -17,7 +17,9 @@ public final class PgNotificationStore implements NotificationStore {
     }
     private final Shards shards;private final PayloadCipher cipher;private final JsonMapper json;
     private final Map<String,String> destinationVersions=new java.util.concurrent.ConcurrentHashMap<>();
-    public PgNotificationStore(Shards shards,PayloadCipher cipher,JsonMapper json){this.shards=shards;this.cipher=cipher;this.json=json;}
+    private final BacklogGate backlog;private final int pendingLimit;
+    public PgNotificationStore(Shards shards,PayloadCipher cipher,JsonMapper json){this(shards,cipher,json,50000,Duration.ofSeconds(1));}
+    public PgNotificationStore(Shards shards,PayloadCipher cipher,JsonMapper json,int maximumPending,Duration samplingTtl){if(maximumPending<1)throw new IllegalArgumentException("maximumPending");this.shards=shards;this.cipher=cipher;this.json=json;pendingLimit=Math.max(1,(int)((maximumPending+(long)shards.all().size()-1)/shards.all().size()));backlog=new BacklogGate(pendingLimit,samplingTtl,System::nanoTime);}
     private static int slot(Caller c,String scope,String key){return scope.startsWith("replay:")?Routing.slot(UUID.fromString(scope.substring(7))):Routing.slot(c.tenantId(),c.clientId(),scope,key);}
     @Override public Optional<IdempotencyHit> findIdempotency(Caller c,String scope,String key){
         var row=shards.slot(slot(c,scope,key)).mapper().dedup(map("tenant",c.tenantId(),"client",c.clientId(),"scope",scope,"key",key));
@@ -26,6 +28,7 @@ public final class PgNotificationStore implements NotificationStore {
     @Override public Acceptance accept(Caller c,String key,String fingerprint,Submission s,DestinationCatalog.Snapshot d){
         registerDestination(d);
         int slot=slot(c,"submit",key);var shard=shards.slot(slot);
+        backlog.check(slot%shards.all().size(),()->shard.mapper().boundedPending(pendingLimit));
         try{return shard.transaction(m->{
             Instant now=m.now(),oldest=m.oldestUnpublished();
             if(oldest!=null&&oldest.plusSeconds(300).isBefore(now))throw new ServiceFailure(503,"OUTBOX_BACKPRESSURE");
