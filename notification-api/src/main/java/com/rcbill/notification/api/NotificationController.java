@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 /** Route skeleton only. Validation and application use cases are intentionally not wired. */
 @RestController
+@org.springframework.context.annotation.Profile("scaffold")
 @RequestMapping("/v1/notifications")
 public class NotificationController {
     @PostMapping

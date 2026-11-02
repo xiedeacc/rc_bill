@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 /** Local-only, deliberately unavailable runtime. Replace through production-feature TDD. */
 @Configuration(proxyBeanMethods = false)
+@org.springframework.context.annotation.Profile("scaffold")
 public class ScaffoldConfiguration {
     @Bean
     static BeanFactoryPostProcessor scaffoldStartupGuard(Environment environment) {
