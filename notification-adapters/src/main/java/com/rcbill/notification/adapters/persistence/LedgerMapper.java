@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.*;
 public interface LedgerMapper {
     @Select("SELECT clock_timestamp()") java.time.Instant now();
     @Select("SELECT * FROM notification WHERE id=#{id}") Map<String,Object> task(@Param("id") UUID id);
+    @Select("SELECT * FROM notification WHERE id=#{id} AND tenant_id=#{tenant} AND client_id=#{client}") Map<String,Object> ownedTask(Map<String,Object> args);
     @Select("SELECT * FROM notification WHERE id=#{id} FOR UPDATE") Map<String,Object> lockTask(@Param("id") UUID id);
     @Select("SELECT d.*, n.created_at FROM idempotency_record d JOIN notification n ON n.id=d.notification_id WHERE d.tenant_id=#{tenant} AND d.client_id=#{client} AND d.scope=#{scope} AND d.key=#{key}")
     Map<String,Object> dedup(Map<String,Object> args);
@@ -40,7 +41,7 @@ public interface LedgerMapper {
         UPDATE delivery_attempt SET finished_at=clock_timestamp(),outcome=#{outcome},http_status=#{http},error_code=#{error},elapsed_ms=#{elapsed},provider_request_id=#{provider}
         WHERE notification_id=#{id} AND lease_token=#{token} AND outcome='STARTED'
         """) int finish(Map<String,Object> args);
-    @Select("SELECT * FROM delivery_attempt WHERE notification_id=#{id} AND attempt_no>#{after} ORDER BY attempt_no LIMIT #{limit}")
+    @Select("SELECT a.* FROM delivery_attempt a JOIN notification n ON n.id=a.notification_id WHERE a.notification_id=#{id} AND n.tenant_id=#{tenant} AND n.client_id=#{client} AND a.attempt_no>#{after} ORDER BY a.attempt_no LIMIT #{limit}")
     List<Map<String,Object>> attempts(Map<String,Object> args);
     @Select("SELECT * FROM notification WHERE status='IN_FLIGHT' AND lease_until<clock_timestamp() ORDER BY lease_until LIMIT #{limit} FOR UPDATE SKIP LOCKED")
     List<Map<String,Object>> abandoned(@Param("limit") int limit);
@@ -60,4 +61,18 @@ public interface LedgerMapper {
     @Select("SELECT min(created_at) FROM outbox_event WHERE publish_state<>'PUBLISHED'") java.time.Instant oldestUnpublished();
     @Delete("DELETE FROM payload WHERE notification_id IN (SELECT n.id FROM notification n JOIN payload p ON p.notification_id=n.id WHERE n.completed_at<clock_timestamp()-interval '7 days' ORDER BY n.completed_at,n.id LIMIT #{limit})") int purgePayload(@Param("limit") int limit);
     @Delete("DELETE FROM outbox_event WHERE event_id IN (SELECT event_id FROM outbox_event WHERE publish_state='PUBLISHED' AND published_at<clock_timestamp()-interval '1 day' LIMIT #{limit})") int purgeOutbox(@Param("limit") int limit);
+    @Select("""
+        SELECT c.root_id FROM delivery_chain c WHERE c.active_id IS NULL
+        AND NOT EXISTS (SELECT 1 FROM notification n WHERE n.root_id=c.root_id AND (n.completed_at IS NULL OR n.completed_at>=clock_timestamp()-interval '30 days'))
+        AND NOT EXISTS (SELECT 1 FROM idempotency_record d JOIN notification n ON n.id=d.notification_id WHERE n.root_id=c.root_id AND d.retain_until>=clock_timestamp())
+        AND NOT EXISTS (SELECT 1 FROM outbox_event o JOIN notification n ON n.id=o.notification_id WHERE n.root_id=c.root_id AND o.publish_state<>'PUBLISHED')
+        ORDER BY c.root_id LIMIT #{limit} FOR UPDATE OF c SKIP LOCKED
+        """) List<Map<String,Object>> expiredChains(@Param("limit") int limit);
+    @Delete("DELETE FROM replay_audit WHERE original_id IN (SELECT id FROM notification WHERE root_id=#{root}) OR replay_id IN (SELECT id FROM notification WHERE root_id=#{root})") int deleteAudit(@Param("root") UUID root);
+    @Delete("DELETE FROM payload WHERE notification_id IN (SELECT id FROM notification WHERE root_id=#{root})") int deletePayload(@Param("root") UUID root);
+    @Delete("DELETE FROM delivery_attempt WHERE notification_id IN (SELECT id FROM notification WHERE root_id=#{root})") int deleteAttempts(@Param("root") UUID root);
+    @Delete("DELETE FROM idempotency_record WHERE notification_id IN (SELECT id FROM notification WHERE root_id=#{root})") int deleteDedup(@Param("root") UUID root);
+    @Delete("DELETE FROM outbox_event WHERE notification_id IN (SELECT id FROM notification WHERE root_id=#{root})") int deleteOutbox(@Param("root") UUID root);
+    @Delete("DELETE FROM notification WHERE root_id=#{root}") int deleteTasks(@Param("root") UUID root);
+    @Delete("DELETE FROM delivery_chain WHERE root_id=#{root}") int deleteChain(@Param("root") UUID root);
 }

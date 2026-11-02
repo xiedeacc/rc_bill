@@ -102,4 +102,15 @@ class LedgerIT {
         assertThat(mapper.purgePayload(1)).as("Second batch must not keep selecting the already-deleted first payload").isEqualTo(1);
         assertThat(count("payload")).isZero();
     }
+    @Test void retentionPreservesUnpublishedResponsibilitiesThenExpiresWholeChain()throws Exception{
+        UUID task=service.submit(caller,"retention-event-key",request("body")).notificationId();var lease=queue.claim(event(),Duration.ofSeconds(60)).lease();
+        queue.complete(lease,new DeliveryQueue.Completion(NotificationStatus.DEAD,AttemptOutcome.PERMANENT,null,400,"HTTP_400",1,null));
+        sql("UPDATE notification SET completed_at=clock_timestamp()-interval '31 days' WHERE id=?",task);
+        sql("UPDATE idempotency_record SET retain_until=clock_timestamp()-interval '1 day' WHERE notification_id=?",task);
+        var retention=new RetentionService(shards);assertThat(retention.purge(10)).isZero();assertThat(service.get(caller,task)).isPresent();
+        sql("UPDATE outbox_event SET publish_state='PUBLISHED',published_at=clock_timestamp(),lease_token=NULL,lease_until=NULL WHERE notification_id=?",task);
+        assertThat(retention.purge(10)).isEqualTo(1);assertThat(service.get(caller,task)).isEmpty();
+        assertThat(count("idempotency_record")).isZero();assertThat(count("delivery_chain")).isZero();
+        assertThat(service.submit(caller,"retention-event-key",request("new-body")).notificationId()).isNotEqualTo(task);
+    }
 }

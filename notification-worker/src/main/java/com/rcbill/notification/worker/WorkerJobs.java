@@ -33,7 +33,7 @@ public final class WorkerJobs {
     }
     @Scheduled(fixedDelayString="${notification.cleanup.interval-ms:60000}") public void cleanup(){
         if(!relay)return;
-        for(var shard:shards.all())try{shard.transaction(m->{m.purgePayload(1000);m.purgeOutbox(1000);return null;});}
+        try{new RetentionService(shards).purge(1000);}
         catch(RuntimeException failure){meters.counter("notification.cleanup.failure").increment();}
     }
     public boolean recovering(){return recoveryHeartbeat.isAfter(Instant.now().minusSeconds(15));}

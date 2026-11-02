@@ -46,22 +46,23 @@ public final class PgNotificationStore implements NotificationStore {
         return row;
     }
     @Override public Optional<NotificationView> find(Caller c,UUID task){
-        var row=shards.task(task).mapper().task(task);
+        var row=shards.task(task).mapper().ownedTask(map("id",task,"tenant",c.tenantId(),"client",c.clientId()));
         if(row==null||!Objects.equals(row.get("tenant_id"),c.tenantId())||!Objects.equals(row.get("client_id"),c.clientId()))return Optional.empty();
         return Optional.of(view(row));
     }
     private NotificationView view(Map<String,Object> row){return new NotificationView(id(row.get("id")),(String)row.get("destination_id"),integer(row,"destination_version"),NotificationStatus.valueOf((String)row.get("status")),integer(row,"attempt_count"),instant(row.get("created_at")),instant(row.get("expires_at")),instant(row.get("completed_at")),instant(row.get("next_attempt_at")),(String)row.get("last_error"),id(row.get("replay_of")));}
     @Override public AttemptPage attempts(Caller c,UUID task,int after,int limit){
-        var m=shards.task(task).mapper();owned(m.task(task),c);
-        var rows=m.attempts(map("id",task,"after",after,"limit",limit+1));
+        var m=shards.task(task).mapper();owned(m.ownedTask(map("id",task,"tenant",c.tenantId(),"client",c.clientId())),c);
+        var rows=m.attempts(map("id",task,"tenant",c.tenantId(),"client",c.clientId(),"after",after,"limit",limit+1));
         var items=rows.stream().limit(limit).map(r->new AttemptView(integer(r,"attempt_no"),instant(r.get("started_at")),instant(r.get("finished_at")),AttemptOutcome.valueOf((String)r.get("outcome")),(Integer)r.get("http_status"),(String)r.get("error_code"),r.get("elapsed_ms")==null?null:number(r,"elapsed_ms"),(String)r.get("provider_request_id"))).toList();
         return new AttemptPage(items,rows.size()>limit?items.getLast().attemptNo():null);
     }
     @Override public Acceptance replay(Caller c,UUID original,String key,String fingerprint,Replay replay){
         String scope="replay:"+original;
         try{return shards.task(original).transaction(m->{
-            var source=owned(m.task(original),c);UUID root=id(source.get("root_id"));
+            var source=owned(m.ownedTask(map("id",original,"tenant",c.tenantId(),"client",c.clientId())),c);UUID root=id(source.get("root_id"));
             var chain=m.lockChain(root);
+            if(chain==null)throw new ServiceFailure(404,"NOT_FOUND");
             var previous=m.dedup(map("tenant",c.tenantId(),"client",c.clientId(),"scope",scope,"key",key));
             if(previous!=null)throw new Duplicate();
             if(!Set.of("DEAD","EXPIRED").contains(source.get("status"))||chain.get("active_id")!=null)throw new ServiceFailure(409,"REPLAY_STATE_CONFLICT");
