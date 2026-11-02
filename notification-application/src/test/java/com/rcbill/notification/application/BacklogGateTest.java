@@ -8,6 +8,24 @@ import org.junit.jupiter.api.Test;
 
 class BacklogGateTest {
   @Test
+  void aSlowCapacityReadCannotAuthorizeWorkUsingAnAlreadyStaleSample() {
+    var time = new AtomicLong();
+    var gate = new BacklogGate(2, Duration.ofSeconds(1), time::get);
+    assertThatThrownBy(
+            () ->
+                gate.check(
+                    0,
+                    () -> {
+                      time.addAndGet(2_000_000_000L);
+                      return 0;
+                    }))
+        .isInstanceOf(ServiceFailure.class);
+    assertThatThrownBy(() -> gate.check(0, () -> 0)).isInstanceOf(ServiceFailure.class);
+    time.addAndGet(1_000_000_001L);
+    assertThatCode(() -> gate.check(0, () -> 0)).doesNotThrowAnyException();
+  }
+
+  @Test
   void samplesWithExplicitBoundedStalenessAndCanRecover() {
     var time = new AtomicLong();
     var count = new AtomicLong(1);

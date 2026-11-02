@@ -2,12 +2,18 @@ package com.rcbill.notification.application;
 
 import java.time.Duration;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.LongSupplier;
 
 public final class BacklogGate {
-  private record Sample(long at, boolean full) {}
+  private record Sample(long at, String rejection) {}
 
-  private final ConcurrentHashMap<Integer, Sample> samples = new ConcurrentHashMap<>();
+  private static final class ShardSample {
+    final ReentrantLock lock = new ReentrantLock();
+    volatile Sample value;
+  }
+
+  private final ConcurrentHashMap<Integer, ShardSample> samples = new ConcurrentHashMap<>();
   private final long limit, ttl;
   private final LongSupplier nanos;
 
@@ -19,15 +25,33 @@ public final class BacklogGate {
   }
 
   public void check(int shard, LongSupplier count) {
-    var sample =
-        samples.compute(
-            shard,
-            (key, old) -> {
-              long now = nanos.getAsLong();
-              return old != null && now - old.at() < ttl
-                  ? old
-                  : new Sample(now, count.getAsLong() >= limit);
-            });
-    if (sample.full()) throw new ServiceFailure(503, "BACKLOG_CAPACITY");
+    var state = samples.computeIfAbsent(shard, ignored -> new ShardSample());
+    var sample = state.value;
+    if (sample == null || nanos.getAsLong() - sample.at() >= ttl) {
+      // Never run JDBC inside ConcurrentHashMap.compute's monitor on Java 21 virtual threads.
+      state.lock.lock();
+      try {
+        sample = state.value;
+        long started = nanos.getAsLong();
+        if (sample == null || started - sample.at() >= ttl) {
+          try {
+            boolean full = count.getAsLong() >= limit;
+            long finished = nanos.getAsLong();
+            String rejection =
+                ttl > 0 && finished - started > ttl
+                    ? "CAPACITY_PROBE_SLOW"
+                    : full ? "BACKLOG_CAPACITY" : null;
+            sample = new Sample(finished, rejection);
+            state.value = sample;
+          } catch (RuntimeException failure) {
+            state.value = new Sample(nanos.getAsLong(), "CAPACITY_UNAVAILABLE");
+            throw failure;
+          }
+        }
+      } finally {
+        state.lock.unlock();
+      }
+    }
+    if (sample.rejection() != null) throw new ServiceFailure(503, sample.rejection());
   }
 }
