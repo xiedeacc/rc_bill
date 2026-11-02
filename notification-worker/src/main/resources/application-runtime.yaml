@@ -1,0 +1,27 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration
+      - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    admin:
+      auto-create: false
+management:
+  endpoint:
+    health:
+      group:
+        readiness:
+          include: readinessState,ledger,worker
+notification:
+  database:
+    urls: ${PG_URL}
+    user: ${PG_USER}
+    password: ${PG_PASSWORD}
+    migrate: ${DB_MIGRATE:false}
+  encryption-key: ${NOTIFICATION_ENCRYPTION_KEY}
+  destinations-file: ${DESTINATIONS_FILE}
+  kafka:
+    partitions: ${KAFKA_PARTITIONS:16}
+  quota:
+    url: ${QUOTA_URL}
