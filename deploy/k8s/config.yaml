@@ -7,6 +7,7 @@ data:
   SPRING_PROFILES_ACTIVE: runtime
   SERVER_ADDRESS: 0.0.0.0
   MANAGEMENT_SERVER_PORT: '9090'
+  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,prometheus
   KAFKA_PARTITIONS: '16'
   DB_MIGRATE: 'false'
   DESTINATIONS_FILE: /etc/notification/destinations.json

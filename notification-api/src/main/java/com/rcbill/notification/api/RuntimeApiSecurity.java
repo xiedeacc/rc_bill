@@ -27,7 +27,7 @@ public class RuntimeApiSecurity {
     @Bean SecurityFilterChain runtimeSecurity(HttpSecurity http,Environment environment)throws Exception{
         return http.csrf(AbstractHttpConfigurer::disable).httpBasic(AbstractHttpConfigurer::disable).formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(a->a.requestMatchers("/actuator/health/**","/actuator/health").permitAll()
+                .authorizeHttpRequests(a->a.requestMatchers("/actuator/health/**","/actuator/health","/actuator/prometheus").permitAll()
                         .requestMatchers(HttpMethod.POST,"/v1/notifications/*/replays").hasAuthority("SCOPE_notifications:replay")
                         .requestMatchers(HttpMethod.POST,"/v1/notifications").hasAuthority("SCOPE_notifications:write")
                         .requestMatchers(HttpMethod.GET,"/v1/notifications/**").hasAuthority("SCOPE_notifications:read").anyRequest().denyAll())
