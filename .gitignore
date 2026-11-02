@@ -11,5 +11,8 @@ ci-evidence-output/
 ci-maven.log
 ci-services.log
 .tools/
+.ci-python/
+.release-python/
+.venv/
 invite.ics
 Thumbs.db

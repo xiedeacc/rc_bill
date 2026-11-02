@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     permissions:
-      contents: write
+      contents: read
     env:
       TEST_PG_URL: jdbc:postgresql://localhost:15432/notification
       TEST_PG_USER: notification
@@ -31,16 +31,37 @@ jobs:
       - name: Start isolated PostgreSQL and three Kafka brokers
         id: infrastructure
         run: docker compose -f compose.test.yaml up -d --wait --wait-timeout 180
+      - name: Validate contracts and documentation links
+        run: |
+          python3 -m venv .ci-python
+          .ci-python/bin/pip install -r requirements-dev.txt
+          .ci-python/bin/python scripts/validate-contracts.py
       - name: Unit and real infrastructure tests
         id: tests
         run: |
           set -o pipefail
           ./mvnw -B -ntp -Pintegration clean verify 2>&1 | tee ci-maven.log
+      - name: Build non-root runtime images
+        id: images
+        run: |
+          set -o pipefail
+          { docker build --build-arg MODULE=notification-api -t rc-bill-api:verified .
+            docker build --build-arg MODULE=notification-worker -t rc-bill-worker:verified .
+          } 2>&1 | tee ci-images.log
+      - name: Verify actual runtime API and Worker processes
+        id: runtime_demo
+        run: bash scripts/demo-smoke.sh
+      - name: Verify read-only non-root container startup
+        id: container_smoke
+        run: bash scripts/container-smoke.sh 2>&1 | tee ci-image-smoke.log
       - name: Collect verification evidence
         if: always()
         env:
           TEST_OUTCOME: ${{ steps.tests.outcome }}
           INFRA_OUTCOME: ${{ steps.infrastructure.outcome }}
+          IMAGE_OUTCOME: ${{ steps.images.outcome }}
+          CONTAINER_OUTCOME: ${{ steps.container_smoke.outcome }}
+          RUNTIME_OUTCOME: ${{ steps.runtime_demo.outcome }}
         run: |
           docker compose -f compose.test.yaml logs --no-color > ci-services.log 2>&1 || true
           python3 scripts/collect-ci-evidence.py
@@ -50,8 +71,22 @@ jobs:
           name: verification-${{ github.sha }}
           path: ci-evidence-output/
           retention-days: 14
+      - name: Remove only the isolated test services
+        if: always()
+        run: docker compose -f compose.test.yaml down -v
+  evidence:
+    needs: verify
+    if: always() && github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: verification-${{ github.sha }}
+          path: ci-evidence-output/
       - name: Publish machine-readable evidence for SSH-only review
-        if: always() && github.event_name == 'push'
         run: |
           report="$RUNNER_TEMP/rc-bill-ci-evidence"
           if git fetch origin refs/heads/ci-evidence; then
@@ -68,6 +103,3 @@ jobs:
           git -C "$report" add .
           git -C "$report" commit -m "ci: evidence for $GITHUB_SHA" || true
           git -C "$report" push origin HEAD:ci-evidence
-      - name: Remove only the isolated test services
-        if: always()
-        run: docker compose -f compose.test.yaml down -v
