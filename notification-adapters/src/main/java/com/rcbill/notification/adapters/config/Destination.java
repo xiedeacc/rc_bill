@@ -97,6 +97,23 @@ public record Destination(
       throw new IllegalArgumentException("Unsupported credential reference");
     if (idempotencyHeader != null && !idempotencyHeader.matches("[A-Za-z][A-Za-z0-9-]{0,63}"))
       throw new IllegalArgumentException("Invalid provider idempotency header");
+    if (idempotencyHeader != null) {
+      String name = idempotencyHeader.toLowerCase(Locale.ROOT);
+      if (idempotencyHeader.equalsIgnoreCase(credentialHeader)
+          || Set.of(
+                  "authorization",
+                  "host",
+                  "cookie",
+                  "content-type",
+                  "content-length",
+                  "transfer-encoding",
+                  "connection")
+              .contains(name)
+          || name.startsWith("proxy-")
+          || name.startsWith("x-forwarded-")) {
+        throw new IllegalArgumentException("Idempotency header conflicts with a protected header");
+      }
+    }
     staticHeaders.forEach(
         (k, v) -> {
           if (!k.matches("[A-Za-z][A-Za-z0-9-]{0,63}")

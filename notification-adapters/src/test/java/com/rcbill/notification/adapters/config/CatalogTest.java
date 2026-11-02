@@ -8,9 +8,37 @@ import com.rcbill.notification.application.port.DestinationCatalog;
 import java.net.URI;
 import java.util.*;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import tools.jackson.databind.json.JsonMapper;
 
 class CatalogTest {
+  @ParameterizedTest
+  @ValueSource(
+      strings = {"Authorization", "Host", "Content-Length", "Proxy-Authorization", "x-api-key"})
+  void idempotencyCannotOverwriteCredentialsOrRouting(String header) {
+    var d = target();
+    assertThatIllegalArgumentException()
+        .isThrownBy(
+            () ->
+                new Destination(
+                    d.id(),
+                    d.version(),
+                    d.allowedTenants(),
+                    d.allowedClients(),
+                    true,
+                    d.endpoint(),
+                    d.method(),
+                    d.contentTypes(),
+                    d.allowedDynamicHeaders(),
+                    Map.of(),
+                    d.credentialRef(),
+                    header,
+                    d.policy(),
+                    d.credentialHeader(),
+                    d.credentialPrefix()));
+  }
+
   Destination target() {
     return new Destination(
         "crm-test",
