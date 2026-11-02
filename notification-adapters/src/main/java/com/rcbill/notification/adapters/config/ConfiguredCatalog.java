@@ -23,5 +23,6 @@ public final class ConfiguredCatalog implements DestinationCatalog {
         return d;
     }
     public boolean enabled(String id,int version){var d=destinations.get(id+":"+version);return d!=null&&d.enabled();}
+    public Optional<Destination> enabledDestination(String id,int version){return Optional.ofNullable(destinations.get(id+":"+version)).filter(Destination::enabled);}
     public Collection<Destination> all(){return destinations.values();}
 }

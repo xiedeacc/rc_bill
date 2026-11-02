@@ -18,21 +18,23 @@ public final class DeliveryDispatcher implements AutoCloseable {
     public DeliveryDispatcher(DeliveryQueue queue,HttpTransport transport,SecretProvider secrets,DispatchAdmission admission,ConfiguredCatalog catalog,int maximum,Clock clock,MeterRegistry meters){
         this.queue=queue;this.transport=transport;this.secrets=secrets;this.admission=admission;this.catalog=catalog;execution=new BoundedExecution(maximum);this.clock=clock;this.meters=meters;
         meters.gauge("notification.http.inflight",execution,BoundedExecution::inFlight);
+        for(var d:catalog.all()){var breaker=breakers.circuitBreaker(d.id()+":"+d.version());meters.gauge("notification.circuit.open",io.micrometer.core.instrument.Tags.of("destination",d.id(),"version",Integer.toString(d.version())),breaker,b->b.getState()==CircuitBreaker.State.OPEN?1.0:0.0);}
     }
     public void handle(DispatchEvent event){
         var slot=execution.reserve().orElseThrow(()->new RejectedExecutionException("Local capacity exhausted"));
-        DispatchAdmission.Permit permit=null;CircuitBreaker breaker=breakers.circuitBreaker(event.destinationId());boolean breakerPermit=false,handed=false;
+        DispatchAdmission.Permit permit=null;CircuitBreaker breaker=null;boolean breakerPermit=false,handed=false;
         try{
-            var active=catalog.all().stream().filter(d->d.id().equals(event.destinationId())&&d.version()==event.destinationVersion()&&d.enabled()).findFirst();
+            var active=catalog.enabledDestination(event.destinationId(),event.destinationVersion());
             if(active.isEmpty()){queue.defer(event,clock.instant().plusSeconds(60),"DESTINATION_PAUSED");return;}
+            breaker=breakers.circuitBreaker(event.destinationId()+":"+event.destinationVersion());
             if(!breaker.tryAcquirePermission()){queue.defer(event,clock.instant().plusSeconds(30),"CIRCUIT_OPEN");return;}breakerPermit=true;
             String budget=active.get().credentialRef()!=null?active.get().credentialRef():active.get().endpoint().getAuthority();
             permit=admission.tryAcquire(budget).orElse(null);
             if(permit==null){queue.defer(event,clock.instant().plusSeconds(5),"ADMISSION_UNAVAILABLE");return;}
             var handoff=queue.claim(event,Duration.ofSeconds(60));
             if(handoff.disposition()!=DeliveryQueue.Disposition.CLAIMED)return;
-            var granted=permit;var lease=Objects.requireNonNull(handoff.lease());
-            slot.execute(()->deliver(lease,granted,breaker));handed=true;
+            var granted=permit;var lease=Objects.requireNonNull(handoff.lease());var selectedBreaker=breaker;
+            slot.execute(()->deliver(lease,granted,selectedBreaker));handed=true;
         }finally{if(!handed){slot.close();if(permit!=null)permit.close();if(breakerPermit)breaker.releasePermission();}}
     }
     private void deliver(DeliveryQueue.Lease lease,DispatchAdmission.Permit permit,CircuitBreaker breaker){
