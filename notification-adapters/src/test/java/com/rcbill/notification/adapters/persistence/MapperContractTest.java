@@ -23,7 +23,7 @@ class MapperContractTest {
     @Test void invalidTopologyFailsBeforeOpeningAnyConnection() {
         assertThatIllegalArgumentException().isThrownBy(()->new Shards(List.of("invalid","invalid","invalid"),"","",false,16));
     }
-    @ParameterizedTest @ValueSource(strings={"task","lockTask","payload","insertChain","lockChain"})
+    @ParameterizedTest @ValueSource(strings={"task","lockTask","payloadRow","insertChain","lockChain"})
     void actualUuidParameterBindingMustReachJdbc(String method)throws Exception {
         var configuration=new Configuration();configuration.addMapper(LedgerMapper.class);var uuid=UUID.randomUUID();
         Object parameters=new ParamNameResolver(configuration,LedgerMapper.class.getMethod(method,UUID.class)).getNamedParams(new Object[]{uuid});
@@ -31,5 +31,12 @@ class MapperContractTest {
         var jdbc=mock(PreparedStatement.class);
         new DefaultParameterHandler(statement,parameters,statement.getBoundSql(parameters)).setParameters(jdbc);
         verify(jdbc,atLeastOnce()).setObject(anyInt(),eq(uuid));
+    }
+    @Test void binaryPayloadIsOneRowRatherThanAnArrayOfByteRows(){
+        var c=new Configuration();c.addMapper(LedgerMapper.class);
+        var session=mock(org.apache.ibatis.session.SqlSession.class);when(session.getConfiguration()).thenReturn(c);
+        byte[] ciphertext={1,2,3,4};when(session.selectOne(anyString(),any())).thenReturn(java.util.Map.of("ciphertext",ciphertext));
+        assertThat(c.getMapper(LedgerMapper.class,session).payload(UUID.randomUUID())).isEqualTo(ciphertext);
+        verify(session,never()).selectList(anyString(),any());
     }
 }

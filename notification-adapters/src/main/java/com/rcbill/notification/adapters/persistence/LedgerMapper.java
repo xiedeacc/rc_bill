@@ -15,7 +15,8 @@ public interface LedgerMapper {
         VALUES(#{id},#{tenant},#{client},#{slot},#{destination},#{version},#{snapshot},#{fingerprint},#{root},#{replayOf},#{deliveryKey},'PENDING',#{expires})
         """) int insertTask(Map<String,Object> args);
     @Insert("INSERT INTO payload(notification_id,ciphertext) VALUES(#{id},#{cipher})") int insertPayload(Map<String,Object> args);
-    @Select("SELECT ciphertext FROM payload WHERE notification_id=#{id}") byte[] payload(@Param("id") UUID id);
+    @Select("SELECT ciphertext FROM payload WHERE notification_id=#{id}") Map<String,Object> payloadRow(@Param("id") UUID id);
+    default byte[] payload(UUID id) {var row=payloadRow(id);return row==null?null:(byte[])row.get("ciphertext");}
     @Insert("INSERT INTO idempotency_record(tenant_id,client_id,scope,key,fingerprint,notification_id) VALUES(#{tenant},#{client},#{scope},#{key},#{fingerprint},#{id}) ON CONFLICT DO NOTHING")
     int insertDedup(Map<String,Object> args);
     @Insert("INSERT INTO delivery_chain(root_id,active_id) VALUES(#{id},#{id})") int insertChain(@Param("id") UUID id);
