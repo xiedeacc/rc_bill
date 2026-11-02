@@ -7,6 +7,10 @@ import java.util.UUID;
 
 /** Database transaction boundary. Implementations must not perform network I/O. */
 public interface NotificationStore {
+    /** Lookup precedes destination revalidation/backpressure; a hit still needs fingerprint comparison. */
+    Optional<IdempotencyHit> findIdempotency(
+            NotificationUseCases.Caller caller, String operationScope, String idempotencyKey);
+
     /** Atomically writes task and deduplication record; a mismatched fingerprint conflicts. */
     NotificationUseCases.Acceptance accept(
             NotificationUseCases.Caller caller, String idempotencyKey,
@@ -22,4 +26,6 @@ public interface NotificationStore {
     NotificationUseCases.Acceptance replay(
             NotificationUseCases.Caller caller, UUID originalId, String idempotencyKey,
             String fingerprint, NotificationUseCases.Replay replay);
+
+    record IdempotencyHit(String fingerprint, NotificationUseCases.Acceptance acceptance) { }
 }
