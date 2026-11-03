@@ -48,12 +48,12 @@ def main():
         with response:
             return response.status, json.loads(response.read())
 
-    report = {'protocol': 1, 'concurrency': 8, 'body_bytes': 2048, 'capacity_claim': False,
+    report = {'protocol': 2, 'concurrency': 8, 'body_bytes': 2048, 'capacity_claim': False,
               'connection_policy': 'urllib-new-connection-per-request',
               'host': {'cpu_count': os.cpu_count(), 'platform': platform.platform()}, 'phases': []}
     failed = False
     try:
-        for phase, count in [('cold', 64), ('warmup', 256), ('steady-1', 512), ('steady-2', 512), ('steady-3', 512)]:
+        for phase, count in [('cold', 64), ('warmup', 4096), ('steady-1', 2048), ('steady-2', 2048), ('steady-3', 2048)]:
             def submit(index):
                 started = time.perf_counter()
                 wall = time.time()
