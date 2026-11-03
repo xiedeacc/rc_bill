@@ -1,0 +1,18 @@
+09:46:42.901 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Starting...
+09:46:43.415 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Start completed.
+09:46:44.068 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:postgresql://127.0.0.1:15432/notification?currentSchema=perf_41613081735_1 (PostgreSQL 17.11)
+09:46:44.149 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Schema history table "perf_41613081735_1"."flyway_schema_history" does not exist yet
+09:46:44.152 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 7 migrations (execution time 00:00.021s)
+09:46:44.164 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Creating Schema History table "perf_41613081735_1"."flyway_schema_history" ...
+09:46:44.204 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema "perf_41613081735_1": << Empty Schema >>
+09:46:44.225 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "perf_41613081735_1" to version "1 - notification ledger"
+09:46:44.269 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "perf_41613081735_1" to version "2 - destination versions"
+09:46:44.281 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "perf_41613081735_1" to version "3 - due outbox age" [non-transactional]
+09:46:44.294 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "perf_41613081735_1" to version "4 - bounded backlog" [non-transactional]
+09:46:44.307 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "perf_41613081735_1" to version "5 - outbox scheduled time"
+09:46:44.316 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "perf_41613081735_1" to version "6 - original due index" [non-transactional]
+09:46:44.327 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "perf_41613081735_1" to version "7 - physical shard identity"
+09:46:44.340 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Successfully applied 7 migrations to schema "perf_41613081735_1", now at version v7 (execution time 00:00.047s)
+Ledger migrations and immutable topology checks completed.
+09:46:44.661 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown initiated...
+09:46:44.666 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown completed.
