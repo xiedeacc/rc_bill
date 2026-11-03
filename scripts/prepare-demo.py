@@ -2,6 +2,7 @@
 import base64
 import json
 import os
+import re
 from pathlib import Path
 import time
 from cryptography.hazmat.primitives import hashes, serialization
@@ -45,6 +46,16 @@ settings = {'PG_URL': 'jdbc:postgresql://127.0.0.1:15432/notification', 'PG_USER
 environment_file = folder / 'environment.json'
 if environment_file.exists():
     settings.update(json.loads(environment_file.read_text(encoding='utf-8')))
+
+fixture = os.environ.get('PERF_FIXTURE_ID')
+if fixture:
+    if not re.fullmatch(r'perf_[a-z0-9_]{1,48}', fixture):
+        raise SystemExit('Invalid isolated performance fixture identifier')
+    settings.update({'PG_URL': 'jdbc:postgresql://127.0.0.1:15432/notification?currentSchema=' + fixture,
+                     'NOTIFICATION_KAFKA_DISPATCH_TOPIC': fixture + '.dispatch',
+                     'NOTIFICATION_KAFKA_DEAD_TOPIC': fixture + '.dead',
+                     'NOTIFICATION_KAFKA_QUARANTINE_TOPIC': fixture + '.quarantine',
+                     'NOTIFICATION_KAFKA_GROUP': fixture + '.group'})
 environment_file.write_text(json.dumps(settings, indent=2), encoding='utf-8')
 environment_file.chmod(0o600)
 print('Generated ignored local fixtures under tmp/demo; JWT expires in one hour.')

@@ -11,6 +11,7 @@ summary = {'sha': os.environ.get('GITHUB_SHA'), 'run_id': os.environ.get('GITHUB
            'tests_outcome': os.environ.get('TEST_OUTCOME'), 'infrastructure_outcome': os.environ.get('INFRA_OUTCOME'),
            'image_outcome': os.environ.get('IMAGE_OUTCOME'), 'container_outcome': os.environ.get('CONTAINER_OUTCOME'),
            'runtime_outcome': os.environ.get('RUNTIME_OUTCOME'),
+           'performance_outcome': os.environ.get('PERFORMANCE_OUTCOME'),
            'unit': {'tests': 0, 'failures': 0, 'errors': 0, 'skipped': 0},
            'integration': {'tests': 0, 'failures': 0, 'errors': 0, 'skipped': 0}, 'suites': [], 'report_errors': []}
 for folder, kind in [('surefire-reports', 'unit'), ('failsafe-reports', 'integration')]:
@@ -28,7 +29,7 @@ for folder, kind in [('surefire-reports', 'unit'), ('failsafe-reports', 'integra
 for file in [Path('ci-maven.log'), Path('ci-services.log'), Path('ci-images.log'), Path('ci-image-smoke.log'), Path('ci-image-api.log'), Path('ci-image-worker.log'), Path('notification-worker/target/pipeline-api.log'), Path('notification-worker/target/MigrationApplication.log'), Path('notification-worker/target/BootstrapApplication.log')]:
     if file.exists():
         shutil.copy2(file, out / file.name)
-for file in Path('.').glob('ci-demo-*'):
+for file in [*Path('.').glob('ci-demo-*'), *Path('.').glob('ci-paired-*')]:
     if file.is_file() and file.suffix != '.jfr':
         shutil.copy2(file, out / file.name)
 summary['test_evidence_complete'] = (summary['tests_outcome'] == 'success' and not summary['report_errors']

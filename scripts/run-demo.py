@@ -16,6 +16,8 @@ if not java:
     raise SystemExit('Set JAVA_HOME to JDK 21 or a supported newer JDK.')
 module = 'notification-api' if role == 'api' else 'notification-worker'
 jar = str(Path(f'{module}/target/{module}-0.1.0-SNAPSHOT.jar').resolve())
+if role == 'api' and environment.get('DEMO_API_JAR'):
+    jar = str(Path(environment['DEMO_API_JAR']).resolve(strict=True))
 if role in {'migrate', 'bootstrap'}:
     main = 'MigrationApplication' if role == 'migrate' else 'BootstrapApplication'
     command = [java, '-Dloader.main=com.rcbill.notification.worker.' + main, '-cp', jar, 'org.springframework.boot.loader.launch.PropertiesLauncher']

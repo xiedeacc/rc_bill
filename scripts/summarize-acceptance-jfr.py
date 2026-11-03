@@ -12,7 +12,7 @@ benchmark = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(benchmark)
 report = json.loads(Path('ci-demo-benchmark.json').read_text())
 raw = subprocess.check_output(['jfr', 'print', '--json', '--events',
-    'rcbill.Stage,jdk.ExecutionSample,jdk.ThreadPark,jdk.JavaMonitorEnter,jdk.SocketRead,jdk.GarbageCollection,jdk.CPULoad',
+    'rcbill.Stage,jdk.ExecutionSample,jdk.ThreadPark,jdk.JavaMonitorEnter,jdk.VirtualThreadPinned,jdk.SocketRead,jdk.GarbageCollection,jdk.CPULoad',
     'ci-demo-api.jfr'], text=True)
 events = json.loads(raw)['recording']['events']
 

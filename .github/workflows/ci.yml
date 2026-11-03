@@ -52,6 +52,10 @@ jobs:
       - name: Verify actual runtime API and Worker processes
         id: runtime_demo
         run: bash scripts/demo-smoke.sh
+      - name: Compare baseline and candidate on the same runner
+        id: performance
+        if: github.ref == 'refs/heads/implementation/acceptance-performance'
+        run: bash scripts/compare-acceptance.sh db04ef68fd9b1b4e854a928b957fe99fee50a82a
       - name: Verify read-only non-root container startup
         id: container_smoke
         run: bash scripts/container-smoke.sh 2>&1 | tee ci-image-smoke.log
@@ -63,6 +67,7 @@ jobs:
           IMAGE_OUTCOME: ${{ steps.images.outcome }}
           CONTAINER_OUTCOME: ${{ steps.container_smoke.outcome }}
           RUNTIME_OUTCOME: ${{ steps.runtime_demo.outcome }}
+          PERFORMANCE_OUTCOME: ${{ steps.performance.outcome }}
         run: |
           docker compose -f compose.test.yaml logs --no-color > ci-services.log 2>&1 || true
           python3 scripts/collect-ci-evidence.py
