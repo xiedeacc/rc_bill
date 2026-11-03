@@ -31,6 +31,32 @@ public interface LedgerMapper {
       """)
   int insertTask(Map<String, Object> args);
 
+  // Communicate between modifying CTEs through RETURNING, never by rereading their base tables.
+  // A lost dedup race is reported to the caller, which must roll back the entire transaction.
+  @Select(
+      value =
+          """
+          WITH created AS (
+            INSERT INTO notification(id,tenant_id,client_id,slot,destination_id,destination_version,snapshot,fingerprint,root_id,delivery_key,status,expires_at)
+            VALUES(#{id},#{tenant},#{client},#{slot},#{destination},#{version},#{snapshot},#{fingerprint},#{id},#{deliveryKey},'PENDING',#{expires})
+            RETURNING id,slot,created_at
+          ), body AS (
+            INSERT INTO payload(notification_id,ciphertext) SELECT id,#{cipher} FROM created
+          ), dedup AS (
+            INSERT INTO idempotency_record(tenant_id,client_id,scope,key,fingerprint,notification_id)
+            SELECT #{tenant},#{client},'submit',#{key},#{fingerprint},id FROM created
+            ON CONFLICT DO NOTHING RETURNING notification_id
+          ), chain AS (
+            INSERT INTO delivery_chain(root_id,active_id) SELECT id,id FROM created
+          ), dispatch AS (
+            INSERT INTO outbox_event(event_id,notification_id,slot,schedule_epoch,event_type,available_at,scheduled_at)
+            SELECT #{event},id,slot,0,'DISPATCH',#{available},#{available} FROM created
+          )
+          SELECT created_at,(SELECT count(*) FROM dedup) AS dedup_count FROM created
+          """,
+      affectData = true)
+  Map<String, Object> acceptBundle(Map<String, Object> args);
+
   @Insert("INSERT INTO payload(notification_id,ciphertext) VALUES(#{id},#{cipher})")
   int insertPayload(Map<String, Object> args);
 

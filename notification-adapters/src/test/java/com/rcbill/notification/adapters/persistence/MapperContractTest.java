@@ -15,6 +15,19 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class MapperContractTest {
   @Test
+  void returningWriteIsDirtyAndUsesOnlyBoundParameters() {
+    var c = new Configuration();
+    c.addMapper(LedgerMapper.class);
+    var statement = c.getMappedStatement(LedgerMapper.class.getName() + ".acceptBundle");
+    assertThat(statement.isDirtySelect()).isTrue();
+    var sql = statement.getBoundSql(Db.map("key", "' OR 1=1 --"));
+    assertThat(sql.getSql()).doesNotContain("OR 1=1");
+    assertThat(sql.getParameterMappings())
+        .extracting(org.apache.ibatis.mapping.ParameterMapping::getProperty)
+        .contains("id", "tenant", "client", "key", "cipher", "event", "expires");
+  }
+
+  @Test
   void allStatementsParseAndTenantValuesStayBound() {
     var c = new Configuration();
     c.addMapper(LedgerMapper.class);

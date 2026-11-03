@@ -84,46 +84,42 @@ public final class PgNotificationStore implements NotificationStore {
             if (oldest != null && oldest.plusSeconds(300).isBefore(now))
               throw new ServiceFailure(503, "OUTBOX_BACKPRESSURE");
             UUID task = Routing.newId(slot);
-            create(
-                m,
-                c,
-                task,
-                task,
-                null,
-                UUID.randomUUID().toString(),
-                slot,
-                json.writeValueAsString(d),
-                fingerprint,
-                s.destinationId(),
-                s.destinationVersion(),
-                now.plusSeconds(s.ttlSeconds()));
-            m.insertPayload(
-                map(
-                    "id",
-                    task,
-                    "cipher",
-                    cipher.encrypt(
-                        task,
-                        json.writeValueAsString(
-                            new Body(s.contentType(), s.body(), s.headers())))));
-            if (m.insertDedup(
+            var result =
+                m.acceptBundle(
                     map(
+                        "id",
+                        task,
                         "tenant",
                         c.tenantId(),
                         "client",
                         c.clientId(),
-                        "scope",
-                        "submit",
-                        "key",
-                        key,
+                        "slot",
+                        slot,
+                        "destination",
+                        s.destinationId(),
+                        "version",
+                        s.destinationVersion(),
+                        "snapshot",
+                        json.writeValueAsString(d),
                         "fingerprint",
                         fingerprint,
-                        "id",
-                        task))
-                == 0) throw new Duplicate();
-            m.insertChain(task);
-            event(m, task, slot, 0, "DISPATCH", now);
-            return new Acceptance(task, instant(m.task(task).get("created_at")), false);
+                        "deliveryKey",
+                        UUID.randomUUID().toString(),
+                        "expires",
+                        now.plusSeconds(s.ttlSeconds()),
+                        "cipher",
+                        cipher.encrypt(
+                            task,
+                            json.writeValueAsString(
+                                new Body(s.contentType(), s.body(), s.headers()))),
+                        "key",
+                        key,
+                        "event",
+                        UUID.randomUUID(),
+                        "available",
+                        now));
+            if (number(result, "dedup_count") != 1) throw new Duplicate();
+            return new Acceptance(task, instant(result.get("created_at")), false);
           });
     } catch (Duplicate race) {
       return NotificationService.existing(

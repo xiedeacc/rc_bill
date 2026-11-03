@@ -112,6 +112,29 @@ class LedgerIT {
   }
 
   @Test
+  void failedOutboxWriteRollsBackEveryAcceptanceRow() throws Exception {
+    sql(
+        "ALTER TABLE outbox_event ADD CONSTRAINT injected_failure CHECK (event_type <>"
+            + " 'DISPATCH')");
+    try {
+      assertThatThrownBy(() -> service.submit(caller, "failed-bundle-key", request("body")))
+          .isInstanceOf(RuntimeException.class);
+      for (String table :
+          List.of(
+              "notification", "payload", "idempotency_record", "delivery_chain", "outbox_event"))
+        assertThat(count(table)).as(table + " must be rolled back").isZero();
+    } finally {
+      sql("ALTER TABLE outbox_event DROP CONSTRAINT injected_failure");
+    }
+    var accepted = service.submit(caller, "failed-bundle-key", request("body"));
+    assertThat(accepted.acceptedAt())
+        .isEqualTo(service.get(caller, accepted.notificationId()).orElseThrow().acceptedAt());
+    assertThat(service.submit(caller, "failed-bundle-key", request("body")).notificationId())
+        .isEqualTo(accepted.notificationId());
+    assertThat(count("idempotency_record")).isEqualTo(1);
+  }
+
+  @Test
   void concurrentSameKeyCreatesExactlyOneTaskAndOutbox() throws Exception {
     try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
       var futures = new ArrayList<Future<NotificationUseCases.Acceptance>>();
@@ -125,6 +148,8 @@ class LedgerIT {
     assertThat(count("notification")).isEqualTo(1);
     assertThat(count("payload")).isEqualTo(1);
     assertThat(count("outbox_event")).isEqualTo(1);
+    assertThat(count("idempotency_record")).isEqualTo(1);
+    assertThat(count("delivery_chain")).isEqualTo(1);
     assertThatThrownBy(() -> service.submit(caller, "same-event-key", request("changed")))
         .isInstanceOfSatisfying(ServiceFailure.class, e -> assertThat(e.status()).isEqualTo(409));
     assertThat(count("notification")).isEqualTo(1);
