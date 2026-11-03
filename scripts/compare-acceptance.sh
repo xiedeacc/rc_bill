@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # A/B/B/A on one runner, fresh processes, schemas, topics and group for each round.
 set -euo pipefail
+export RUN_ACCEPTANCE_BENCHMARK=true
 baseline="${1:?Supply an audited baseline commit SHA}"
 [[ "$baseline" =~ ^[a-f0-9]{40}$ ]]
 candidate=$(git rev-parse HEAD)

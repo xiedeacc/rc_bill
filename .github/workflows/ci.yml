@@ -4,6 +4,11 @@ on:
     branches: [master, 'implementation/**']
   pull_request:
   workflow_dispatch:
+    inputs:
+      acceptance_performance:
+        description: 'Explicitly run the long acceptance performance comparison'
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -51,10 +56,12 @@ jobs:
           } 2>&1 | tee ci-images.log
       - name: Verify actual runtime API and Worker processes
         id: runtime_demo
+        env:
+          RUN_ACCEPTANCE_BENCHMARK: ${{ github.event_name == 'workflow_dispatch' && inputs.acceptance_performance }}
         run: bash scripts/demo-smoke.sh
       - name: Compare baseline and candidate on the same runner
         id: performance
-        if: github.ref == 'refs/heads/implementation/acceptance-performance'
+        if: github.event_name == 'workflow_dispatch' && inputs.acceptance_performance
         run: bash scripts/compare-acceptance.sh db04ef68fd9b1b4e854a928b957fe99fee50a82a
       - name: Verify read-only non-root container startup
         id: container_smoke

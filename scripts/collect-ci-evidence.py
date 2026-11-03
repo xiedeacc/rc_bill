@@ -32,6 +32,10 @@ for file in [Path('ci-maven.log'), Path('ci-services.log'), Path('ci-images.log'
 for file in [*Path('.').glob('ci-demo-*'), *Path('.').glob('ci-paired-*')]:
     if file.is_file() and file.suffix != '.jfr':
         shutil.copy2(file, out / file.name)
+# A comparison can be cancelled after moving the initial completed run aside.
+for file in Path('tmp/performance-initial').glob('ci-demo-*'):
+    if file.is_file() and file.suffix != '.jfr':
+        shutil.copy2(file, out / ('initial-' + file.name))
 summary['test_evidence_complete'] = (summary['tests_outcome'] == 'success' and not summary['report_errors']
                                    and all(summary[kind]['tests'] > 0 and sum(summary[kind][key] for key in ['failures', 'errors', 'skipped']) == 0
                                            for kind in ['unit', 'integration']))
