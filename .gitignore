@@ -16,3 +16,8 @@ ci-services.log
 .venv/
 invite.ics
 Thumbs.db
+
+__pycache__/
+*.pyc
+*.jfr
+ci-demo-*.json

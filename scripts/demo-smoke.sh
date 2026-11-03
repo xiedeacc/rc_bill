@@ -11,7 +11,7 @@ python=.ci-python/bin/python
 "$python" scripts/run-demo.py migrate > ci-demo-migration.log 2>&1
 "$python" scripts/run-demo.py bootstrap > ci-demo-bootstrap.log 2>&1
 "$python" scripts/mock-external-services.py > ci-demo-mocks.log 2>&1 & pids+=("$!")
-JAVA_TOOL_OPTIONS='-XX:StartFlightRecording=settings=profile,filename=ci-demo-api.jfr,dumponexit=true,maxsize=128m' "$python" scripts/run-demo.py api > ci-demo-api.log 2>&1 & pids+=("$!")
+JAVA_TOOL_OPTIONS='-XX:StartFlightRecording=settings=profile,jdk.InitialEnvironmentVariable#enabled=false,jdk.InitialSystemProperty#enabled=false,jdk.JVMInformation#enabled=false,filename=ci-demo-api.jfr,dumponexit=true,maxsize=128m' "$python" scripts/run-demo.py api > ci-demo-api.log 2>&1 & pids+=("$!")
 "$python" scripts/run-demo.py worker > ci-demo-worker.log 2>&1 & pids+=("$!")
 for port in 8080 8081; do
   ready=0

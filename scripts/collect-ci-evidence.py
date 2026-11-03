@@ -29,7 +29,7 @@ for file in [Path('ci-maven.log'), Path('ci-services.log'), Path('ci-images.log'
     if file.exists():
         shutil.copy2(file, out / file.name)
 for file in Path('.').glob('ci-demo-*'):
-    if file.is_file():
+    if file.is_file() and file.suffix != '.jfr':
         shutil.copy2(file, out / file.name)
 summary['test_evidence_complete'] = (summary['tests_outcome'] == 'success' and not summary['report_errors']
                                    and all(summary[kind]['tests'] > 0 and sum(summary[kind][key] for key in ['failures', 'errors', 'skipped']) == 0
