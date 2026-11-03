@@ -36,6 +36,7 @@ jobs:
           python3 -m venv .ci-python
           .ci-python/bin/pip install -r requirements-dev.txt
           .ci-python/bin/python scripts/validate-contracts.py
+          .ci-python/bin/python scripts/test_acceptance_benchmark.py
       - name: Unit and real infrastructure tests
         id: tests
         run: |
