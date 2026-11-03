@@ -16,6 +16,8 @@
 | [Kafka专项设计](docs/kafka-reliability.md) | 参数、部署、offset、PG热点与虚拟线程 |
 | [运行与运维](docs/runtime-and-operations.md) | 演示、环境变量、外部配额契约、迁移、发布及故障处置 |
 | [验证记录](docs/verification.md) | 实际执行结果与明确未验证的项目 |
+| [接收性能分析](docs/acceptance-performance.md) | 冷启动/预热后数据、TDD优化及已停止的对照实验 |
+| [AI会话归档说明](docs/conversation-archive.md) | 完整公开会话快照、zip内容和完整性校验 |
 | [HTTP OpenAPI](contracts/openapi.yaml) | 四个业务接口、权限和错误约定 |
 | [Kafka事件Schema](contracts/dispatch-event.schema.json) | 不携带Body/凭证的版本化调度事件 |
 
@@ -107,6 +109,6 @@ Kubernetes模板、镜像构建与手动发布流程已经提供，尚未向真�
 - [x] 系统设计、审查、AI案例、模拟面试和可运行代码。
 - [x] 单元/组件与真实基础设施集成测试、CI和发布入口。
 - [x] Git仓库和可审查的提交/修复证据。
-- [ ] 最终会话结束后导出完整、未删改的用户可见AI会话并打包zip入库。当前对话仍在进行，不能把阶段摘要或截断日志冒充完整归档。
+- [x] 本项目截至归档时间的全部可导出公开会话已打包为根目录 `AI_会话记录_2026-11-03.zip`；保留用户消息、AI公开回复及工具活动原文，范围和截止点见[归档说明](docs/conversation-archive.md)。后续新增消息须另行更新快照。
 
 原有`invite.ics`保持不变且不提交。请勿把真实凭证或个人信息放入后续会话或仓库。
