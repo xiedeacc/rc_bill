@@ -31,7 +31,8 @@ public final class EnvelopeLimitFilter extends OncePerRequestFilter {
       ApiProblems.write(request, response, 503, "API_CAPACITY");
       return;
     }
-    try {
+    try (var timing =
+        com.rcbill.notification.adapters.observability.StageTiming.start("http.authorized")) {
       bounded(request, response, chain);
     } finally {
       capacity.release();

@@ -90,6 +90,9 @@ public class RuntimeApiSecurity {
                 o.jwt(j -> {})
                     .authenticationEntryPoint(
                         (r, s, x) -> ApiProblems.write(r, s, 401, "UNAUTHORIZED")))
+        .addFilterBefore(
+            new AcceptanceTimingFilter(),
+            org.springframework.security.web.context.SecurityContextHolderFilter.class)
         .addFilterAfter(
             new EnvelopeLimitFilter(
                 environment.getProperty("notification.api.maximum-in-flight", Integer.class, 512)),

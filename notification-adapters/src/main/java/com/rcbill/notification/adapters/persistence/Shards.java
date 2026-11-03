@@ -15,7 +15,17 @@ public final class Shards implements AutoCloseable {
   public record Shard(
       SqlSessionTemplate sessions, TransactionTemplate transactions, HikariDataSource pool) {
     public <T> T transaction(Function<LedgerMapper, T> action) {
-      return transactions.execute(status -> action.apply(sessions.getMapper(LedgerMapper.class)));
+      try (var total =
+          com.rcbill.notification.adapters.observability.StageTiming.start("transaction")) {
+        return transactions.execute(
+            status -> {
+              try (var work =
+                  com.rcbill.notification.adapters.observability.StageTiming.start(
+                      "transaction.work")) {
+                return action.apply(sessions.getMapper(LedgerMapper.class));
+              }
+            });
+      }
     }
 
     public LedgerMapper mapper() {
@@ -63,6 +73,7 @@ public final class Shards implements AutoCloseable {
           var cfg = new org.apache.ibatis.session.Configuration();
           cfg.setCacheEnabled(false);
           cfg.setLocalCacheScope(LocalCacheScope.STATEMENT);
+          cfg.addInterceptor(new com.rcbill.notification.adapters.observability.LedgerTiming());
           cfg.addMapper(LedgerMapper.class);
           var bean = new SqlSessionFactoryBean();
           bean.setDataSource(ds);
