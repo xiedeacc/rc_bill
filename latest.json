@@ -1,19 +1,19 @@
 {
-  "sha": "2ba641c5095229a0136e2787db9ad618322828c5",
-  "run_id": "41520162782",
-  "tests_outcome": "success",
+  "sha": "7c21eeb393cbb57e126ba21c242121cb778242a5",
+  "run_id": "41611738483",
+  "tests_outcome": "cancelled",
   "infrastructure_outcome": "success",
-  "image_outcome": "success",
-  "container_outcome": "success",
-  "runtime_outcome": "success",
+  "image_outcome": "skipped",
+  "container_outcome": "skipped",
+  "runtime_outcome": "skipped",
   "unit": {
-    "tests": 145,
+    "tests": 146,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
   "integration": {
-    "tests": 12,
+    "tests": 10,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -71,6 +71,14 @@
       "name": "com.rcbill.notification.adapters.config.CatalogTest",
       "kind": "unit",
       "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.rcbill.notification.adapters.observability.LedgerTimingTest",
+      "kind": "unit",
+      "tests": 1,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -210,24 +218,8 @@
       "failures": 0,
       "errors": 0,
       "skipped": 0
-    },
-    {
-      "name": "com.rcbill.notification.worker.AdministrativeJobsIT",
-      "kind": "integration",
-      "tests": 1,
-      "failures": 0,
-      "errors": 0,
-      "skipped": 0
-    },
-    {
-      "name": "com.rcbill.notification.worker.PipelineIT",
-      "kind": "integration",
-      "tests": 1,
-      "failures": 0,
-      "errors": 0,
-      "skipped": 0
     }
   ],
   "report_errors": [],
-  "test_evidence_complete": true
+  "test_evidence_complete": false
 }

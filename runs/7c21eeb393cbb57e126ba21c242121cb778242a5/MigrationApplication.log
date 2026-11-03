@@ -1,0 +1,9 @@
+09:33:07.492 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Starting...
+09:33:08.058 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Start completed.
+09:33:08.578 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:postgresql://localhost:15432/notification?currentSchema=jobs_5e8020163f284737be96acfd7f435cde (PostgreSQL 17.11)
+09:33:08.763 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 7 migrations (execution time 00:00.068s)
+09:33:08.783 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema "jobs_5e8020163f284737be96acfd7f435cde": 7
+09:33:08.788 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema "jobs_5e8020163f284737be96acfd7f435cde" is up to date. No migration necessary.
+Ledger migrations and immutable topology checks completed.
+09:33:09.552 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown initiated...
+09:33:09.565 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown completed.
