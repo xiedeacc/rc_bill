@@ -2,6 +2,12 @@
 
 本文件区分源码实现、执行结果和生产目标。报告中的失败保留原样，不把mock、skip或仅编译成功当作真实基础设施验证。
 
+## 2026-11-03性能任务的停止点
+
+按用户要求停止性能测试。`0e83d02`在[CI 41613081735](https://github.com/xiedeacc/rc_bill/actions/runs/41613081735)已通过148个单元/组件测试及13个真实基础设施测试，均无失败、错误或跳过；runtime长窗口完成10304次接收并最终成功投递。随后ABBA比较被取消，容器运行步骤未执行，不能把该次整条CI写成成功。优化后冷P95 547.281ms，预热后三个窗口64.045/60.766/49.623ms；与旧版的预热协议不同，不能计算因果收益。完整数字和定位边界见[接收性能分析](acceptance-performance.md)。
+
+最终文档与归档提交按用户要求不再运行压测，并以`[skip ci]`避免push重新触发验证。下列旧基线保留为历史证据。
+
 ## 已完成的独立CI验证
 
 已确认的完整运行基线：`d58d40abc4678d38f20a25088075ca267a7de134`， [CI run 41518168245](https://github.com/xiedeacc/rc_bill/actions/runs/41518168245)。其后修订以[最新证据](https://github.com/xiedeacc/rc_bill/blob/ci-evidence/latest.json)及对应commit为准；不要将一个旧报告自动套在新代码上。

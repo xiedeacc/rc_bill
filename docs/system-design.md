@@ -1,6 +1,6 @@
 # 可靠 API 通知服务系统设计
 
-版本：3.0。日期：2026-11-02。项目：rc_bill。状态：业务链路已实现；运行证据见验证记录，大规模容量仍需压测。
+版本：3.1。日期：2026-11-03。项目：rc_bill。状态：业务链路已实现；运行证据见验证记录，大规模容量仍需压测。
 
 本服务接收内部业务系统的通知请求，将其可靠地投递给外部 HTTP(S) API。API 接收与外部投递解耦，以分片 PostgreSQL 的任务/幂等/Outbox 短事务为接收一致性边界，以 Kafka 为主要投递分发通道，采用 MyBatis、Spring Boot 与 Spring Cloud 构建 API、Relay、Worker 三种可独立扩容的运行角色。Relay与Worker共用worker模块，已支持按all、relay、dispatch角色启动。系统承诺在配置的期限与故障假设下持续尝试投递，并显式保留失败任务；不能承诺任意供应商永远可用，也不能单方面保证外部业务恰好执行一次。
 
@@ -101,7 +101,11 @@ contracts/openapi.yaml    面向调用方的目标契约
 
 执行顺序：验证身份/授权 → 限制原始 HTTP 字节数与解析深度 → DTO 校验 → 计算请求指纹 → 查询幂等记录 → 对新请求验证 destination 版本及权限 → 容量预检查 → 开启数据库事务 → 在同一分片插入幂等记录、任务、Body和Outbox → 提交 → 返回 202。幂等命中应在拒绝新流量的积压检查前处理；已接收请求不应因目标之后停用而失去可查询响应。
 
-同 key 冲突通过唯一约束解决，不能先查后插后假定无竞争。并发输家用 `INSERT ... ON CONFLICT DO NOTHING` 后在 READ COMMITTED 的下一条语句重读已提交赢家；如果事务超时返回 503，调用方仍用原 key 重试。幂等记录指向任务，任务与Outbox同事务创建，绝不先写“成功幂等”再异步保存任务。
+同 key 冲突通过唯一约束解决，不能先查后插后假定无竞争。并发输家用 `INSERT ... ON CONFLICT DO NOTHING` 检测到冲突后，先回滚本次临时写入，再在 READ COMMITTED 的新查询中重读已提交赢家；如果事务超时返回 503，调用方仍用原 key 重试。幂等记录指向任务，任务与Outbox同事务创建，绝不先写“成功幂等”再异步保存任务。
+
+接收写入使用一个MyBatis `@Select(affectData=true)` 数据修改CTE，一次提交任务、加密payload、幂等记录、delivery_chain和Outbox的写入语句，并从INSERT RETURNING获取真实created_at。各CTE通过RETURNING结果传值，不能依赖同语句重新查询基础表看见兄弟CTE修改。Spring事务仍包住数据库时钟、Outbox年龄检查及写入；任何写入失败或幂等竞争输家都整笔回滚，返回202仍在commit完成后。正常新请求由9次Mapper调用减少为4次，低频容量采样另计；这不是把PG事务替换为Kafka事务。
+
+冷启动、充分预热后的窗口和生产负载SLO必须分开测量。首次64请求的P95不能作为稳定运行结论；同样不能隐藏冷请求来宣称150ms目标整体达标。分阶段JFR、已取得数据、未完成的同机对照及边界见[接收性能分析](acceptance-performance.md)。
 
 ### 4.2 Kafka调度与执行组件
 
