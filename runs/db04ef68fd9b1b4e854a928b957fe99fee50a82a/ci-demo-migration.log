@@ -1,0 +1,18 @@
+09:35:41.570 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Starting...
+09:35:41.917 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Start completed.
+09:35:42.319 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:postgresql://127.0.0.1:15432/notification (PostgreSQL 17.11)
+09:35:42.391 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Schema history table "public"."flyway_schema_history" does not exist yet
+09:35:42.395 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 7 migrations (execution time 00:00.018s)
+09:35:42.405 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Creating Schema History table "public"."flyway_schema_history" ...
+09:35:42.449 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema "public": << Empty Schema >>
+09:35:42.478 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "public" to version "1 - notification ledger"
+09:35:42.520 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "public" to version "2 - destination versions"
+09:35:42.540 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "public" to version "3 - due outbox age" [non-transactional]
+09:35:42.568 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "public" to version "4 - bounded backlog" [non-transactional]
+09:35:42.591 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "public" to version "5 - outbox scheduled time"
+09:35:42.603 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "public" to version "6 - original due index" [non-transactional]
+09:35:42.626 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "public" to version "7 - physical shard identity"
+09:35:42.642 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Successfully applied 7 migrations to schema "public", now at version v7 (execution time 00:00.065s)
+Ledger migrations and immutable topology checks completed.
+09:35:42.927 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown initiated...
+09:35:42.930 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown completed.

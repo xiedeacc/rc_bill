@@ -1,0 +1,1329 @@
+[
+  {
+    "phase": "cold",
+    "stages": {
+      "sql.dedup": {
+        "count": 64,
+        "total_ms": 966.955,
+        "p50_ms": 7.7,
+        "p95_ms": 46.414,
+        "p99_ms": 75.443,
+        "max_ms": 75.443
+      },
+      "sql.boundedPending": {
+        "count": 1,
+        "total_ms": 21.823,
+        "p50_ms": 21.823,
+        "p95_ms": 21.823,
+        "p99_ms": 21.823,
+        "max_ms": 21.823
+      },
+      "sql.now": {
+        "count": 64,
+        "total_ms": 509.385,
+        "p50_ms": 3.591,
+        "p95_ms": 33.007,
+        "p99_ms": 83.311,
+        "max_ms": 83.311
+      },
+      "sql.oldestUnpublished": {
+        "count": 64,
+        "total_ms": 377.516,
+        "p50_ms": 3.562,
+        "p95_ms": 16.062,
+        "p99_ms": 34.151,
+        "max_ms": 34.151
+      },
+      "sql.insertTask": {
+        "count": 64,
+        "total_ms": 489.519,
+        "p50_ms": 2.995,
+        "p95_ms": 26.543,
+        "p99_ms": 82.909,
+        "max_ms": 82.909
+      },
+      "sql.insertPayload": {
+        "count": 64,
+        "total_ms": 346.267,
+        "p50_ms": 3.166,
+        "p95_ms": 18.479,
+        "p99_ms": 29.378,
+        "max_ms": 29.378
+      },
+      "sql.insertDedup": {
+        "count": 64,
+        "total_ms": 246.641,
+        "p50_ms": 2.366,
+        "p95_ms": 11.999,
+        "p99_ms": 14.615,
+        "max_ms": 14.615
+      },
+      "sql.insertChain": {
+        "count": 64,
+        "total_ms": 322.891,
+        "p50_ms": 1.984,
+        "p95_ms": 15.694,
+        "p99_ms": 75.726,
+        "max_ms": 75.726
+      },
+      "sql.outbox": {
+        "count": 64,
+        "total_ms": 301.896,
+        "p50_ms": 2.465,
+        "p95_ms": 16.537,
+        "p99_ms": 36.975,
+        "max_ms": 36.975
+      },
+      "sql.task": {
+        "count": 64,
+        "total_ms": 482.94,
+        "p50_ms": 4.483,
+        "p95_ms": 27.234,
+        "p99_ms": 41.135,
+        "max_ms": 41.135
+      },
+      "transaction.work": {
+        "count": 64,
+        "total_ms": 3362.935,
+        "p50_ms": 47.082,
+        "p95_ms": 119.722,
+        "p99_ms": 151.374,
+        "max_ms": 151.374
+      },
+      "transaction": {
+        "count": 64,
+        "total_ms": 4616.528,
+        "p50_ms": 59.909,
+        "p95_ms": 162.726,
+        "p99_ms": 227.84,
+        "max_ms": 227.84
+      },
+      "http.authorized": {
+        "count": 64,
+        "total_ms": 7065.508,
+        "p50_ms": 91.003,
+        "p95_ms": 258.408,
+        "p99_ms": 316.685,
+        "max_ms": 316.685
+      },
+      "http.accept": {
+        "count": 64,
+        "total_ms": 8251.596,
+        "p50_ms": 97.32,
+        "p95_ms": 375.847,
+        "p99_ms": 435.369,
+        "max_ms": 435.369
+      }
+    },
+    "cpu_samples": [
+      {
+        "jvmUser": 0.024630541,
+        "jvmSystem": 0.0024630541,
+        "machineTotal": 0.8497537
+      },
+      {
+        "jvmUser": 0.3690773,
+        "jvmSystem": 0.009975063,
+        "machineTotal": 0.99501246
+      }
+    ],
+    "execution_stacks": [
+      [
+        "java/util/GregorianCalendar.computeFields <- java/util/GregorianCalendar.computeFields <- java/util/Calendar.setTimeInMillis <- java/util/GregorianCalendar.<init> <- java/util/GregorianCalendar.<init>",
+        2
+      ],
+      [
+        "com/sun/crypto/provider/GHASH.blockMult <- com/sun/crypto/provider/GHASH.processBlock <- com/sun/crypto/provider/GHASH.processBlocks <- com/sun/crypto/provider/GHASH.update <- com/sun/crypto/provider/GHASH.doFinal",
+        2
+      ],
+      [
+        "org/apache/tomcat/util/http/parser/HttpHeaderParser.parseHeader <- org/apache/coyote/http11/Http11InputBuffer.parseHeaders <- org/apache/coyote/http11/Http11Processor.service <- org/apache/coyote/AbstractProcessorLight.process <- org/apache/coyote/AbstractProtocol$ConnectionHandler.process",
+        2
+      ],
+      [
+        "java/nio/CharBuffer.<init> <- java/nio/HeapCharBuffer.<init> <- java/nio/CharBuffer.allocate <- java/nio/charset/CharsetDecoder.decode <- java/nio/charset/Charset.decode",
+        1
+      ],
+      [
+        "java/util/Arrays.binarySearch0 <- java/util/Arrays.binarySearch <- org/springframework/boot/loader/zip/ZipContent.getFirstLookupIndex <- org/springframework/boot/loader/zip/ZipContent.hasEntry <- org/springframework/boot/loader/jar/NestedJarFile.hasEntry",
+        1
+      ],
+      [
+        "jdk/internal/org/objectweb/asm/ClassWriter.toByteArray <- java/lang/invoke/InnerClassLambdaMetafactory.generateInnerClass <- java/lang/invoke/InnerClassLambdaMetafactory.spinInnerClass <- java/lang/invoke/InnerClassLambdaMetafactory.buildCallSite <- java/lang/invoke/LambdaMetafactory.metafactory",
+        1
+      ],
+      [
+        "org/springframework/util/MultiValueMapAdapter.set <- org/springframework/http/server/ServletRequestHeadersAdapter$RequestHeaderOverrideWrapper.set <- org/springframework/http/server/ServletRequestHeadersAdapter$RequestHeaderOverrideWrapper.set <- org/springframework/http/HttpHeaders.set <- org/springframework/http/HttpHeaders.setContentType",
+        1
+      ],
+      [
+        "java/util/HashMap.getNode <- java/util/HashMap.get <- org/apache/catalina/connector/Request.getAttribute <- org/apache/catalina/connector/RequestFacade.getAttribute <- org/springframework/security/web/FilterChainProxy.doFilter",
+        1
+      ],
+      [
+        "sun/security/provider/SHA2.implCompress0 <- sun/security/provider/SHA2.implCompress <- sun/security/provider/DigestBase.implCompressMultiBlock0 <- sun/security/provider/DigestBase.implCompressMultiBlock <- sun/security/provider/DigestBase.engineUpdate",
+        1
+      ],
+      [
+        "java/lang/invoke/MethodTypeForm.cachedLambdaForm <- java/lang/invoke/DelegatingMethodHandle.makeReinvokerForm <- java/lang/invoke/DelegatingMethodHandle.makeReinvokerForm <- java/lang/invoke/BoundMethodHandle.makeReinvoker <- java/lang/invoke/DirectMethodHandle.rebind",
+        1
+      ],
+      [
+        "org/apache/ibatis/executor/result/DefaultResultHandler.<init> <- org/apache/ibatis/executor/resultset/DefaultResultSetHandler.handleResultSet <- org/apache/ibatis/executor/resultset/DefaultResultSetHandler.handleResultSets <- org/apache/ibatis/executor/statement/PreparedStatementHandler.query <- org/apache/ibatis/executor/statement/RoutingStatementHandler.query",
+        1
+      ],
+      [
+        "org/springframework/transaction/support/TransactionSynchronizationManager.setCurrentTransactionName <- org/springframework/transaction/support/AbstractPlatformTransactionManager.prepareSynchronization <- org/springframework/transaction/support/AbstractPlatformTransactionManager.startTransaction <- org/springframework/transaction/support/AbstractPlatformTransactionManager.getTransaction <- org/springframework/transaction/support/TransactionTemplate.execute",
+        1
+      ],
+      [
+        "sun/nio/ch/Util.getTemporaryDirectBuffer <- sun/nio/ch/IOUtil.read <- sun/nio/ch/IOUtil.read <- sun/nio/ch/SocketChannelImpl.read <- org/apache/tomcat/util/net/NioChannel.read",
+        1
+      ],
+      [
+        "java/math/BigInteger.implMultiplyToLen <- java/math/BigInteger.multiplyToLen <- java/math/BigInteger.implMontgomeryMultiply <- java/math/BigInteger.montgomeryMultiply <- java/math/BigInteger.oddModPow",
+        1
+      ],
+      [
+        "java/security/Provider.getService <- sun/security/jca/ProviderList$ServiceList.tryGet <- sun/security/jca/ProviderList$ServiceList$1.hasNext <- javax/crypto/Cipher.getInstance <- com/rcbill/notification/adapters/security/PayloadCipher.encrypt",
+        1
+      ]
+    ],
+    "waits": {
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkNanos <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionObject.awaitNanos <- java/util/concurrent/LinkedBlockingQueue.poll <- java/util/concurrent/ThreadPoolExecutor.getTask": {
+        "count": 4,
+        "total_ms": 5232.632,
+        "p50_ms": 42.213,
+        "p95_ms": 5000.066,
+        "p99_ms": 5000.066,
+        "max_ms": 5000.066
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkNanos <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionObject.awaitNanos <- java/util/concurrent/ScheduledThreadPoolExecutor$DelayedWorkQueue.take <- java/util/concurrent/ScheduledThreadPoolExecutor$DelayedWorkQueue.take": {
+        "count": 12,
+        "total_ms": 2023.76,
+        "p50_ms": 61.121,
+        "p95_ms": 999.729,
+        "p99_ms": 999.729,
+        "max_ms": 999.729
+      },
+      "jdk.SocketRead: java/net/Socket$SocketInputStream.read <- org/postgresql/core/VisibleBufferedInputStream.readMore <- org/postgresql/core/VisibleBufferedInputStream.ensureBytes <- org/postgresql/core/VisibleBufferedInputStream.ensureBytes <- org/postgresql/core/VisibleBufferedInputStream.read": {
+        "count": 88,
+        "total_ms": 1861.295,
+        "p50_ms": 15.773,
+        "p95_ms": 72.452,
+        "p99_ms": 74.442,
+        "max_ms": 74.442
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionNode.block <- java/util/concurrent/ForkJoinPool.unmanagedBlock <- java/util/concurrent/ForkJoinPool.managedBlock": {
+        "count": 1,
+        "total_ms": 999.753,
+        "p50_ms": 999.753,
+        "p95_ms": 999.753,
+        "p99_ms": 999.753,
+        "max_ms": 999.753
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/ForkJoinPool.awaitWork <- java/util/concurrent/ForkJoinPool.runWorker <- java/util/concurrent/ForkJoinWorkerThread.run": {
+        "count": 16,
+        "total_ms": 572.63,
+        "p50_ms": 21.111,
+        "p95_ms": 80.067,
+        "p99_ms": 80.067,
+        "max_ms": 80.067
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/LinkedTransferQueue$DualNode.await <- java/util/concurrent/LinkedTransferQueue.xfer <- java/util/concurrent/LinkedTransferQueue.take": {
+        "count": 26,
+        "total_ms": 483.654,
+        "p50_ms": 13.858,
+        "p95_ms": 43.401,
+        "p99_ms": 75.458,
+        "max_ms": 75.458
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkUntil <- java/util/concurrent/ForkJoinPool.awaitWork <- java/util/concurrent/ForkJoinPool.runWorker <- java/util/concurrent/ForkJoinWorkerThread.run": {
+        "count": 2,
+        "total_ms": 35.697,
+        "p50_ms": 15.066,
+        "p95_ms": 20.631,
+        "p99_ms": 20.631,
+        "max_ms": 20.631
+      }
+    }
+  },
+  {
+    "phase": "warmup",
+    "stages": {
+      "sql.dedup": {
+        "count": 256,
+        "total_ms": 1443.333,
+        "p50_ms": 3.683,
+        "p95_ms": 20.154,
+        "p99_ms": 26.265,
+        "max_ms": 40.73
+      },
+      "sql.boundedPending": {
+        "count": 3,
+        "total_ms": 5.084,
+        "p50_ms": 1.75,
+        "p95_ms": 2.519,
+        "p99_ms": 2.519,
+        "max_ms": 2.519
+      },
+      "sql.now": {
+        "count": 256,
+        "total_ms": 1011.754,
+        "p50_ms": 2.162,
+        "p95_ms": 13.339,
+        "p99_ms": 41.691,
+        "max_ms": 47.594
+      },
+      "sql.oldestUnpublished": {
+        "count": 256,
+        "total_ms": 1119.237,
+        "p50_ms": 2.375,
+        "p95_ms": 12.118,
+        "p99_ms": 35.793,
+        "max_ms": 56.654
+      },
+      "sql.insertTask": {
+        "count": 256,
+        "total_ms": 1136.034,
+        "p50_ms": 2.3,
+        "p95_ms": 12.582,
+        "p99_ms": 56.359,
+        "max_ms": 56.583
+      },
+      "sql.insertPayload": {
+        "count": 256,
+        "total_ms": 959.855,
+        "p50_ms": 2.12,
+        "p95_ms": 10.307,
+        "p99_ms": 43.894,
+        "max_ms": 57.259
+      },
+      "sql.insertDedup": {
+        "count": 256,
+        "total_ms": 1100.028,
+        "p50_ms": 1.851,
+        "p95_ms": 13.106,
+        "p99_ms": 55.87,
+        "max_ms": 55.987
+      },
+      "sql.insertChain": {
+        "count": 256,
+        "total_ms": 816.663,
+        "p50_ms": 1.692,
+        "p95_ms": 11.004,
+        "p99_ms": 24.271,
+        "max_ms": 57.282
+      },
+      "sql.outbox": {
+        "count": 256,
+        "total_ms": 750.836,
+        "p50_ms": 1.702,
+        "p95_ms": 10.03,
+        "p99_ms": 22.718,
+        "max_ms": 26.853
+      },
+      "sql.task": {
+        "count": 256,
+        "total_ms": 866.677,
+        "p50_ms": 1.608,
+        "p95_ms": 10.912,
+        "p99_ms": 26.164,
+        "max_ms": 46.707
+      },
+      "transaction.work": {
+        "count": 256,
+        "total_ms": 8191.854,
+        "p50_ms": 24.584,
+        "p95_ms": 85.675,
+        "p99_ms": 152.383,
+        "max_ms": 170.395
+      },
+      "transaction": {
+        "count": 256,
+        "total_ms": 9400.227,
+        "p50_ms": 28.782,
+        "p95_ms": 99.417,
+        "p99_ms": 155.668,
+        "max_ms": 178.336
+      },
+      "http.authorized": {
+        "count": 256,
+        "total_ms": 12725.801,
+        "p50_ms": 41.802,
+        "p95_ms": 145.737,
+        "p99_ms": 175.272,
+        "max_ms": 237.169
+      },
+      "http.accept": {
+        "count": 256,
+        "total_ms": 13452.689,
+        "p50_ms": 44.619,
+        "p95_ms": 146.657,
+        "p99_ms": 182.9,
+        "max_ms": 237.953
+      }
+    },
+    "cpu_samples": [
+      {
+        "jvmUser": 0.32160804,
+        "jvmSystem": 0.020100502,
+        "machineTotal": 0.98994976
+      },
+      {
+        "jvmUser": 0.19362745,
+        "jvmSystem": 0.009803922,
+        "machineTotal": 0.99509805
+      }
+    ],
+    "execution_stacks": [
+      [
+        "java/io/InputStream.read <- java/io/FilterInputStream.read <- java/io/PushbackInputStream.read <- java/io/InputStream.readNBytes <- org/springframework/http/converter/ByteArrayHttpMessageConverter.readInternal",
+        3
+      ],
+      [
+        "java/util/concurrent/locks/AbstractQueuedSynchronizer.signalNext <- java/util/concurrent/locks/AbstractQueuedSynchronizer.release <- java/util/concurrent/locks/ReentrantLock.unlock <- org/postgresql/jdbc/ResourceLock.close <- org/postgresql/jdbc/TypeInfoCache.getJavaClass",
+        2
+      ],
+      [
+        "sun/nio/ch/NioSocketImpl.beginWrite <- sun/nio/ch/NioSocketImpl.implWrite <- sun/nio/ch/NioSocketImpl.write <- sun/nio/ch/NioSocketImpl$2.write <- java/net/Socket$SocketOutputStream.write",
+        1
+      ],
+      [
+        "org/apache/tomcat/util/net/NioEndpoint$NioSocketWrapper.getPoller <- org/apache/tomcat/util/net/NioEndpoint$NioSocketWrapper.registerReadInterest <- org/apache/tomcat/util/net/NioEndpoint$NioSocketWrapper.fillReadBuffer <- org/apache/tomcat/util/net/NioEndpoint$NioSocketWrapper.read <- org/apache/coyote/http11/Http11InputBuffer.fill",
+        1
+      ],
+      [
+        "tools/jackson/core/json/DupDetector.child <- tools/jackson/core/json/JsonReadContext.createChildObjectContext <- tools/jackson/core/json/JsonParserBase.createChildObjectContext <- tools/jackson/core/json/UTF8StreamJsonParser._nextTokenNotInObject <- tools/jackson/core/json/UTF8StreamJsonParser.nextToken",
+        1
+      ],
+      [
+        "java/lang/Class.reflectionData <- java/lang/Class.privateGetDeclaredConstructors <- java/lang/Class.getConstructor0 <- java/lang/Class.getDeclaredConstructor <- org/apache/ibatis/reflection/factory/DefaultObjectFactory.instantiateClass",
+        1
+      ],
+      [
+        "java/util/regex/Pattern.lambda$CIRange$19 <- java.util.regex.Pattern$$Lambda/0x00007f95584d4540.is <- java/util/regex/Pattern.lambda$union$4 <- java.util.regex.Pattern$$Lambda/0x00007f95582cf928.is <- java/util/regex/Pattern.lambda$union$4",
+        1
+      ],
+      [
+        "org/springframework/security/web/authentication/AnonymousAuthenticationFilter.doFilter <- org/springframework/security/web/ObservationFilterChainDecorator$ObservationFilter.wrapFilter <- org/springframework/security/web/ObservationFilterChainDecorator$ObservationFilter.doFilter <- org/springframework/security/web/ObservationFilterChainDecorator$VirtualFilterChain.doFilter <- org/springframework/security/web/servletapi/SecurityContextHolderAwareRequestFilter.doFilter",
+        1
+      ],
+      [
+        "org/apache/catalina/util/TLSUtil.isTLSRequestAttribute <- org/apache/catalina/connector/Request.getAttribute <- org/apache/catalina/connector/RequestFacade.getAttribute <- org/springframework/web/filter/OncePerRequestFilter.doFilter <- org/apache/catalina/core/ApplicationFilterChain.doFilter",
+        1
+      ],
+      [
+        "java/util/concurrent/ConcurrentHashMap.get <- java/util/Calendar.setWeekCountData <- java/util/Calendar.<init> <- java/util/GregorianCalendar.<init> <- java/util/GregorianCalendar.<init>",
+        1
+      ],
+      [
+        "java/lang/invoke/VarHandleReferences$FieldInstanceReadWrite.compareAndExchange <- java/lang/invoke/VarHandleGuards.guard_LLL_L <- java/util/concurrent/LinkedTransferQueue$DualNode.cmpExItem <- java/util/concurrent/LinkedTransferQueue.xfer <- java/util/concurrent/LinkedTransferQueue.add",
+        1
+      ],
+      [
+        "java/util/regex/Pattern.<init> <- java/util/regex/Pattern.compile <- java/util/regex/Pattern.matches <- java/lang/String.matches <- com/rcbill/notification/application/SubmissionRequest.validated",
+        1
+      ],
+      [
+        "java/nio/ByteBuffer.put <- sun/nio/ch/NioSocketImpl.tryWrite <- sun/nio/ch/NioSocketImpl.implWrite <- sun/nio/ch/NioSocketImpl.write <- sun/nio/ch/NioSocketImpl$2.write",
+        1
+      ],
+      [
+        "org/springframework/core/MethodParameter.<init> <- org/springframework/core/annotation/SynthesizingMethodParameter.<init> <- org/springframework/core/annotation/AnnotatedMethod$AnnotatedMethodParameter.<init> <- org/springframework/core/annotation/AnnotatedMethod$ReturnValueMethodParameter.<init> <- org/springframework/core/annotation/AnnotatedMethod.getReturnValueType",
+        1
+      ],
+      [
+        "tools/jackson/core/util/RecyclerPool$ConcurrentDequePoolBase.acquirePooled <- tools/jackson/core/util/RecyclerPool.acquireAndLinkPooled <- tools/jackson/core/TokenStreamFactory._getBufferRecycler <- tools/jackson/databind/ObjectMapper.writeValueAsString <- com/rcbill/notification/adapters/persistence/PgNotificationStore.lambda$accept$1",
+        1
+      ]
+    ],
+    "waits": {
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/ForkJoinPool.awaitWork <- java/util/concurrent/ForkJoinPool.runWorker <- java/util/concurrent/ForkJoinWorkerThread.run": {
+        "count": 87,
+        "total_ms": 8360.515,
+        "p50_ms": 24.334,
+        "p95_ms": 118.137,
+        "p99_ms": 2498.304,
+        "max_ms": 2498.304
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkNanos <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionObject.awaitNanos <- java/util/concurrent/LinkedBlockingQueue.poll <- java/util/concurrent/ThreadPoolExecutor.getTask": {
+        "count": 6,
+        "total_ms": 5569.828,
+        "p50_ms": 249.577,
+        "p95_ms": 3564.41,
+        "p99_ms": 3564.41,
+        "max_ms": 3564.41
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkNanos <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionObject.awaitNanos <- java/util/concurrent/ScheduledThreadPoolExecutor$DelayedWorkQueue.take <- java/util/concurrent/ScheduledThreadPoolExecutor$DelayedWorkQueue.take": {
+        "count": 23,
+        "total_ms": 4061.907,
+        "p50_ms": 65.526,
+        "p95_ms": 999.678,
+        "p99_ms": 1000.128,
+        "max_ms": 1000.128
+      },
+      "jdk.SocketRead: java/net/Socket$SocketInputStream.read <- org/postgresql/core/VisibleBufferedInputStream.readMore <- org/postgresql/core/VisibleBufferedInputStream.ensureBytes <- org/postgresql/core/VisibleBufferedInputStream.ensureBytes <- org/postgresql/core/VisibleBufferedInputStream.read": {
+        "count": 153,
+        "total_ms": 3161.801,
+        "p50_ms": 15.742,
+        "p95_ms": 55.836,
+        "p99_ms": 57.178,
+        "max_ms": 57.218
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionNode.block <- java/util/concurrent/ForkJoinPool.unmanagedBlock <- java/util/concurrent/ForkJoinPool.managedBlock": {
+        "count": 3,
+        "total_ms": 2049.606,
+        "p50_ms": 999.788,
+        "p95_ms": 1000.143,
+        "p99_ms": 1000.143,
+        "max_ms": 1000.143
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/LinkedTransferQueue$DualNode.await <- java/util/concurrent/LinkedTransferQueue.xfer <- java/util/concurrent/LinkedTransferQueue.take": {
+        "count": 30,
+        "total_ms": 567.009,
+        "p50_ms": 13.413,
+        "p95_ms": 51.318,
+        "p99_ms": 51.361,
+        "max_ms": 51.361
+      },
+      "jdk.JavaMonitorEnter: sun/nio/ch/EPollSelectorImpl.clearInterrupt <- sun/nio/ch/EPollSelectorImpl.processEvents <- sun/nio/ch/EPollSelectorImpl.doSelect <- sun/nio/ch/SelectorImpl.lockAndDoSelect <- sun/nio/ch/SelectorImpl.select": {
+        "count": 1,
+        "total_ms": 24.99,
+        "p50_ms": 24.99,
+        "p95_ms": 24.99,
+        "p99_ms": 24.99,
+        "max_ms": 24.99
+      },
+      "jdk.GarbageCollection: ": {
+        "count": 1,
+        "total_ms": 6.951,
+        "p50_ms": 6.951,
+        "p95_ms": 6.951,
+        "p99_ms": 6.951,
+        "max_ms": 6.951
+      }
+    }
+  },
+  {
+    "phase": "steady-1",
+    "stages": {
+      "sql.dedup": {
+        "count": 512,
+        "total_ms": 2437.235,
+        "p50_ms": 3.025,
+        "p95_ms": 15.162,
+        "p99_ms": 28.715,
+        "max_ms": 47.649
+      },
+      "sql.boundedPending": {
+        "count": 4,
+        "total_ms": 16.41,
+        "p50_ms": 1.306,
+        "p95_ms": 10.11,
+        "p99_ms": 10.11,
+        "max_ms": 10.11
+      },
+      "sql.now": {
+        "count": 512,
+        "total_ms": 1907.252,
+        "p50_ms": 2.109,
+        "p95_ms": 13.975,
+        "p99_ms": 26.426,
+        "max_ms": 71.054
+      },
+      "sql.oldestUnpublished": {
+        "count": 512,
+        "total_ms": 1831.153,
+        "p50_ms": 1.998,
+        "p95_ms": 11.514,
+        "p99_ms": 25.455,
+        "max_ms": 74.529
+      },
+      "sql.insertTask": {
+        "count": 512,
+        "total_ms": 1555.797,
+        "p50_ms": 1.881,
+        "p95_ms": 8.895,
+        "p99_ms": 19.768,
+        "max_ms": 32.169
+      },
+      "sql.insertPayload": {
+        "count": 512,
+        "total_ms": 1444.663,
+        "p50_ms": 1.739,
+        "p95_ms": 8.144,
+        "p99_ms": 19.052,
+        "max_ms": 30.34
+      },
+      "sql.insertDedup": {
+        "count": 512,
+        "total_ms": 1397.044,
+        "p50_ms": 1.535,
+        "p95_ms": 8.634,
+        "p99_ms": 20.865,
+        "max_ms": 55.049
+      },
+      "sql.insertChain": {
+        "count": 512,
+        "total_ms": 1202.539,
+        "p50_ms": 1.427,
+        "p95_ms": 6.949,
+        "p99_ms": 18.971,
+        "max_ms": 28.961
+      },
+      "sql.outbox": {
+        "count": 512,
+        "total_ms": 1444.155,
+        "p50_ms": 1.796,
+        "p95_ms": 8.713,
+        "p99_ms": 21.788,
+        "max_ms": 37.057
+      },
+      "sql.task": {
+        "count": 512,
+        "total_ms": 1604.696,
+        "p50_ms": 1.823,
+        "p95_ms": 8.207,
+        "p99_ms": 21.763,
+        "max_ms": 129.692
+      },
+      "transaction.work": {
+        "count": 512,
+        "total_ms": 13148.72,
+        "p50_ms": 21.04,
+        "p95_ms": 67.548,
+        "p99_ms": 107.566,
+        "max_ms": 172.943
+      },
+      "transaction": {
+        "count": 512,
+        "total_ms": 15657.492,
+        "p50_ms": 24.965,
+        "p95_ms": 78.794,
+        "p99_ms": 111.12,
+        "max_ms": 177.578
+      },
+      "http.authorized": {
+        "count": 512,
+        "total_ms": 21771.797,
+        "p50_ms": 33.803,
+        "p95_ms": 102.25,
+        "p99_ms": 152.281,
+        "max_ms": 268.188
+      },
+      "http.accept": {
+        "count": 512,
+        "total_ms": 23094.229,
+        "p50_ms": 35.719,
+        "p95_ms": 106.08,
+        "p99_ms": 152.666,
+        "max_ms": 268.668
+      }
+    },
+    "cpu_samples": [
+      {
+        "jvmUser": 0.1575,
+        "jvmSystem": 0.01,
+        "machineTotal": 0.975
+      },
+      {
+        "jvmUser": 0.19711539,
+        "jvmSystem": 0.014423077,
+        "machineTotal": 1.0
+      },
+      {
+        "jvmUser": 0.2617587,
+        "jvmSystem": 0.016359918,
+        "machineTotal": 0.9693251
+      }
+    ],
+    "execution_stacks": [
+      [
+        "java/io/InputStream.read <- java/io/FilterInputStream.read <- java/io/PushbackInputStream.read <- java/io/InputStream.readNBytes <- org/springframework/http/converter/ByteArrayHttpMessageConverter.readInternal",
+        6
+      ],
+      [
+        "com/sun/crypto/provider/GHASH.processBlocks <- com/sun/crypto/provider/GHASH.update <- com/sun/crypto/provider/GHASH.doFinal <- com/sun/crypto/provider/GaloisCounterMode$EncryptOp.doFinal <- com/sun/crypto/provider/GaloisCounterMode$GCMEncrypt.doFinal",
+        2
+      ],
+      [
+        "sun/nio/cs/UTF_8$Encoder.encodeBufferLoop <- sun/nio/cs/UTF_8$Encoder.encodeLoop <- java/nio/charset/CharsetEncoder.encode <- java/nio/charset/CharsetEncoder.encode <- java/nio/charset/CharsetEncoder.canEncode",
+        2
+      ],
+      [
+        "org/springframework/web/servlet/mvc/method/annotation/RequestMappingHandlerAdapter.getDataBinderFactory <- org/springframework/web/servlet/mvc/method/annotation/RequestMappingHandlerAdapter.invokeHandlerMethod <- org/springframework/web/servlet/mvc/method/annotation/RequestMappingHandlerAdapter.handleInternal <- org/springframework/web/servlet/mvc/method/AbstractHandlerMethodAdapter.handle <- org/springframework/web/servlet/DispatcherServlet.doDispatch",
+        2
+      ],
+      [
+        "io/micrometer/core/instrument/observation/DefaultMeterObservationHandler.createTags <- io/micrometer/core/instrument/observation/DefaultMeterObservationHandler.onEvent <- io/micrometer/observation/ObservationHandler$FirstMatchingCompositeObservationHandler.onEvent <- io/micrometer/observation/SimpleObservation.notifyOnEvent <- io/micrometer/observation/SimpleObservation.event",
+        1
+      ],
+      [
+        "sun/util/calendar/Gregorian$Date.<init> <- sun/util/calendar/Gregorian.newCalendarDate <- java/util/GregorianCalendar.<init> <- java/util/GregorianCalendar.<init> <- org/postgresql/jdbc/TimestampUtils.<init>",
+        1
+      ],
+      [
+        "java/util/concurrent/ConcurrentLinkedQueue.iterator <- org/apache/ibatis/executor/BaseExecutor.query <- org/apache/ibatis/executor/BaseExecutor.query <- java.lang.invoke.LambdaForm$DMH/0x00007f955853c000.invokeInterface <- java.lang.invoke.LambdaForm$MH/0x00007f9558755000.invoke",
+        1
+      ],
+      [
+        "java/lang/StringBuilder.<init> <- java/util/Collections$SingletonList.get <- java/util/AbstractList$Itr.next <- com/nimbusds/jwt/proc/DefaultJWTProcessor.process <- com/nimbusds/jwt/proc/DefaultJWTProcessor.process",
+        1
+      ],
+      [
+        "java/util/concurrent/ConcurrentHashMap.get <- jdk/jfr/internal/StringPool.addString <- jdk/jfr/internal/event/EventWriter.putString <- com/rcbill/notification/adapters/observability/StageTiming.commit <- com/rcbill/notification/adapters/observability/StageTiming.close",
+        1
+      ],
+      [
+        "java/lang/Integer.equals <- java/util/HashMap.getNode <- java/util/HashMap.get <- org/apache/ibatis/type/JdbcType.forCode <- org/apache/ibatis/executor/resultset/ResultSetWrapper.<init>",
+        1
+      ],
+      [
+        "org/apache/catalina/connector/Request$2.get <- org/apache/catalina/connector/Request.getAttribute <- org/apache/catalina/connector/RequestFacade.getAttribute <- org/springframework/security/web/FilterChainProxy.doFilter <- org/springframework/web/filter/CompositeFilter$VirtualFilterChain.doFilter",
+        1
+      ],
+      [
+        "java/util/HashMap.resize <- java/util/HashMap.putVal <- java/util/HashMap.put <- java/util/HashSet.add <- java/util/AbstractCollection.addAll",
+        1
+      ],
+      [
+        "org/springframework/security/oauth2/jwt/NimbusJwtDecoder.createJwt <- org/springframework/security/oauth2/jwt/NimbusJwtDecoder.decode <- org/springframework/security/oauth2/server/resource/authentication/JwtAuthenticationProvider.getJwt <- org/springframework/security/oauth2/server/resource/authentication/JwtAuthenticationProvider.authenticate <- org/springframework/security/authentication/ProviderManager.authenticate",
+        1
+      ],
+      [
+        "tools/jackson/core/json/JsonFactory._createParser <- tools/jackson/core/base/TextualTSFactory.createParser <- tools/jackson/core/TokenStreamFactory.createParser <- tools/jackson/databind/ObjectMapper.readTree <- com/rcbill/notification/api/ApiJson.parse",
+        1
+      ],
+      [
+        "jakarta/servlet/http/HttpServletResponseWrapper.<init> <- org/springframework/web/context/request/async/StandardServletAsyncWebRequest$LifecycleHttpServletResponse.<init> <- org/springframework/web/context/request/async/StandardServletAsyncWebRequest.<init> <- org/springframework/web/context/request/async/StandardServletAsyncWebRequest.<init> <- org/springframework/web/context/request/async/WebAsyncUtils.createAsyncWebRequest",
+        1
+      ]
+    ],
+    "waits": {
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/ForkJoinPool.awaitWork <- java/util/concurrent/ForkJoinPool.runWorker <- java/util/concurrent/ForkJoinWorkerThread.run": {
+        "count": 121,
+        "total_ms": 11134.112,
+        "p50_ms": 25.338,
+        "p95_ms": 93.105,
+        "p99_ms": 2750.233,
+        "max_ms": 2790.146
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkNanos <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionObject.awaitNanos <- java/util/concurrent/ScheduledThreadPoolExecutor$DelayedWorkQueue.take <- java/util/concurrent/ScheduledThreadPoolExecutor$DelayedWorkQueue.take": {
+        "count": 51,
+        "total_ms": 7373.593,
+        "p50_ms": 63.241,
+        "p95_ms": 997.328,
+        "p99_ms": 999.871,
+        "max_ms": 999.871
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkNanos <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionObject.awaitNanos <- java/util/concurrent/LinkedBlockingQueue.poll <- java/util/concurrent/ThreadPoolExecutor.getTask": {
+        "count": 7,
+        "total_ms": 5241.575,
+        "p50_ms": 264.55,
+        "p95_ms": 3026.968,
+        "p99_ms": 3026.968,
+        "max_ms": 3026.968
+      },
+      "jdk.SocketRead: java/net/Socket$SocketInputStream.read <- org/postgresql/core/VisibleBufferedInputStream.readMore <- org/postgresql/core/VisibleBufferedInputStream.ensureBytes <- org/postgresql/core/VisibleBufferedInputStream.ensureBytes <- org/postgresql/core/VisibleBufferedInputStream.read": {
+        "count": 207,
+        "total_ms": 4188.514,
+        "p50_ms": 15.886,
+        "p95_ms": 52.661,
+        "p99_ms": 74.29,
+        "max_ms": 88.442
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionNode.block <- java/util/concurrent/ForkJoinPool.unmanagedBlock <- java/util/concurrent/ForkJoinPool.managedBlock": {
+        "count": 6,
+        "total_ms": 4010.444,
+        "p50_ms": 882.407,
+        "p95_ms": 999.884,
+        "p99_ms": 999.884,
+        "max_ms": 999.884
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/LinkedTransferQueue$DualNode.await <- java/util/concurrent/LinkedTransferQueue.xfer <- java/util/concurrent/LinkedTransferQueue.take": {
+        "count": 41,
+        "total_ms": 725.746,
+        "p50_ms": 14.045,
+        "p95_ms": 38.529,
+        "p99_ms": 55.498,
+        "max_ms": 55.498
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkUntil <- java/util/concurrent/ForkJoinPool.awaitWork <- java/util/concurrent/ForkJoinPool.runWorker <- java/util/concurrent/ForkJoinWorkerThread.run": {
+        "count": 2,
+        "total_ms": 66.297,
+        "p50_ms": 18.676,
+        "p95_ms": 47.621,
+        "p99_ms": 47.621,
+        "max_ms": 47.621
+      },
+      "jdk.GarbageCollection: ": {
+        "count": 3,
+        "total_ms": 53.759,
+        "p50_ms": 11.853,
+        "p95_ms": 31.608,
+        "p99_ms": 31.608,
+        "max_ms": 31.608
+      },
+      "jdk.SocketRead: sun/nio/ch/SocketChannelImpl.read <- org/apache/tomcat/util/net/NioChannel.read <- org/apache/tomcat/util/net/NioEndpoint$NioSocketWrapper.fillReadBuffer <- org/apache/tomcat/util/net/NioEndpoint$NioSocketWrapper.read <- org/apache/coyote/http11/Http11InputBuffer.fill": {
+        "count": 1,
+        "total_ms": 53.691,
+        "p50_ms": 53.691,
+        "p95_ms": 53.691,
+        "p99_ms": 53.691,
+        "max_ms": 53.691
+      },
+      "jdk.JavaMonitorEnter: sun/security/provider/SecureRandom.engineNextBytes <- sun/security/provider/NativePRNG$RandomIO.implNextBytes <- sun/security/provider/NativePRNG.engineNextBytes <- java/security/SecureRandom.nextBytes <- java/util/UUID.randomUUID": {
+        "count": 2,
+        "total_ms": 37.175,
+        "p50_ms": 18.254,
+        "p95_ms": 18.921,
+        "p99_ms": 18.921,
+        "max_ms": 18.921
+      },
+      "jdk.JavaMonitorEnter: sun/security/provider/SecureRandom.engineNextBytes <- sun/security/provider/NativePRNG$RandomIO.implNextBytes <- sun/security/provider/NativePRNG.engineNextBytes <- java/security/SecureRandom.nextBytes <- com/rcbill/notification/adapters/security/PayloadCipher.encrypt": {
+        "count": 1,
+        "total_ms": 12.337,
+        "p50_ms": 12.337,
+        "p95_ms": 12.337,
+        "p99_ms": 12.337,
+        "max_ms": 12.337
+      },
+      "jdk.JavaMonitorEnter: sun/security/provider/NativePRNG$RandomIO.implNextBytes <- sun/security/provider/NativePRNG.engineNextBytes <- java/security/SecureRandom.nextBytes <- java/util/UUID.randomUUID <- com/rcbill/notification/domain/Routing.newId": {
+        "count": 1,
+        "total_ms": 10.322,
+        "p50_ms": 10.322,
+        "p95_ms": 10.322,
+        "p99_ms": 10.322,
+        "max_ms": 10.322
+      }
+    }
+  },
+  {
+    "phase": "steady-2",
+    "stages": {
+      "sql.dedup": {
+        "count": 512,
+        "total_ms": 2339.092,
+        "p50_ms": 2.355,
+        "p95_ms": 17.193,
+        "p99_ms": 34.16,
+        "max_ms": 76.615
+      },
+      "sql.boundedPending": {
+        "count": 3,
+        "total_ms": 3.954,
+        "p50_ms": 0.813,
+        "p95_ms": 2.371,
+        "p99_ms": 2.371,
+        "max_ms": 2.371
+      },
+      "sql.now": {
+        "count": 512,
+        "total_ms": 1428.316,
+        "p50_ms": 1.512,
+        "p95_ms": 9.424,
+        "p99_ms": 33.001,
+        "max_ms": 39.389
+      },
+      "sql.oldestUnpublished": {
+        "count": 512,
+        "total_ms": 1352.468,
+        "p50_ms": 1.389,
+        "p95_ms": 9.541,
+        "p99_ms": 15.671,
+        "max_ms": 73.399
+      },
+      "sql.insertTask": {
+        "count": 512,
+        "total_ms": 1335.904,
+        "p50_ms": 1.529,
+        "p95_ms": 7.848,
+        "p99_ms": 18.189,
+        "max_ms": 59.381
+      },
+      "sql.insertPayload": {
+        "count": 512,
+        "total_ms": 1244.975,
+        "p50_ms": 1.55,
+        "p95_ms": 7.515,
+        "p99_ms": 16.816,
+        "max_ms": 22.913
+      },
+      "sql.insertDedup": {
+        "count": 512,
+        "total_ms": 1121.859,
+        "p50_ms": 1.136,
+        "p95_ms": 7.066,
+        "p99_ms": 19.343,
+        "max_ms": 46.77
+      },
+      "sql.insertChain": {
+        "count": 512,
+        "total_ms": 828.671,
+        "p50_ms": 0.839,
+        "p95_ms": 5.255,
+        "p99_ms": 12.377,
+        "max_ms": 18.122
+      },
+      "sql.outbox": {
+        "count": 512,
+        "total_ms": 1002.46,
+        "p50_ms": 1.101,
+        "p95_ms": 6.667,
+        "p99_ms": 12.466,
+        "max_ms": 21.969
+      },
+      "sql.task": {
+        "count": 512,
+        "total_ms": 1155.975,
+        "p50_ms": 1.171,
+        "p95_ms": 7.589,
+        "p99_ms": 18.142,
+        "max_ms": 28.299
+      },
+      "transaction.work": {
+        "count": 512,
+        "total_ms": 9839.893,
+        "p50_ms": 14.954,
+        "p95_ms": 46.675,
+        "p99_ms": 76.315,
+        "max_ms": 118.259
+      },
+      "transaction": {
+        "count": 512,
+        "total_ms": 12060.423,
+        "p50_ms": 19.082,
+        "p95_ms": 54.173,
+        "p99_ms": 81.187,
+        "max_ms": 132.862
+      },
+      "http.authorized": {
+        "count": 512,
+        "total_ms": 16228.379,
+        "p50_ms": 25.67,
+        "p95_ms": 71.444,
+        "p99_ms": 118.158,
+        "max_ms": 172.077
+      },
+      "http.accept": {
+        "count": 512,
+        "total_ms": 16998.23,
+        "p50_ms": 28.285,
+        "p95_ms": 72.227,
+        "p99_ms": 132.647,
+        "max_ms": 172.473
+      }
+    },
+    "cpu_samples": [
+      {
+        "jvmUser": 0.3181818,
+        "jvmSystem": 0.02020202,
+        "machineTotal": 0.7323232
+      },
+      {
+        "jvmUser": 0.2835821,
+        "jvmSystem": 0.017412934,
+        "machineTotal": 0.99502486
+      },
+      {
+        "jvmUser": 0.14925373,
+        "jvmSystem": 0.0099502485,
+        "machineTotal": 0.99751246
+      }
+    ],
+    "execution_stacks": [
+      [
+        "com/sun/crypto/provider/GHASH.processBlocks <- com/sun/crypto/provider/GHASH.update <- com/sun/crypto/provider/GHASH.doFinal <- com/sun/crypto/provider/GaloisCounterMode$EncryptOp.doFinal <- com/sun/crypto/provider/GaloisCounterMode$GCMEncrypt.doFinal",
+        2
+      ],
+      [
+        "java/io/InputStream.read <- java/io/FilterInputStream.read <- java/io/PushbackInputStream.read <- java/io/InputStream.readNBytes <- org/springframework/http/converter/ByteArrayHttpMessageConverter.readInternal",
+        2
+      ],
+      [
+        "java/util/ComparableTimSort.sort <- java/util/Arrays.sort <- io/micrometer/common/KeyValues.toKeyValues <- io/micrometer/common/KeyValues.of <- io/micrometer/observation/Observation$Context.getLowCardinalityKeyValues",
+        2
+      ],
+      [
+        "tools/jackson/databind/ser/jdk/StringCollectionSerializer.serializeContentsImpl <- tools/jackson/databind/ser/jdk/StringCollectionSerializer.serializeContents <- tools/jackson/databind/ser/jdk/StringCollectionSerializer.serialize <- tools/jackson/databind/ser/jdk/StringCollectionSerializer.serialize <- tools/jackson/databind/ser/BeanPropertyWriter.serializeAsProperty",
+        1
+      ],
+      [
+        "org/apache/ibatis/executor/resultset/DefaultResultSetHandler.handleResultSet <- org/apache/ibatis/executor/resultset/DefaultResultSetHandler.handleResultSets <- org/apache/ibatis/executor/statement/PreparedStatementHandler.query <- org/apache/ibatis/executor/statement/RoutingStatementHandler.query <- org/apache/ibatis/executor/SimpleExecutor.doQuery",
+        1
+      ],
+      [
+        "java/security/Provider$ServiceKey.equals <- java/util/concurrent/ConcurrentHashMap.get <- java/security/Provider.getService <- sun/security/jca/ProviderList$ServiceList.tryGet <- sun/security/jca/ProviderList$ServiceList$1.hasNext",
+        1
+      ],
+      [
+        "java/util/concurrent/ConcurrentHashMap.get <- org/apache/ibatis/type/TypeHandlerRegistry.getJdbcHandlerMap <- org/apache/ibatis/type/TypeHandlerRegistry.getTypeHandler <- org/apache/ibatis/type/TypeHandlerRegistry.hasTypeHandler <- org/apache/ibatis/type/TypeHandlerRegistry.hasTypeHandler",
+        1
+      ],
+      [
+        "javax/crypto/Cipher.chooseProvider <- javax/crypto/Cipher.init <- javax/crypto/Cipher.init <- com/rcbill/notification/adapters/security/PayloadCipher.encrypt <- com/rcbill/notification/adapters/persistence/PgNotificationStore.lambda$accept$1",
+        1
+      ],
+      [
+        "java/util/ImmutableCollections$Set12.contains <- java/lang/Module.allows <- java/lang/Module.isStaticallyExportedOrOpen <- java/lang/Module.implIsExportedOrOpen <- java/lang/Module.isExported",
+        1
+      ],
+      [
+        "tools/jackson/core/sym/ByteQuadsCanonicalizer.makeChild <- tools/jackson/core/json/ByteSourceJsonBootstrapper.constructParser <- tools/jackson/core/json/JsonFactory._createParser <- tools/jackson/core/base/TextualTSFactory.createParser <- tools/jackson/core/TokenStreamFactory.createParser",
+        1
+      ],
+      [
+        "java/util/HashMap.resize <- java/util/HashMap.putVal <- java/util/HashMap.put <- org/springframework/transaction/support/TransactionSynchronizationManager.doBindResource <- org/springframework/transaction/support/TransactionSynchronizationManager.bindResource",
+        1
+      ],
+      [
+        "java.lang.invoke.LambdaForm$MH/0x00007f9558002800.invoke <- java.lang.invoke.LambdaForm$MH/0x00007f955875b000.invoke <- java/lang/invoke/Invokers$Holder.invokeExact_MT <- tools/jackson/databind/ser/BeanPropertyWriter.get <- tools/jackson/databind/ser/BeanPropertyWriter.serializeAsProperty",
+        1
+      ],
+      [
+        "java/lang/String.encodeUTF8 <- java/lang/String.encode <- java/lang/String.getBytes <- com/nimbusds/jose/util/Base64Codec.decode <- com/nimbusds/jose/util/Base64.decode",
+        1
+      ],
+      [
+        "java/util/List.of <- java/util/ImmutableCollections.listCopy <- java/util/List.copyOf <- com/rcbill/notification/adapters/persistence/Shards.all <- com/rcbill/notification/adapters/persistence/PgNotificationStore.accept",
+        1
+      ],
+      [
+        "org/postgresql/jdbc/PgPreparedStatement.bindBytes <- org/postgresql/jdbc/PgPreparedStatement.setUuid <- org/postgresql/jdbc/PgPreparedStatement.setObject <- com/zaxxer/hikari/pool/HikariProxyPreparedStatement.setObject <- org/apache/ibatis/type/ObjectTypeHandler.setNonNullParameter",
+        1
+      ]
+    ],
+    "waits": {
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/ForkJoinPool.awaitWork <- java/util/concurrent/ForkJoinPool.runWorker <- java/util/concurrent/ForkJoinWorkerThread.run": {
+        "count": 138,
+        "total_ms": 11150.044,
+        "p50_ms": 18.012,
+        "p95_ms": 80.664,
+        "p99_ms": 2564.024,
+        "max_ms": 2590.193
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkNanos <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionObject.awaitNanos <- java/util/concurrent/LinkedBlockingQueue.poll <- java/util/concurrent/ThreadPoolExecutor.getTask": {
+        "count": 4,
+        "total_ms": 5522.25,
+        "p50_ms": 173.539,
+        "p95_ms": 4140.156,
+        "p99_ms": 4140.156,
+        "max_ms": 4140.156
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkNanos <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionObject.awaitNanos <- java/util/concurrent/ScheduledThreadPoolExecutor$DelayedWorkQueue.take <- java/util/concurrent/ScheduledThreadPoolExecutor$DelayedWorkQueue.take": {
+        "count": 41,
+        "total_ms": 4670.605,
+        "p50_ms": 41.486,
+        "p95_ms": 478.119,
+        "p99_ms": 1006.681,
+        "max_ms": 1006.681
+      },
+      "jdk.SocketRead: java/net/Socket$SocketInputStream.read <- org/postgresql/core/VisibleBufferedInputStream.readMore <- org/postgresql/core/VisibleBufferedInputStream.ensureBytes <- org/postgresql/core/VisibleBufferedInputStream.ensureBytes <- org/postgresql/core/VisibleBufferedInputStream.read": {
+        "count": 181,
+        "total_ms": 3450.3,
+        "p50_ms": 15.553,
+        "p95_ms": 39.281,
+        "p99_ms": 70.036,
+        "max_ms": 73.318
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionNode.block <- java/util/concurrent/ForkJoinPool.unmanagedBlock <- java/util/concurrent/ForkJoinPool.managedBlock": {
+        "count": 2,
+        "total_ms": 2007.637,
+        "p50_ms": 995.828,
+        "p95_ms": 1011.809,
+        "p99_ms": 1011.809,
+        "max_ms": 1011.809
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/LinkedTransferQueue$DualNode.await <- java/util/concurrent/LinkedTransferQueue.xfer <- java/util/concurrent/LinkedTransferQueue.take": {
+        "count": 40,
+        "total_ms": 864.198,
+        "p50_ms": 16.44,
+        "p95_ms": 47.885,
+        "p99_ms": 61.252,
+        "max_ms": 61.252
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkUntil <- java/util/concurrent/ForkJoinPool.awaitWork <- java/util/concurrent/ForkJoinPool.runWorker <- java/util/concurrent/ForkJoinWorkerThread.run": {
+        "count": 2,
+        "total_ms": 27.157,
+        "p50_ms": 11.967,
+        "p95_ms": 15.19,
+        "p99_ms": 15.19,
+        "max_ms": 15.19
+      },
+      "jdk.GarbageCollection: ": {
+        "count": 3,
+        "total_ms": 24.991,
+        "p50_ms": 6.648,
+        "p95_ms": 12.143,
+        "p99_ms": 12.143,
+        "max_ms": 12.143
+      },
+      "jdk.SocketRead: sun/nio/ch/SocketChannelImpl.read <- org/apache/tomcat/util/net/NioChannel.read <- org/apache/tomcat/util/net/NioEndpoint$NioSocketWrapper.fillReadBuffer <- org/apache/tomcat/util/net/NioEndpoint$NioSocketWrapper.read <- org/apache/coyote/http11/Http11InputBuffer.fill": {
+        "count": 1,
+        "total_ms": 10.151,
+        "p50_ms": 10.151,
+        "p95_ms": 10.151,
+        "p99_ms": 10.151,
+        "max_ms": 10.151
+      }
+    }
+  },
+  {
+    "phase": "steady-3",
+    "stages": {
+      "sql.dedup": {
+        "count": 512,
+        "total_ms": 1834.771,
+        "p50_ms": 2.324,
+        "p95_ms": 9.813,
+        "p99_ms": 18.638,
+        "max_ms": 32.367
+      },
+      "sql.boundedPending": {
+        "count": 3,
+        "total_ms": 8.264,
+        "p50_ms": 2.865,
+        "p95_ms": 3.856,
+        "p99_ms": 3.856,
+        "max_ms": 3.856
+      },
+      "sql.now": {
+        "count": 512,
+        "total_ms": 1104.072,
+        "p50_ms": 1.519,
+        "p95_ms": 5.539,
+        "p99_ms": 16.137,
+        "max_ms": 36.631
+      },
+      "sql.oldestUnpublished": {
+        "count": 512,
+        "total_ms": 1104.136,
+        "p50_ms": 1.454,
+        "p95_ms": 5.01,
+        "p99_ms": 14.703,
+        "max_ms": 68.38
+      },
+      "sql.insertTask": {
+        "count": 512,
+        "total_ms": 1025.686,
+        "p50_ms": 1.474,
+        "p95_ms": 5.002,
+        "p99_ms": 14.191,
+        "max_ms": 30.757
+      },
+      "sql.insertPayload": {
+        "count": 512,
+        "total_ms": 1014.455,
+        "p50_ms": 1.391,
+        "p95_ms": 5.876,
+        "p99_ms": 12.231,
+        "max_ms": 21.552
+      },
+      "sql.insertDedup": {
+        "count": 512,
+        "total_ms": 924.483,
+        "p50_ms": 1.227,
+        "p95_ms": 5.448,
+        "p99_ms": 12.996,
+        "max_ms": 19.981
+      },
+      "sql.insertChain": {
+        "count": 512,
+        "total_ms": 902.703,
+        "p50_ms": 1.115,
+        "p95_ms": 5.463,
+        "p99_ms": 15.594,
+        "max_ms": 21.677
+      },
+      "sql.outbox": {
+        "count": 512,
+        "total_ms": 1038.585,
+        "p50_ms": 1.381,
+        "p95_ms": 5.83,
+        "p99_ms": 16.208,
+        "max_ms": 25.536
+      },
+      "sql.task": {
+        "count": 512,
+        "total_ms": 1096.724,
+        "p50_ms": 1.389,
+        "p95_ms": 5.248,
+        "p99_ms": 20.337,
+        "max_ms": 61.33
+      },
+      "transaction.work": {
+        "count": 512,
+        "total_ms": 8434.086,
+        "p50_ms": 13.268,
+        "p95_ms": 37.943,
+        "p99_ms": 56.024,
+        "max_ms": 105.777
+      },
+      "transaction": {
+        "count": 512,
+        "total_ms": 9743.704,
+        "p50_ms": 15.47,
+        "p95_ms": 43.111,
+        "p99_ms": 60.424,
+        "max_ms": 107.825
+      },
+      "http.authorized": {
+        "count": 512,
+        "total_ms": 13033.381,
+        "p50_ms": 21.978,
+        "p95_ms": 54.335,
+        "p99_ms": 73.054,
+        "max_ms": 115.029
+      },
+      "http.accept": {
+        "count": 512,
+        "total_ms": 13586.942,
+        "p50_ms": 23.34,
+        "p95_ms": 56.782,
+        "p99_ms": 73.538,
+        "max_ms": 115.444
+      }
+    },
+    "cpu_samples": [
+      {
+        "jvmUser": 0.23690774,
+        "jvmSystem": 0.017456358,
+        "machineTotal": 0.82793015
+      },
+      {
+        "jvmUser": 0.2857143,
+        "jvmSystem": 0.01754386,
+        "machineTotal": 0.99248123
+      }
+    ],
+    "execution_stacks": [
+      [
+        "org/springframework/transaction/support/TransactionTemplate.execute <- com/rcbill/notification/adapters/persistence/Shards$Shard.transaction <- com/rcbill/notification/adapters/persistence/PgNotificationStore.accept <- com/rcbill/notification/application/NotificationService.submit <- com/rcbill/notification/api/RuntimeNotificationController.submit",
+        1
+      ],
+      [
+        "org/apache/tomcat/util/http/MimeHeaders.getName <- org/apache/tomcat/util/http/ValuesEnumerator.findNext <- org/apache/tomcat/util/http/ValuesEnumerator.<init> <- org/apache/tomcat/util/http/MimeHeaders.values <- org/apache/catalina/connector/Request.getHeaders",
+        1
+      ],
+      [
+        "java/lang/StringConcatHelper.simpleConcat <- java/lang/invoke/DirectMethodHandle$Holder.invokeStatic <- java.lang.invoke.LambdaForm$MH/0x00007f9558002800.invoke <- java/lang/invoke/Invokers$Holder.linkToTargetMethod <- org/springframework/security/authorization/AuthorizationObservationConvention.getContextualName",
+        1
+      ],
+      [
+        "java/util/Set.of <- com/rcbill/notification/api/ApiJson.submission <- com/rcbill/notification/api/RuntimeNotificationController.submit <- java.lang.invoke.LambdaForm$DMH/0x00007f9558404000.invokeVirtual <- java.lang.invoke.LambdaForm$MH/0x00007f955875ac00.invoke",
+        1
+      ],
+      [
+        "sun/nio/ch/SelectionKeyImpl.translateInterestOps <- sun/nio/ch/EPollSelectorImpl.processUpdateQueue <- sun/nio/ch/EPollSelectorImpl.doSelect <- sun/nio/ch/SelectorImpl.lockAndDoSelect <- sun/nio/ch/SelectorImpl.select",
+        1
+      ],
+      [
+        "org/apache/catalina/connector/Request.parseLocales <- java/util/concurrent/ConcurrentHashMap.putVal <- org/apache/catalina/connector/Request.setAttribute",
+        1
+      ],
+      [
+        "java/lang/String.split <- java/lang/String.split <- java/lang/String.split <- org/springframework/security/oauth2/server/resource/authentication/JwtGrantedAuthoritiesConverter.getAuthorities <- org/springframework/security/oauth2/server/resource/authentication/JwtGrantedAuthoritiesConverter.convert",
+        1
+      ],
+      [
+        "org/apache/tomcat/util/buf/CharsetHolder.validate <- org/apache/catalina/connector/Request.setCharacterEncoding <- org/apache/catalina/connector/RequestFacade.setCharacterEncoding <- org/springframework/web/filter/CharacterEncodingFilter.doFilterInternal <- org/springframework/web/filter/OncePerRequestFilter.doFilter",
+        1
+      ],
+      [
+        "java/util/HashMap.putVal <- java/util/HashMap.put <- com/rcbill/notification/adapters/persistence/Db.map <- com/rcbill/notification/adapters/persistence/PgNotificationStore.findIdempotency <- com/rcbill/notification/application/NotificationService.submit",
+        1
+      ],
+      [
+        "java/net/URL.of <- java/net/URI.toURL <- org/springframework/security/oauth2/core/converter/ObjectToURLConverter.convert <- org/springframework/core/convert/support/ConversionUtils.invokeConverter <- org/springframework/core/convert/support/GenericConversionService.convert",
+        1
+      ],
+      [
+        "com/zaxxer/hikari/pool/ProxyStatement.close <- org/apache/ibatis/executor/BaseExecutor.closeStatement <- org/apache/ibatis/executor/SimpleExecutor.doUpdate <- org/apache/ibatis/executor/BaseExecutor.update <- java.lang.invoke.LambdaForm$DMH/0x00007f9558430c00.invokeInterface",
+        1
+      ],
+      [
+        "java/util/HashMap$HashIterator.nextNode <- java/util/HashMap$EntryIterator.next <- java/util/HashMap$EntryIterator.next <- java/util/HashMap.putMapEntries <- java/util/HashMap.putAll",
+        1
+      ],
+      [
+        "java/lang/StringLatin1.regionMatchesCI <- java/lang/String.regionMatches <- java/lang/String.equalsIgnoreCase <- org/apache/tomcat/util/buf/MessageBytes.equalsIgnoreCase <- org/apache/tomcat/util/http/MimeHeaders.getValue",
+        1
+      ],
+      [
+        "java/lang/String.startsWith <- org/springframework/validation/support/BindingAwareModelMap.removeBindingResultIfNecessary <- org/springframework/validation/support/BindingAwareModelMap.put <- org/springframework/validation/support/BindingAwareModelMap.put <- org/springframework/ui/ModelMap.addAttribute",
+        1
+      ],
+      [
+        "java/util/HashMap.getNode <- java/util/HashMap.get <- org/springframework/security/web/ObservationFilterChainDecorator$ObservationFilter.eventName <- org/springframework/security/web/ObservationFilterChainDecorator$ObservationFilter.<init> <- org/springframework/security/web/ObservationFilterChainDecorator.wrap",
+        1
+      ]
+    ],
+    "waits": {
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkNanos <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionObject.awaitNanos <- java/util/concurrent/ScheduledThreadPoolExecutor$DelayedWorkQueue.take <- java/util/concurrent/ScheduledThreadPoolExecutor$DelayedWorkQueue.take": {
+        "count": 28,
+        "total_ms": 4009.167,
+        "p50_ms": 54.441,
+        "p95_ms": 878.908,
+        "p99_ms": 952.341,
+        "max_ms": 952.341
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/ForkJoinPool.awaitWork <- java/util/concurrent/ForkJoinPool.runWorker <- java/util/concurrent/ForkJoinWorkerThread.run": {
+        "count": 115,
+        "total_ms": 2690.435,
+        "p50_ms": 18.154,
+        "p95_ms": 56.203,
+        "p99_ms": 79.407,
+        "max_ms": 82.643
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionNode.block <- java/util/concurrent/ForkJoinPool.unmanagedBlock <- java/util/concurrent/ForkJoinPool.managedBlock": {
+        "count": 3,
+        "total_ms": 1949.733,
+        "p50_ms": 878.634,
+        "p95_ms": 952.424,
+        "p99_ms": 952.424,
+        "max_ms": 952.424
+      },
+      "jdk.SocketRead: java/net/Socket$SocketInputStream.read <- org/postgresql/core/VisibleBufferedInputStream.readMore <- org/postgresql/core/VisibleBufferedInputStream.ensureBytes <- org/postgresql/core/VisibleBufferedInputStream.ensureBytes <- org/postgresql/core/VisibleBufferedInputStream.read": {
+        "count": 93,
+        "total_ms": 1729.174,
+        "p50_ms": 16.844,
+        "p95_ms": 31.434,
+        "p99_ms": 67.715,
+        "max_ms": 67.715
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkNanos <- java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionObject.awaitNanos <- java/util/concurrent/LinkedBlockingQueue.poll <- java/util/concurrent/ThreadPoolExecutor.getTask": {
+        "count": 6,
+        "total_ms": 1406.631,
+        "p50_ms": 141.417,
+        "p95_ms": 600.542,
+        "p99_ms": 600.542,
+        "max_ms": 600.542
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.park <- java/util/concurrent/LinkedTransferQueue$DualNode.await <- java/util/concurrent/LinkedTransferQueue.xfer <- java/util/concurrent/LinkedTransferQueue.take": {
+        "count": 14,
+        "total_ms": 246.475,
+        "p50_ms": 17.318,
+        "p95_ms": 26.8,
+        "p99_ms": 26.8,
+        "max_ms": 26.8
+      },
+      "jdk.ThreadPark: jdk/internal/misc/Unsafe.park <- java/util/concurrent/locks/LockSupport.parkUntil <- java/util/concurrent/ForkJoinPool.awaitWork <- java/util/concurrent/ForkJoinPool.runWorker <- java/util/concurrent/ForkJoinWorkerThread.run": {
+        "count": 3,
+        "total_ms": 47.471,
+        "p50_ms": 12.595,
+        "p95_ms": 22.366,
+        "p99_ms": 22.366,
+        "max_ms": 22.366
+      },
+      "jdk.GarbageCollection: ": {
+        "count": 2,
+        "total_ms": 21.479,
+        "p50_ms": 7.324,
+        "p95_ms": 14.155,
+        "p99_ms": 14.155,
+        "max_ms": 14.155
+      }
+    }
+  }
+]

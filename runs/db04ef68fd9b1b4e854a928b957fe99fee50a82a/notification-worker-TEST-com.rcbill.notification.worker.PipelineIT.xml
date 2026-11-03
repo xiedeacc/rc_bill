@@ -1,0 +1,1137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-failsafe-plugin/xsd/failsafe-test-report.xsd" version="3.0.2" name="com.rcbill.notification.worker.PipelineIT" time="21.51" tests="1" errors="0" skipped="0" failures="0" flakes="0">
+  <properties>
+    <property name="java.specification.version" value="21"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/home/runner/work/rc_bill/rc_bill/notification-worker/target/test-classes:/home/runner/work/rc_bill/rc_bill/notification-worker/target/classes:/home/runner/work/rc_bill/rc_bill/notification-adapters/target/notification-adapters-0.1.0-SNAPSHOT.jar:/home/runner/work/rc_bill/rc_bill/notification-application/target/notification-application-0.1.0-SNAPSHOT.jar:/home/runner/work/rc_bill/rc_bill/notification-domain/target/notification-domain-0.1.0-SNAPSHOT.jar:/home/runner/.m2/repository/org/mybatis/spring/boot/mybatis-spring-boot-starter/4.1.0/mybatis-spring-boot-starter-4.1.0.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/4.1.2/spring-boot-starter-jdbc-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-jdbc/4.1.2/spring-boot-jdbc-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-sql/4.1.2/spring-boot-sql-4.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-jdbc/7.0.10/spring-jdbc-7.0.10.jar:/home/runner/.m2/repository/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar:/home/runner/.m2/repository/org/mybatis/spring/boot/mybatis-spring-boot-autoconfigure/4.1.0/mybatis-spring-boot-autoconfigure-4.1.0.jar:/home/runner/.m2/repository/org/mybatis/mybatis/3.5.19/mybatis-3.5.19.jar:/home/runner/.m2/repository/org/mybatis/mybatis-spring/4.1.0/mybatis-spring-4.1.0.jar:/home/runner/.m2/repository/org/postgresql/postgresql/42.7.14/postgresql-42.7.14.jar:/home/runner/.m2/repository/org/checkerframework/checker-qual/3.55.1/checker-qual-3.55.1.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-kafka/4.1.2/spring-boot-starter-kafka-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-kafka/4.1.2/spring-boot-kafka-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-transaction/4.1.2/spring-boot-transaction-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-persistence/4.1.2/spring-boot-persistence-4.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-tx/7.0.10/spring-tx-7.0.10.jar:/home/runner/.m2/repository/org/springframework/kafka/spring-kafka/4.1.2/spring-kafka-4.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-messaging/7.0.10/spring-messaging-7.0.10.jar:/home/runner/.m2/repository/org/apache/kafka/kafka-clients/4.2.2/kafka-clients-4.2.2.jar:/home/runner/.m2/repository/com/github/luben/zstd-jni/1.5.6-10/zstd-jni-1.5.6-10.jar:/home/runner/.m2/repository/at/yawk/lz4/lz4-java/1.11.2/lz4-java-1.11.2.jar:/home/runner/.m2/repository/org/xerial/snappy/snappy-java/1.1.10.7/snappy-java-1.1.10.7.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-oauth2-resource-server/4.1.2/spring-boot-starter-oauth2-resource-server-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-security-oauth2-resource-server/4.1.2/spring-boot-security-oauth2-resource-server-4.1.2.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-oauth2-jose/7.1.2/spring-security-oauth2-jose-7.1.2.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-core/7.1.2/spring-security-core-7.1.2.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-oauth2-core/7.1.2/spring-security-oauth2-core-7.1.2.jar:/home/runner/.m2/repository/com/nimbusds/nimbus-jose-jwt/10.9.1/nimbus-jose-jwt-10.9.1.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-oauth2-resource-server/7.1.2/spring-security-oauth2-resource-server-7.1.2.jar:/home/runner/.m2/repository/org/flywaydb/flyway-core/12.4.0/flyway-core-12.4.0.jar:/home/runner/.m2/repository/tools/jackson/core/jackson-databind/3.1.7/jackson-databind-3.1.7.jar:/home/runner/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar:/home/runner/.m2/repository/tools/jackson/core/jackson-core/3.1.7/jackson-core-3.1.7.jar:/home/runner/.m2/repository/org/flywaydb/flyway-database-postgresql/12.4.0/flyway-database-postgresql-12.4.0.jar:/home/runner/.m2/repository/org/apache/httpcomponents/client5/httpclient5/5.6.5/httpclient5-5.6.5.jar:/home/runner/.m2/repository/org/apache/httpcomponents/core5/httpcore5/5.4.4/httpcore5-5.4.4.jar:/home/runner/.m2/repository/org/apache/httpcomponents/core5/httpcore5-h2/5.4.4/httpcore5-h2-5.4.4.jar:/home/runner/.m2/repository/org/slf4j/slf4j-api/2.0.20/slf4j-api-2.0.20.jar:/home/runner/.m2/repository/io/micrometer/micrometer-registry-prometheus/1.17.2/micrometer-registry-prometheus-1.17.2.jar:/home/runner/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar:/home/runner/.m2/repository/io/micrometer/micrometer-core/1.17.2/micrometer-core-1.17.2.jar:/home/runner/.m2/repository/io/micrometer/micrometer-commons/1.17.2/micrometer-commons-1.17.2.jar:/home/runner/.m2/repository/org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.jar:/home/runner/.m2/repository/io/prometheus/prometheus-metrics-core/1.7.0/prometheus-metrics-core-1.7.0.jar:/home/runner/.m2/repository/io/prometheus/prometheus-metrics-model/1.7.0/prometheus-metrics-model-1.7.0.jar:/home/runner/.m2/repository/io/prometheus/prometheus-metrics-config/1.7.0/prometheus-metrics-config-1.7.0.jar:/home/runner/.m2/repository/io/prometheus/prometheus-metrics-tracer-common/1.7.0/prometheus-metrics-tracer-common-1.7.0.jar:/home/runner/.m2/repository/io/prometheus/prometheus-metrics-exposition-formats/1.7.0/prometheus-metrics-exposition-formats-1.7.0.jar:/home/runner/.m2/repository/io/prometheus/prometheus-metrics-exposition-textformats/1.7.0/prometheus-metrics-exposition-textformats-1.7.0.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-actuator/4.1.2/spring-boot-starter-actuator-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-micrometer-metrics/4.1.2/spring-boot-starter-micrometer-metrics-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-micrometer-metrics/4.1.2/spring-boot-micrometer-metrics-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-micrometer-observation/4.1.2/spring-boot-micrometer-observation-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-actuator-autoconfigure/4.1.2/spring-boot-actuator-autoconfigure-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-actuator/4.1.2/spring-boot-actuator-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-health/4.1.2/spring-boot-health-4.1.2.jar:/home/runner/.m2/repository/io/micrometer/micrometer-observation/1.17.2/micrometer-observation-1.17.2.jar:/home/runner/.m2/repository/io/micrometer/micrometer-jakarta9/1.17.2/micrometer-jakarta9-1.17.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc/4.1.2/spring-boot-starter-webmvc-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-jackson/4.1.2/spring-boot-starter-jackson-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-jackson/4.1.2/spring-boot-jackson-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/4.1.2/spring-boot-starter-tomcat-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.2/spring-boot-starter-tomcat-runtime-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.2/spring-boot-web-server-4.1.2.jar:/home/runner/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/11.0.27/tomcat-embed-core-11.0.27.jar:/home/runner/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/11.0.27/tomcat-embed-el-11.0.27.jar:/home/runner/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.27/tomcat-embed-websocket-11.0.27.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-tomcat/4.1.2/spring-boot-tomcat-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-http-converter/4.1.2/spring-boot-http-converter-4.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-web/7.0.10/spring-web-7.0.10.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-webmvc/4.1.2/spring-boot-webmvc-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-servlet/4.1.2/spring-boot-servlet-4.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-webmvc/7.0.10/spring-webmvc-7.0.10.jar:/home/runner/.m2/repository/org/springframework/spring-expression/7.0.10/spring-expression-7.0.10.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-security/4.1.2/spring-boot-starter-security-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-security/4.1.2/spring-boot-security-4.1.2.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-config/7.1.2/spring-security-config-7.1.2.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-web/7.1.2/spring-security-web-7.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-aop/7.0.10/spring-aop-7.0.10.jar:/home/runner/.m2/repository/org/springframework/spring-beans/7.0.10/spring-beans-7.0.10.jar:/home/runner/.m2/repository/org/springframework/cloud/spring-cloud-starter-circuitbreaker-resilience4j/5.0.3/spring-cloud-starter-circuitbreaker-resilience4j-5.0.3.jar:/home/runner/.m2/repository/org/springframework/cloud/spring-cloud-starter/5.0.4/spring-cloud-starter-5.0.4.jar:/home/runner/.m2/repository/org/springframework/cloud/spring-cloud-context/5.0.4/spring-cloud-context-5.0.4.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-crypto/7.1.2/spring-security-crypto-7.1.2.jar:/home/runner/.m2/repository/org/springframework/cloud/spring-cloud-commons/5.0.4/spring-cloud-commons-5.0.4.jar:/home/runner/.m2/repository/org/bouncycastle/bcprov-jdk18on/1.85.2/bcprov-jdk18on-1.85.2.jar:/home/runner/.m2/repository/org/springframework/cloud/spring-cloud-circuitbreaker-resilience4j/5.0.3/spring-cloud-circuitbreaker-resilience4j-5.0.3.jar:/home/runner/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.21.7/jackson-core-2.21.7.jar:/home/runner/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.21.7/jackson-databind-2.21.7.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-spring-boot3/2.3.0/resilience4j-spring-boot3-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-spring6/2.3.0/resilience4j-spring6-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-annotations/2.3.0/resilience4j-annotations-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-consumer/2.3.0/resilience4j-consumer-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-circularbuffer/2.3.0/resilience4j-circularbuffer-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-framework-common/2.3.0/resilience4j-framework-common-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-micrometer/2.3.0/resilience4j-micrometer-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-retry/2.3.0/resilience4j-retry-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-ratelimiter/2.3.0/resilience4j-ratelimiter-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-circuitbreaker/2.3.0/resilience4j-circuitbreaker-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-core/2.3.0/resilience4j-core-2.3.0.jar:/home/runner/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-jdk8/2.3.21/kotlin-stdlib-jdk8-2.3.21.jar:/home/runner/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib/2.3.21/kotlin-stdlib-2.3.21.jar:/home/runner/.m2/repository/org/jetbrains/annotations/13.0/annotations-13.0.jar:/home/runner/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-jdk7/2.3.21/kotlin-stdlib-jdk7-2.3.21.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-timelimiter/2.3.0/resilience4j-timelimiter-2.3.0.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-test/4.1.2/spring-boot-starter-test-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.2/spring-boot-starter-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-logging/4.1.2/spring-boot-starter-logging-4.1.2.jar:/home/runner/.m2/repository/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38.jar:/home/runner/.m2/repository/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38.jar:/home/runner/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.jar:/home/runner/.m2/repository/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar:/home/runner/.m2/repository/org/slf4j/jul-to-slf4j/2.0.20/jul-to-slf4j-2.0.20.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.2/spring-boot-autoconfigure-4.1.2.jar:/home/runner/.m2/repository/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.jar:/home/runner/.m2/repository/org/yaml/snakeyaml/2.6/snakeyaml-2.6.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-test/4.1.2/spring-boot-test-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot/4.1.2/spring-boot-4.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-context/7.0.10/spring-context-7.0.10.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.2/spring-boot-test-autoconfigure-4.1.2.jar:/home/runner/.m2/repository/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.jar:/home/runner/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.5/jakarta.xml.bind-api-4.0.5.jar:/home/runner/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.jar:/home/runner/.m2/repository/net/minidev/json-smart/2.6.0/json-smart-2.6.0.jar:/home/runner/.m2/repository/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.jar:/home/runner/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar:/home/runner/.m2/repository/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.jar:/home/runner/.m2/repository/net/bytebuddy/byte-buddy/1.18.15/byte-buddy-1.18.15.jar:/home/runner/.m2/repository/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.jar:/home/runner/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar:/home/runner/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/runner/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar:/home/runner/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar:/home/runner/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar:/home/runner/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar:/home/runner/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.15/byte-buddy-agent-1.18.15.jar:/home/runner/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/home/runner/.m2/repository/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.jar:/home/runner/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/home/runner/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/home/runner/.m2/repository/org/springframework/spring-core/7.0.10/spring-core-7.0.10.jar:/home/runner/.m2/repository/commons-logging/commons-logging/1.3.6/commons-logging-1.3.6.jar:/home/runner/.m2/repository/org/springframework/spring-test/7.0.10/spring-test-7.0.10.jar:/home/runner/.m2/repository/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.jar:"/>
+    <property name="java.vm.vendor" value="Eclipse Adoptium"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://adoptium.net/"/>
+    <property name="user.timezone" value="Etc/UTC"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.vm.specification.version" value="21"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/temurin-21-jdk-amd64/lib"/>
+    <property name="sun.java.command" value="/home/runner/work/rc_bill/rc_bill/notification-worker/target/surefire/surefirebooter-20261103093458099_9.jar /home/runner/work/rc_bill/rc_bill/notification-worker/target/surefire 2026-11-03T09-34-35_202-jvmRun1 surefire-20261103093458099_7tmp surefire_1-20261103093458099_8tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/home/runner/work/rc_bill/rc_bill/notification-worker/target/test-classes:/home/runner/work/rc_bill/rc_bill/notification-worker/target/classes:/home/runner/work/rc_bill/rc_bill/notification-adapters/target/notification-adapters-0.1.0-SNAPSHOT.jar:/home/runner/work/rc_bill/rc_bill/notification-application/target/notification-application-0.1.0-SNAPSHOT.jar:/home/runner/work/rc_bill/rc_bill/notification-domain/target/notification-domain-0.1.0-SNAPSHOT.jar:/home/runner/.m2/repository/org/mybatis/spring/boot/mybatis-spring-boot-starter/4.1.0/mybatis-spring-boot-starter-4.1.0.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/4.1.2/spring-boot-starter-jdbc-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-jdbc/4.1.2/spring-boot-jdbc-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-sql/4.1.2/spring-boot-sql-4.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-jdbc/7.0.10/spring-jdbc-7.0.10.jar:/home/runner/.m2/repository/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar:/home/runner/.m2/repository/org/mybatis/spring/boot/mybatis-spring-boot-autoconfigure/4.1.0/mybatis-spring-boot-autoconfigure-4.1.0.jar:/home/runner/.m2/repository/org/mybatis/mybatis/3.5.19/mybatis-3.5.19.jar:/home/runner/.m2/repository/org/mybatis/mybatis-spring/4.1.0/mybatis-spring-4.1.0.jar:/home/runner/.m2/repository/org/postgresql/postgresql/42.7.14/postgresql-42.7.14.jar:/home/runner/.m2/repository/org/checkerframework/checker-qual/3.55.1/checker-qual-3.55.1.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-kafka/4.1.2/spring-boot-starter-kafka-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-kafka/4.1.2/spring-boot-kafka-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-transaction/4.1.2/spring-boot-transaction-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-persistence/4.1.2/spring-boot-persistence-4.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-tx/7.0.10/spring-tx-7.0.10.jar:/home/runner/.m2/repository/org/springframework/kafka/spring-kafka/4.1.2/spring-kafka-4.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-messaging/7.0.10/spring-messaging-7.0.10.jar:/home/runner/.m2/repository/org/apache/kafka/kafka-clients/4.2.2/kafka-clients-4.2.2.jar:/home/runner/.m2/repository/com/github/luben/zstd-jni/1.5.6-10/zstd-jni-1.5.6-10.jar:/home/runner/.m2/repository/at/yawk/lz4/lz4-java/1.11.2/lz4-java-1.11.2.jar:/home/runner/.m2/repository/org/xerial/snappy/snappy-java/1.1.10.7/snappy-java-1.1.10.7.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-oauth2-resource-server/4.1.2/spring-boot-starter-oauth2-resource-server-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-security-oauth2-resource-server/4.1.2/spring-boot-security-oauth2-resource-server-4.1.2.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-oauth2-jose/7.1.2/spring-security-oauth2-jose-7.1.2.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-core/7.1.2/spring-security-core-7.1.2.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-oauth2-core/7.1.2/spring-security-oauth2-core-7.1.2.jar:/home/runner/.m2/repository/com/nimbusds/nimbus-jose-jwt/10.9.1/nimbus-jose-jwt-10.9.1.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-oauth2-resource-server/7.1.2/spring-security-oauth2-resource-server-7.1.2.jar:/home/runner/.m2/repository/org/flywaydb/flyway-core/12.4.0/flyway-core-12.4.0.jar:/home/runner/.m2/repository/tools/jackson/core/jackson-databind/3.1.7/jackson-databind-3.1.7.jar:/home/runner/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar:/home/runner/.m2/repository/tools/jackson/core/jackson-core/3.1.7/jackson-core-3.1.7.jar:/home/runner/.m2/repository/org/flywaydb/flyway-database-postgresql/12.4.0/flyway-database-postgresql-12.4.0.jar:/home/runner/.m2/repository/org/apache/httpcomponents/client5/httpclient5/5.6.5/httpclient5-5.6.5.jar:/home/runner/.m2/repository/org/apache/httpcomponents/core5/httpcore5/5.4.4/httpcore5-5.4.4.jar:/home/runner/.m2/repository/org/apache/httpcomponents/core5/httpcore5-h2/5.4.4/httpcore5-h2-5.4.4.jar:/home/runner/.m2/repository/org/slf4j/slf4j-api/2.0.20/slf4j-api-2.0.20.jar:/home/runner/.m2/repository/io/micrometer/micrometer-registry-prometheus/1.17.2/micrometer-registry-prometheus-1.17.2.jar:/home/runner/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar:/home/runner/.m2/repository/io/micrometer/micrometer-core/1.17.2/micrometer-core-1.17.2.jar:/home/runner/.m2/repository/io/micrometer/micrometer-commons/1.17.2/micrometer-commons-1.17.2.jar:/home/runner/.m2/repository/org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.jar:/home/runner/.m2/repository/io/prometheus/prometheus-metrics-core/1.7.0/prometheus-metrics-core-1.7.0.jar:/home/runner/.m2/repository/io/prometheus/prometheus-metrics-model/1.7.0/prometheus-metrics-model-1.7.0.jar:/home/runner/.m2/repository/io/prometheus/prometheus-metrics-config/1.7.0/prometheus-metrics-config-1.7.0.jar:/home/runner/.m2/repository/io/prometheus/prometheus-metrics-tracer-common/1.7.0/prometheus-metrics-tracer-common-1.7.0.jar:/home/runner/.m2/repository/io/prometheus/prometheus-metrics-exposition-formats/1.7.0/prometheus-metrics-exposition-formats-1.7.0.jar:/home/runner/.m2/repository/io/prometheus/prometheus-metrics-exposition-textformats/1.7.0/prometheus-metrics-exposition-textformats-1.7.0.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-actuator/4.1.2/spring-boot-starter-actuator-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-micrometer-metrics/4.1.2/spring-boot-starter-micrometer-metrics-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-micrometer-metrics/4.1.2/spring-boot-micrometer-metrics-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-micrometer-observation/4.1.2/spring-boot-micrometer-observation-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-actuator-autoconfigure/4.1.2/spring-boot-actuator-autoconfigure-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-actuator/4.1.2/spring-boot-actuator-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-health/4.1.2/spring-boot-health-4.1.2.jar:/home/runner/.m2/repository/io/micrometer/micrometer-observation/1.17.2/micrometer-observation-1.17.2.jar:/home/runner/.m2/repository/io/micrometer/micrometer-jakarta9/1.17.2/micrometer-jakarta9-1.17.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc/4.1.2/spring-boot-starter-webmvc-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-jackson/4.1.2/spring-boot-starter-jackson-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-jackson/4.1.2/spring-boot-jackson-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/4.1.2/spring-boot-starter-tomcat-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.2/spring-boot-starter-tomcat-runtime-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.2/spring-boot-web-server-4.1.2.jar:/home/runner/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/11.0.27/tomcat-embed-core-11.0.27.jar:/home/runner/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/11.0.27/tomcat-embed-el-11.0.27.jar:/home/runner/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.27/tomcat-embed-websocket-11.0.27.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-tomcat/4.1.2/spring-boot-tomcat-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-http-converter/4.1.2/spring-boot-http-converter-4.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-web/7.0.10/spring-web-7.0.10.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-webmvc/4.1.2/spring-boot-webmvc-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-servlet/4.1.2/spring-boot-servlet-4.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-webmvc/7.0.10/spring-webmvc-7.0.10.jar:/home/runner/.m2/repository/org/springframework/spring-expression/7.0.10/spring-expression-7.0.10.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-security/4.1.2/spring-boot-starter-security-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-security/4.1.2/spring-boot-security-4.1.2.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-config/7.1.2/spring-security-config-7.1.2.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-web/7.1.2/spring-security-web-7.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-aop/7.0.10/spring-aop-7.0.10.jar:/home/runner/.m2/repository/org/springframework/spring-beans/7.0.10/spring-beans-7.0.10.jar:/home/runner/.m2/repository/org/springframework/cloud/spring-cloud-starter-circuitbreaker-resilience4j/5.0.3/spring-cloud-starter-circuitbreaker-resilience4j-5.0.3.jar:/home/runner/.m2/repository/org/springframework/cloud/spring-cloud-starter/5.0.4/spring-cloud-starter-5.0.4.jar:/home/runner/.m2/repository/org/springframework/cloud/spring-cloud-context/5.0.4/spring-cloud-context-5.0.4.jar:/home/runner/.m2/repository/org/springframework/security/spring-security-crypto/7.1.2/spring-security-crypto-7.1.2.jar:/home/runner/.m2/repository/org/springframework/cloud/spring-cloud-commons/5.0.4/spring-cloud-commons-5.0.4.jar:/home/runner/.m2/repository/org/bouncycastle/bcprov-jdk18on/1.85.2/bcprov-jdk18on-1.85.2.jar:/home/runner/.m2/repository/org/springframework/cloud/spring-cloud-circuitbreaker-resilience4j/5.0.3/spring-cloud-circuitbreaker-resilience4j-5.0.3.jar:/home/runner/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.21.7/jackson-core-2.21.7.jar:/home/runner/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.21.7/jackson-databind-2.21.7.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-spring-boot3/2.3.0/resilience4j-spring-boot3-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-spring6/2.3.0/resilience4j-spring6-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-annotations/2.3.0/resilience4j-annotations-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-consumer/2.3.0/resilience4j-consumer-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-circularbuffer/2.3.0/resilience4j-circularbuffer-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-framework-common/2.3.0/resilience4j-framework-common-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-micrometer/2.3.0/resilience4j-micrometer-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-retry/2.3.0/resilience4j-retry-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-ratelimiter/2.3.0/resilience4j-ratelimiter-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-circuitbreaker/2.3.0/resilience4j-circuitbreaker-2.3.0.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-core/2.3.0/resilience4j-core-2.3.0.jar:/home/runner/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-jdk8/2.3.21/kotlin-stdlib-jdk8-2.3.21.jar:/home/runner/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib/2.3.21/kotlin-stdlib-2.3.21.jar:/home/runner/.m2/repository/org/jetbrains/annotations/13.0/annotations-13.0.jar:/home/runner/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-jdk7/2.3.21/kotlin-stdlib-jdk7-2.3.21.jar:/home/runner/.m2/repository/io/github/resilience4j/resilience4j-timelimiter/2.3.0/resilience4j-timelimiter-2.3.0.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-test/4.1.2/spring-boot-starter-test-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.2/spring-boot-starter-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-starter-logging/4.1.2/spring-boot-starter-logging-4.1.2.jar:/home/runner/.m2/repository/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38.jar:/home/runner/.m2/repository/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38.jar:/home/runner/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.jar:/home/runner/.m2/repository/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar:/home/runner/.m2/repository/org/slf4j/jul-to-slf4j/2.0.20/jul-to-slf4j-2.0.20.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.2/spring-boot-autoconfigure-4.1.2.jar:/home/runner/.m2/repository/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.jar:/home/runner/.m2/repository/org/yaml/snakeyaml/2.6/snakeyaml-2.6.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-test/4.1.2/spring-boot-test-4.1.2.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot/4.1.2/spring-boot-4.1.2.jar:/home/runner/.m2/repository/org/springframework/spring-context/7.0.10/spring-context-7.0.10.jar:/home/runner/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.2/spring-boot-test-autoconfigure-4.1.2.jar:/home/runner/.m2/repository/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.jar:/home/runner/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.5/jakarta.xml.bind-api-4.0.5.jar:/home/runner/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.jar:/home/runner/.m2/repository/net/minidev/json-smart/2.6.0/json-smart-2.6.0.jar:/home/runner/.m2/repository/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.jar:/home/runner/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar:/home/runner/.m2/repository/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.jar:/home/runner/.m2/repository/net/bytebuddy/byte-buddy/1.18.15/byte-buddy-1.18.15.jar:/home/runner/.m2/repository/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.jar:/home/runner/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar:/home/runner/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/runner/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar:/home/runner/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar:/home/runner/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar:/home/runner/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar:/home/runner/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.15/byte-buddy-agent-1.18.15.jar:/home/runner/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/home/runner/.m2/repository/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.jar:/home/runner/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/home/runner/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/home/runner/.m2/repository/org/springframework/spring-core/7.0.10/spring-core-7.0.10.jar:/home/runner/.m2/repository/commons-logging/commons-logging/1.3.6/commons-logging-1.3.6.jar:/home/runner/.m2/repository/org/springframework/spring-test/7.0.10/spring-test-7.0.10.jar:/home/runner/.m2/repository/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/runner"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2026-10-20"/>
+    <property name="java.home" value="/usr/lib/jvm/temurin-21-jdk-amd64"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/home/runner/work/rc_bill/rc_bill/notification-worker"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="surefire.real.class.path" value="/home/runner/work/rc_bill/rc_bill/notification-worker/target/surefire/surefirebooter-20261103093458099_9.jar"/>
+    <property name="polyglot.engine.WarnInterpreterOnly" value="false"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="21.0.13+9-LTS"/>
+    <property name="user.name" value="runner"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="7.0.0-1017-azure"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="Temurin-21.0.13+9"/>
+    <property name="localRepository" value="/home/runner/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://github.com/adoptium/adoptium-support/issues"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="21.0.13"/>
+    <property name="user.dir" value="/home/runner/work/rc_bill/rc_bill/notification-worker"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.vendor" value="Eclipse Adoptium"/>
+    <property name="java.vm.version" value="21.0.13+9-LTS"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="65.0"/>
+  </properties>
+  <testcase name="deliveryRetryDuplicateAndDurableHandoffRecovery" classname="com.rcbill.notification.worker.PipelineIT" time="21.131">
+    <system-out><![CDATA[09:35:06.941 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Starting...
+09:35:06.963 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Start completed.
+09:35:07.131 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:postgresql://localhost:15432/notification?currentSchema=pipeline_66ffdb348fa14bfa8a59a85dc65800b5 (PostgreSQL 17.11)
+09:35:07.176 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Schema history table "pipeline_66ffdb348fa14bfa8a59a85dc65800b5"."flyway_schema_history" does not exist yet
+09:35:07.181 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 7 migrations (execution time 00:00.018s)
+09:35:07.189 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Creating Schema History table "pipeline_66ffdb348fa14bfa8a59a85dc65800b5"."flyway_schema_history" ...
+09:35:07.215 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema "pipeline_66ffdb348fa14bfa8a59a85dc65800b5": << Empty Schema >>
+09:35:07.228 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "pipeline_66ffdb348fa14bfa8a59a85dc65800b5" to version "1 - notification ledger"
+09:35:07.250 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "pipeline_66ffdb348fa14bfa8a59a85dc65800b5" to version "2 - destination versions"
+09:35:07.259 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "pipeline_66ffdb348fa14bfa8a59a85dc65800b5" to version "3 - due outbox age" [non-transactional]
+09:35:07.269 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "pipeline_66ffdb348fa14bfa8a59a85dc65800b5" to version "4 - bounded backlog" [non-transactional]
+09:35:07.275 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "pipeline_66ffdb348fa14bfa8a59a85dc65800b5" to version "5 - outbox scheduled time"
+09:35:07.279 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "pipeline_66ffdb348fa14bfa8a59a85dc65800b5" to version "6 - original due index" [non-transactional]
+09:35:07.284 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema "pipeline_66ffdb348fa14bfa8a59a85dc65800b5" to version "7 - physical shard identity"
+09:35:07.290 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Successfully applied 7 migrations to schema "pipeline_66ffdb348fa14bfa8a59a85dc65800b5", now at version v7 (execution time 00:00.024s)
+09:35:07.394 [main] INFO org.apache.kafka.common.config.AbstractConfig -- AdminClientConfig values: 
+	bootstrap.controllers = []
+	bootstrap.servers = [localhost:19092, localhost:19093, localhost:19094]
+	client.dns.lookup = use_all_dns_ips
+	client.id = 
+	config.providers = []
+	connections.max.idle.ms = 300000
+	default.api.timeout.ms = 60000
+	enable.metrics.push = false
+	metadata.max.age.ms = 300000
+	metadata.recovery.rebootstrap.trigger.ms = 300000
+	metadata.recovery.strategy = rebootstrap
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = []
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = []
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+
+09:35:07.397 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka version: 4.2.2
+09:35:07.397 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka commitId: c5e942859576203e
+09:35:07.397 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka startTimeMs: 1793698507397
+09:35:07.828 [main] INFO org.apache.kafka.common.config.AbstractConfig -- ConsumerConfig values: 
+	allow.auto.create.topics = false
+	auto.commit.interval.ms = 5000
+	auto.offset.reset = none
+	bootstrap.servers = [localhost:19092, localhost:19093, localhost:19094]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1
+	client.rack = 
+	config.providers = []
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 16777216
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = it-group-66ffdb348fa14bfa8a59a85dc65800b5
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_committed
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 100
+	metadata.max.age.ms = 300000
+	metadata.recovery.rebootstrap.trigger.ms = 300000
+	metadata.recovery.strategy = rebootstrap
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = []
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	share.acknowledgement.mode = implicit
+	share.acquire.mode = BATCH_OPTIMIZED
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = []
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+
+09:35:07.862 [main] INFO org.apache.kafka.common.telemetry.internals.KafkaMetricsCollector -- initializing Kafka metrics collector
+09:35:07.920 [main] INFO org.apache.kafka.common.config.AbstractConfig -- These configurations '[ssl.endpoint.identification.algorithm]' were supplied but are not used yet.
+09:35:07.921 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka version: 4.2.2
+09:35:07.921 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka commitId: c5e942859576203e
+09:35:07.921 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka startTimeMs: 1793698507921
+09:35:07.925 [main] INFO org.apache.kafka.clients.consumer.internals.ClassicKafkaConsumer -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Subscribed to topic(s): it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5
+09:35:07.955 [main] INFO org.apache.kafka.common.config.AbstractConfig -- ConsumerConfig values: 
+	allow.auto.create.topics = false
+	auto.commit.interval.ms = 5000
+	auto.offset.reset = none
+	bootstrap.servers = [localhost:19092, localhost:19093, localhost:19094]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2
+	client.rack = 
+	config.providers = []
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 16777216
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = it-group-66ffdb348fa14bfa8a59a85dc65800b5
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_committed
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 100
+	metadata.max.age.ms = 300000
+	metadata.recovery.rebootstrap.trigger.ms = 300000
+	metadata.recovery.strategy = rebootstrap
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = []
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	share.acknowledgement.mode = implicit
+	share.acquire.mode = BATCH_OPTIMIZED
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = []
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+
+09:35:07.955 [main] INFO org.apache.kafka.common.telemetry.internals.KafkaMetricsCollector -- initializing Kafka metrics collector
+09:35:07.984 [main] INFO org.apache.kafka.common.config.AbstractConfig -- These configurations '[ssl.endpoint.identification.algorithm]' were supplied but are not used yet.
+09:35:07.984 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka version: 4.2.2
+09:35:07.984 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka commitId: c5e942859576203e
+09:35:07.984 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka startTimeMs: 1793698507984
+09:35:07.985 [main] INFO org.apache.kafka.clients.consumer.internals.ClassicKafkaConsumer -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Subscribed to topic(s): it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5
+09:35:08.114 [kafka-poll-1] INFO org.apache.kafka.clients.Metadata -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Cluster ID: MkU3OEVBNTcwNTJENDM2Qk
+09:35:08.132 [kafka-poll-0] INFO org.apache.kafka.clients.Metadata -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Cluster ID: MkU3OEVBNTcwNTJENDM2Qk
+09:35:08.140 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Discovered group coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false)
+09:35:08.141 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Discovered group coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false)
+09:35:08.143 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] (Re-)joining group
+09:35:08.148 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] (Re-)joining group
+09:35:08.169 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: need to re-join with the given member-id: consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2-5ce8e100-f76b-4d1d-9d6c-dfa6800e4c14
+09:35:08.169 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] (Re-)joining group
+09:35:08.170 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: need to re-join with the given member-id: consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1-37ad8867-877b-4372-a678-f000ab78c82f
+09:35:08.170 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] (Re-)joining group
+09:35:13.712 [pool-2-thread-1] INFO org.apache.kafka.common.config.AbstractConfig -- ProducerConfig values: 
+	acks = -1
+	batch.size = 65536
+	bootstrap.servers = [localhost:19092, localhost:19093, localhost:19094]
+	buffer.memory = 67108864
+	client.dns.lookup = use_all_dns_ips
+	client.id = producer-1
+	compression.gzip.level = -1
+	compression.lz4.level = 9
+	compression.type = lz4
+	compression.zstd.level = 3
+	config.providers = []
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	enable.metrics.push = true
+	interceptor.classes = []
+	key.serializer = class org.apache.kafka.common.serialization.StringSerializer
+	linger.ms = 5
+	max.block.ms = 5000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metadata.recovery.rebootstrap.trigger.ms = 300000
+	metadata.recovery.strategy = rebootstrap
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = []
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = []
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 60000
+	transaction.two.phase.commit.enable = false
+	transactional.id = null
+	value.serializer = class org.apache.kafka.common.serialization.StringSerializer
+
+09:35:13.714 [pool-2-thread-1] INFO org.apache.kafka.common.telemetry.internals.KafkaMetricsCollector -- initializing Kafka metrics collector
+09:35:13.719 [pool-2-thread-1] INFO org.apache.kafka.clients.producer.KafkaProducer -- [Producer clientId=producer-1] Instantiated an idempotent producer.
+09:35:13.733 [pool-2-thread-1] INFO org.apache.kafka.common.config.AbstractConfig -- These configurations '[ssl.endpoint.identification.algorithm]' were supplied but are not used yet.
+09:35:13.733 [pool-2-thread-1] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka version: 4.2.2
+09:35:13.733 [pool-2-thread-1] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka commitId: c5e942859576203e
+09:35:13.733 [pool-2-thread-1] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka startTimeMs: 1793698513733
+09:35:13.750 [kafka-producer-network-thread | producer-1] INFO org.apache.kafka.clients.Metadata -- [Producer clientId=producer-1] Cluster ID: MkU3OEVBNTcwNTJENDM2Qk
+09:35:13.975 [kafka-producer-network-thread | producer-1] INFO org.apache.kafka.clients.producer.internals.TransactionManager -- [Producer clientId=producer-1] ProducerId set to 1000 with epoch 0
+09:35:14.179 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Successfully joined group with generation Generation{generationId=1, memberId='consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2-5ce8e100-f76b-4d1d-9d6c-dfa6800e4c14', protocol='cooperative-sticky'}
+09:35:14.179 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Successfully joined group with generation Generation{generationId=1, memberId='consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1-37ad8867-877b-4372-a678-f000ab78c82f', protocol='cooperative-sticky'}
+09:35:14.182 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.AbstractStickyAssignor -- Final assignment of partitions to consumers: 
+{consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2-5ce8e100-f76b-4d1d-9d6c-dfa6800e4c14=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15], consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1-37ad8867-877b-4372-a678-f000ab78c82f=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]}
+09:35:14.183 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Finished assignment for group at generation 1: {consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2-5ce8e100-f76b-4d1d-9d6c-dfa6800e4c14=Assignment(partitions=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]), consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1-37ad8867-877b-4372-a678-f000ab78c82f=Assignment(partitions=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14])}
+09:35:14.190 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Successfully synced group in generation Generation{generationId=1, memberId='consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1-37ad8867-877b-4372-a678-f000ab78c82f', protocol='cooperative-sticky'}
+09:35:14.190 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Successfully synced group in generation Generation{generationId=1, memberId='consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2-5ce8e100-f76b-4d1d-9d6c-dfa6800e4c14', protocol='cooperative-sticky'}
+09:35:14.190 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Updating assignment with
+	Assigned partitions:                       [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+	Current owned partitions:                  []
+	Added partitions (assigned - owned):       [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+	Revoked partitions (owned - assigned):     []
+
+09:35:14.190 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Updating assignment with
+	Assigned partitions:                       [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]
+	Current owned partitions:                  []
+	Added partitions (assigned - owned):       [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]
+	Revoked partitions (owned - assigned):     []
+
+09:35:14.190 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Notifying assignor about the new Assignment(partitions=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15])
+09:35:14.190 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Notifying assignor about the new Assignment(partitions=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14])
+09:35:14.191 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerRebalanceListenerInvoker -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Adding newly assigned partitions: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+09:35:14.191 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerRebalanceListenerInvoker -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Adding newly assigned partitions: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]
+09:35:14.192 [kafka-poll-1] INFO org.springframework.kafka.listener.ConcurrentMessageListenerContainer -- it-group-66ffdb348fa14bfa8a59a85dc65800b5: partitions assigned: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+09:35:14.192 [kafka-poll-0] INFO org.springframework.kafka.listener.ConcurrentMessageListenerContainer -- it-group-66ffdb348fa14bfa8a59a85dc65800b5: partitions assigned: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]
+09:35:14.198 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:14.198 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:14.200 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:16.922 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerRebalanceListenerInvoker -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Revoke previously assigned partitions [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+09:35:16.922 [kafka-poll-1] INFO org.springframework.kafka.listener.ConcurrentMessageListenerContainer -- it-group-66ffdb348fa14bfa8a59a85dc65800b5: partitions revoked: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+09:35:16.923 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerRebalanceListenerInvoker -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Revoke previously assigned partitions [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]
+09:35:16.923 [kafka-poll-0] INFO org.springframework.kafka.listener.ConcurrentMessageListenerContainer -- it-group-66ffdb348fa14bfa8a59a85dc65800b5: partitions revoked: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]
+09:35:16.923 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Member consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2-5ce8e100-f76b-4d1d-9d6c-dfa6800e4c14 sending LeaveGroup request to coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false) due to the consumer unsubscribed from all topics
+09:35:16.925 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Member consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1-37ad8867-877b-4372-a678-f000ab78c82f sending LeaveGroup request to coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false) due to the consumer unsubscribed from all topics
+09:35:16.926 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Resetting generation and member id due to: consumer pro-actively leaving the group
+09:35:16.926 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: consumer pro-actively leaving the group
+09:35:16.926 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ClassicKafkaConsumer -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Unsubscribed all topics or patterns and assigned partitions
+09:35:16.928 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Resetting generation and member id due to: consumer pro-actively leaving the group
+09:35:16.928 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: consumer pro-actively leaving the group
+09:35:16.928 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ClassicKafkaConsumer -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Unsubscribed all topics or patterns and assigned partitions
+09:35:16.930 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Resetting generation and member id due to: consumer pro-actively leaving the group
+09:35:16.930 [kafka-poll-1] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: consumer pro-actively leaving the group
+09:35:16.931 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Resetting generation and member id due to: consumer pro-actively leaving the group
+09:35:16.931 [kafka-poll-0] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: consumer pro-actively leaving the group
+09:35:17.309 [kafka-poll-0] INFO org.apache.kafka.common.metrics.Metrics -- Metrics scheduler closed
+09:35:17.310 [kafka-poll-0] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.metrics.JmxReporter
+09:35:17.310 [kafka-poll-0] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+09:35:17.310 [kafka-poll-0] INFO org.apache.kafka.common.metrics.Metrics -- Metrics reporters closed
+09:35:17.318 [kafka-poll-0] INFO org.apache.kafka.common.utils.AppInfoParser -- App info kafka.consumer for consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-1 unregistered
+09:35:17.319 [kafka-poll-0] INFO org.springframework.kafka.listener.KafkaMessageListenerContainer -- it-group-66ffdb348fa14bfa8a59a85dc65800b5: Consumer stopped
+09:35:17.331 [kafka-poll-1] INFO org.apache.kafka.common.metrics.Metrics -- Metrics scheduler closed
+09:35:17.331 [kafka-poll-1] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.metrics.JmxReporter
+09:35:17.332 [kafka-poll-1] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+09:35:17.332 [kafka-poll-1] INFO org.apache.kafka.common.metrics.Metrics -- Metrics reporters closed
+09:35:17.339 [kafka-poll-1] INFO org.apache.kafka.common.utils.AppInfoParser -- App info kafka.consumer for consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-2 unregistered
+09:35:17.339 [kafka-poll-1] INFO org.springframework.kafka.listener.KafkaMessageListenerContainer -- it-group-66ffdb348fa14bfa8a59a85dc65800b5: Consumer stopped
+09:35:17.406 [main] INFO org.apache.kafka.common.config.AbstractConfig -- ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.offset.reset = none
+	bootstrap.servers = [localhost:19092, localhost:19093, localhost:19094]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3
+	client.rack = 
+	config.providers = []
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = it-group-66ffdb348fa14bfa8a59a85dc65800b5
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metadata.recovery.rebootstrap.trigger.ms = 300000
+	metadata.recovery.strategy = rebootstrap
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = []
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	share.acknowledgement.mode = implicit
+	share.acquire.mode = BATCH_OPTIMIZED
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = []
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+
+09:35:17.407 [main] INFO org.apache.kafka.common.telemetry.internals.KafkaMetricsCollector -- initializing Kafka metrics collector
+09:35:17.412 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka version: 4.2.2
+09:35:17.412 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka commitId: c5e942859576203e
+09:35:17.412 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka startTimeMs: 1793698517412
+09:35:17.413 [main] INFO org.apache.kafka.clients.consumer.internals.ClassicKafkaConsumer -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Subscribed to topic(s): it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5
+09:35:17.426 [main] INFO org.apache.kafka.clients.Metadata -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Cluster ID: MkU3OEVBNTcwNTJENDM2Qk
+09:35:17.427 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Discovered group coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false)
+09:35:17.429 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] (Re-)joining group
+09:35:17.438 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: need to re-join with the given member-id: consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3-c6beeb72-40f5-4696-9bbf-f40a932759c8
+09:35:17.438 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] (Re-)joining group
+09:35:20.445 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Successfully joined group with generation Generation{generationId=3, memberId='consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3-c6beeb72-40f5-4696-9bbf-f40a932759c8', protocol='cooperative-sticky'}
+09:35:20.445 [main] INFO org.apache.kafka.clients.consumer.internals.AbstractStickyAssignor -- Final assignment of partitions to consumers: 
+{consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3-c6beeb72-40f5-4696-9bbf-f40a932759c8=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]}
+09:35:20.446 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Finished assignment for group at generation 3: {consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3-c6beeb72-40f5-4696-9bbf-f40a932759c8=Assignment(partitions=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15])}
+09:35:20.450 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Successfully synced group in generation Generation{generationId=3, memberId='consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3-c6beeb72-40f5-4696-9bbf-f40a932759c8', protocol='cooperative-sticky'}
+09:35:20.450 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Updating assignment with
+	Assigned partitions:                       [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+	Current owned partitions:                  []
+	Added partitions (assigned - owned):       [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+	Revoked partitions (owned - assigned):     []
+
+09:35:20.450 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Notifying assignor about the new Assignment(partitions=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15])
+09:35:20.450 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerRebalanceListenerInvoker -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Adding newly assigned partitions: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0 to the committed offset FetchPosition{offset=3, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:20.451 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:20.452 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:20.452 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:20.473 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerRebalanceListenerInvoker -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Revoke previously assigned partitions [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+09:35:20.474 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Member consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3-c6beeb72-40f5-4696-9bbf-f40a932759c8 sending LeaveGroup request to coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false) due to the consumer is being closed
+09:35:20.474 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Resetting generation and member id due to: consumer pro-actively leaving the group
+09:35:20.474 [main] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: consumer pro-actively leaving the group
+09:35:20.958 [main] INFO org.apache.kafka.clients.FetchSessionHandler -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Node 3 sent an invalid full fetch response with extraIds=(oDqnWOVrTCS5WZ2lNTYKCw), response=()
+09:35:20.961 [main] INFO org.apache.kafka.clients.FetchSessionHandler -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Node 1 sent an invalid full fetch response with extraIds=(oDqnWOVrTCS5WZ2lNTYKCw), response=()
+09:35:20.964 [main] INFO org.apache.kafka.common.metrics.Metrics -- Metrics scheduler closed
+09:35:20.964 [main] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.metrics.JmxReporter
+09:35:20.964 [main] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+09:35:20.964 [main] INFO org.apache.kafka.common.metrics.Metrics -- Metrics reporters closed
+09:35:20.966 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- App info kafka.consumer for consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-3 unregistered
+09:35:20.984 [main] INFO org.apache.kafka.common.config.AbstractConfig -- ConsumerConfig values: 
+	allow.auto.create.topics = false
+	auto.commit.interval.ms = 5000
+	auto.offset.reset = none
+	bootstrap.servers = [localhost:19092, localhost:19093, localhost:19094]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4
+	client.rack = 
+	config.providers = []
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 16777216
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = it-group-66ffdb348fa14bfa8a59a85dc65800b5
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_committed
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 100
+	metadata.max.age.ms = 300000
+	metadata.recovery.rebootstrap.trigger.ms = 300000
+	metadata.recovery.strategy = rebootstrap
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = []
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	share.acknowledgement.mode = implicit
+	share.acquire.mode = BATCH_OPTIMIZED
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = []
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+
+09:35:20.984 [main] INFO org.apache.kafka.common.telemetry.internals.KafkaMetricsCollector -- initializing Kafka metrics collector
+09:35:20.985 [main] INFO org.apache.kafka.common.config.AbstractConfig -- These configurations '[ssl.endpoint.identification.algorithm]' were supplied but are not used yet.
+09:35:20.985 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka version: 4.2.2
+09:35:20.985 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka commitId: c5e942859576203e
+09:35:20.985 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka startTimeMs: 1793698520985
+09:35:20.986 [main] INFO org.apache.kafka.clients.consumer.internals.ClassicKafkaConsumer -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Subscribed to topic(s): it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5
+09:35:20.987 [main] INFO org.apache.kafka.common.config.AbstractConfig -- ConsumerConfig values: 
+	allow.auto.create.topics = false
+	auto.commit.interval.ms = 5000
+	auto.offset.reset = none
+	bootstrap.servers = [localhost:19092, localhost:19093, localhost:19094]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5
+	client.rack = 
+	config.providers = []
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 16777216
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = it-group-66ffdb348fa14bfa8a59a85dc65800b5
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_committed
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 100
+	metadata.max.age.ms = 300000
+	metadata.recovery.rebootstrap.trigger.ms = 300000
+	metadata.recovery.strategy = rebootstrap
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = []
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	share.acknowledgement.mode = implicit
+	share.acquire.mode = BATCH_OPTIMIZED
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = []
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+
+09:35:20.987 [main] INFO org.apache.kafka.common.telemetry.internals.KafkaMetricsCollector -- initializing Kafka metrics collector
+09:35:20.994 [main] INFO org.apache.kafka.common.config.AbstractConfig -- These configurations '[ssl.endpoint.identification.algorithm]' were supplied but are not used yet.
+09:35:20.994 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka version: 4.2.2
+09:35:20.994 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka commitId: c5e942859576203e
+09:35:20.994 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- Kafka startTimeMs: 1793698520994
+09:35:20.994 [main] INFO org.apache.kafka.clients.consumer.internals.ClassicKafkaConsumer -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Subscribed to topic(s): it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5
+09:35:21.003 [kafka-poll-3] INFO org.apache.kafka.clients.Metadata -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Cluster ID: MkU3OEVBNTcwNTJENDM2Qk
+09:35:21.004 [kafka-poll-2] INFO org.apache.kafka.clients.Metadata -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Cluster ID: MkU3OEVBNTcwNTJENDM2Qk
+09:35:21.004 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Discovered group coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false)
+09:35:21.005 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Discovered group coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false)
+09:35:21.006 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] (Re-)joining group
+09:35:21.005 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] (Re-)joining group
+09:35:21.010 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: need to re-join with the given member-id: consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4-2ef358f2-8ed8-4a95-9a2e-dc2d28d1d79e
+09:35:21.010 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] (Re-)joining group
+09:35:21.014 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: need to re-join with the given member-id: consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5-df2e8f3c-4f23-4d57-bbd0-be50115092ea
+09:35:21.014 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] (Re-)joining group
+09:35:27.014 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Successfully joined group with generation Generation{generationId=5, memberId='consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4-2ef358f2-8ed8-4a95-9a2e-dc2d28d1d79e', protocol='cooperative-sticky'}
+09:35:27.014 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Successfully joined group with generation Generation{generationId=5, memberId='consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5-df2e8f3c-4f23-4d57-bbd0-be50115092ea', protocol='cooperative-sticky'}
+09:35:27.014 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.AbstractStickyAssignor -- Final assignment of partitions to consumers: 
+{consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5-df2e8f3c-4f23-4d57-bbd0-be50115092ea=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15], consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4-2ef358f2-8ed8-4a95-9a2e-dc2d28d1d79e=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]}
+09:35:27.014 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Finished assignment for group at generation 5: {consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4-2ef358f2-8ed8-4a95-9a2e-dc2d28d1d79e=Assignment(partitions=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]), consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5-df2e8f3c-4f23-4d57-bbd0-be50115092ea=Assignment(partitions=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15])}
+09:35:27.020 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Successfully synced group in generation Generation{generationId=5, memberId='consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5-df2e8f3c-4f23-4d57-bbd0-be50115092ea', protocol='cooperative-sticky'}
+09:35:27.020 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Successfully synced group in generation Generation{generationId=5, memberId='consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4-2ef358f2-8ed8-4a95-9a2e-dc2d28d1d79e', protocol='cooperative-sticky'}
+09:35:27.020 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Updating assignment with
+	Assigned partitions:                       [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+	Current owned partitions:                  []
+	Added partitions (assigned - owned):       [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+	Revoked partitions (owned - assigned):     []
+
+09:35:27.020 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Notifying assignor about the new Assignment(partitions=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15])
+09:35:27.021 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Updating assignment with
+	Assigned partitions:                       [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]
+	Current owned partitions:                  []
+	Added partitions (assigned - owned):       [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]
+	Revoked partitions (owned - assigned):     []
+
+09:35:27.021 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerRebalanceListenerInvoker -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Adding newly assigned partitions: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+09:35:27.021 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Notifying assignor about the new Assignment(partitions=[it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14])
+09:35:27.021 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerRebalanceListenerInvoker -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Adding newly assigned partitions: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]
+09:35:27.021 [kafka-poll-3] INFO org.springframework.kafka.listener.ConcurrentMessageListenerContainer -- it-group-66ffdb348fa14bfa8a59a85dc65800b5: partitions assigned: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+09:35:27.021 [kafka-poll-2] INFO org.springframework.kafka.listener.ConcurrentMessageListenerContainer -- it-group-66ffdb348fa14bfa8a59a85dc65800b5: partitions assigned: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]
+09:35:27.022 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:27.022 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13 to the committed offset FetchPosition{offset=1, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:27.022 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:27.022 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:27.022 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:27.022 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:27.022 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:27.022 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:27.025 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0 to the committed offset FetchPosition{offset=3, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:27.025 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:27.025 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19094 (id: 3 rack: null isFenced: false)], epoch=0}}
+09:35:27.025 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:27.025 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:27.025 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:27.026 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19092 (id: 1 rack: null isFenced: false)], epoch=0}}
+09:35:27.026 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerUtils -- Setting offset for partition it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10 to the committed offset FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:19093 (id: 2 rack: null isFenced: false)], epoch=0}}
+09:35:27.107 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerRebalanceListenerInvoker -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Revoke previously assigned partitions [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]
+09:35:27.107 [kafka-poll-2] INFO org.springframework.kafka.listener.ConcurrentMessageListenerContainer -- it-group-66ffdb348fa14bfa8a59a85dc65800b5: partitions revoked: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-0, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-2, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-4, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-6, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-8, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-10, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-12, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-14]
+09:35:27.107 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerRebalanceListenerInvoker -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Revoke previously assigned partitions [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+09:35:27.107 [kafka-poll-3] INFO org.springframework.kafka.listener.ConcurrentMessageListenerContainer -- it-group-66ffdb348fa14bfa8a59a85dc65800b5: partitions revoked: [it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-1, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-3, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-5, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-7, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-9, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-11, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-13, it.dispatch.66ffdb348fa14bfa8a59a85dc65800b5-15]
+09:35:27.107 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Member consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4-2ef358f2-8ed8-4a95-9a2e-dc2d28d1d79e sending LeaveGroup request to coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false) due to the consumer unsubscribed from all topics
+09:35:27.107 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Member consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5-df2e8f3c-4f23-4d57-bbd0-be50115092ea sending LeaveGroup request to coordinator localhost:19094 (id: 2147483644 rack: null isFenced: false) due to the consumer unsubscribed from all topics
+09:35:27.108 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Resetting generation and member id due to: consumer pro-actively leaving the group
+09:35:27.108 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: consumer pro-actively leaving the group
+09:35:27.108 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ClassicKafkaConsumer -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Unsubscribed all topics or patterns and assigned partitions
+09:35:27.108 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Resetting generation and member id due to: consumer pro-actively leaving the group
+09:35:27.108 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: consumer pro-actively leaving the group
+09:35:27.108 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ClassicKafkaConsumer -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Unsubscribed all topics or patterns and assigned partitions
+09:35:27.108 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Resetting generation and member id due to: consumer pro-actively leaving the group
+09:35:27.108 [kafka-poll-3] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: consumer pro-actively leaving the group
+09:35:27.108 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Resetting generation and member id due to: consumer pro-actively leaving the group
+09:35:27.108 [kafka-poll-2] INFO org.apache.kafka.clients.consumer.internals.ConsumerCoordinator -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Request joining group due to: consumer pro-actively leaving the group
+09:35:27.531 [kafka-poll-3] INFO org.apache.kafka.clients.FetchSessionHandler -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Node 1 sent an invalid full fetch response with extraIds=(oDqnWOVrTCS5WZ2lNTYKCw), response=()
+09:35:27.535 [kafka-poll-3] INFO org.apache.kafka.clients.FetchSessionHandler -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Node 3 sent an invalid full fetch response with extraIds=(oDqnWOVrTCS5WZ2lNTYKCw), response=()
+09:35:27.535 [kafka-poll-2] INFO org.apache.kafka.clients.FetchSessionHandler -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Node 1 sent an invalid full fetch response with extraIds=(oDqnWOVrTCS5WZ2lNTYKCw), response=()
+09:35:27.535 [kafka-poll-2] INFO org.apache.kafka.clients.FetchSessionHandler -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Node 3 sent an invalid full fetch response with extraIds=(oDqnWOVrTCS5WZ2lNTYKCw), response=()
+09:35:27.536 [kafka-poll-2] INFO org.apache.kafka.clients.FetchSessionHandler -- [Consumer clientId=consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4, groupId=it-group-66ffdb348fa14bfa8a59a85dc65800b5] Node 2 sent an invalid full fetch response with extraIds=(oDqnWOVrTCS5WZ2lNTYKCw), response=()
+09:35:27.537 [kafka-poll-2] INFO org.apache.kafka.common.metrics.Metrics -- Metrics scheduler closed
+09:35:27.537 [kafka-poll-2] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.metrics.JmxReporter
+09:35:27.537 [kafka-poll-2] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+09:35:27.537 [kafka-poll-2] INFO org.apache.kafka.common.metrics.Metrics -- Metrics reporters closed
+09:35:27.539 [kafka-poll-3] INFO org.apache.kafka.common.metrics.Metrics -- Metrics scheduler closed
+09:35:27.539 [kafka-poll-3] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.metrics.JmxReporter
+09:35:27.539 [kafka-poll-3] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+09:35:27.539 [kafka-poll-3] INFO org.apache.kafka.common.metrics.Metrics -- Metrics reporters closed
+09:35:27.540 [kafka-poll-2] INFO org.apache.kafka.common.utils.AppInfoParser -- App info kafka.consumer for consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-4 unregistered
+09:35:27.540 [kafka-poll-2] INFO org.springframework.kafka.listener.KafkaMessageListenerContainer -- it-group-66ffdb348fa14bfa8a59a85dc65800b5: Consumer stopped
+09:35:27.542 [kafka-poll-3] INFO org.apache.kafka.common.utils.AppInfoParser -- App info kafka.consumer for consumer-it-group-66ffdb348fa14bfa8a59a85dc65800b5-5 unregistered
+09:35:27.542 [kafka-poll-3] INFO org.springframework.kafka.listener.KafkaMessageListenerContainer -- it-group-66ffdb348fa14bfa8a59a85dc65800b5: Consumer stopped
+09:35:27.542 [main] INFO org.apache.kafka.clients.producer.KafkaProducer -- [Producer clientId=producer-1] Closing the Kafka producer with timeoutMillis = 30000 ms.
+09:35:27.544 [main] INFO org.apache.kafka.common.metrics.Metrics -- Metrics scheduler closed
+09:35:27.544 [main] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.metrics.JmxReporter
+09:35:27.544 [main] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+09:35:27.544 [main] INFO org.apache.kafka.common.metrics.Metrics -- Metrics reporters closed
+09:35:27.544 [main] INFO org.apache.kafka.common.utils.AppInfoParser -- App info kafka.producer for producer-1 unregistered
+09:35:27.589 [main] INFO org.apache.kafka.common.metrics.Metrics -- Metrics scheduler closed
+09:35:27.589 [main] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.metrics.JmxReporter
+09:35:27.592 [main] INFO org.apache.kafka.common.metrics.Metrics -- Metrics reporters closed
+09:35:27.593 [kafka-admin-client-thread | adminclient-2] INFO org.apache.kafka.common.utils.AppInfoParser -- App info kafka.admin.client for adminclient-2 unregistered
+09:35:27.594 [kafka-admin-client-thread | adminclient-2] INFO org.apache.kafka.common.metrics.Metrics -- Metrics scheduler closed
+09:35:27.594 [kafka-admin-client-thread | adminclient-2] INFO org.apache.kafka.common.metrics.Metrics -- Closing reporter org.apache.kafka.common.metrics.JmxReporter
+09:35:27.594 [kafka-admin-client-thread | adminclient-2] INFO org.apache.kafka.common.metrics.Metrics -- Metrics reporters closed
+09:35:27.594 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown initiated...
+09:35:27.603 [main] INFO com.zaxxer.hikari.HikariDataSource -- ledger-0 - Shutdown completed.
+]]></system-out>
+  </testcase>
+</testsuite>
